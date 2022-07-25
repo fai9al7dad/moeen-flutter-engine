@@ -1,14 +1,39 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/page_header.dart';
 import 'package:provider/provider.dart'; // You have to add this manually, for some reason it cannot be added automatically
 import 'package:flutter_svg/flutter_svg.dart';
 
-class RenderPage extends StatelessWidget {
+class RenderPage extends StatefulWidget {
   final List page;
   const RenderPage({Key? key, required this.page}) : super(key: key);
+
+  @override
+  State<RenderPage> createState() => _RenderPageState();
+}
+
+class _RenderPageState extends State<RenderPage> {
+  List? _mw;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    refreshMw();
+  }
+
+  void refreshMw() async {
+    final WordColorMap wordColorMap = WordColorMap();
+    var mw = await wordColorMap.getPageColorsPage(
+        pageNumber: widget.page[0]["pageNumber"]);
+    setState(() {
+      _mw = mw;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +45,7 @@ class RenderPage extends StatelessWidget {
           // Text(mistakes[0]['id'].toString()),
           Column(
         children: [
-          PageHeader(page: page[0]),
+          PageHeader(page: widget.page[0]),
           const SizedBox(height: 10),
           Consumer<QuranProvider>(
             builder: (context, quranProvider, child) => RichText(
@@ -38,16 +63,19 @@ class RenderPage extends StatelessWidget {
                   //   ),
                   // ]),
 
-                  children: List.generate(page.length, (index) {
-                    var item = page[index];
-                    int curLineNum = page[index]["lineNumber"];
+                  children: List.generate(widget.page.length, (index) {
+                    var item = widget.page[index];
+                    int curLineNum = widget.page[index]["lineNumber"];
                     // if last item this will return undefined
-                    int aftLineNum = index != page.length - 1
-                        ? page[index + 1]["lineNumber"]
+                    int aftLineNum = index != widget.page.length - 1
+                        ? widget.page[index + 1]["lineNumber"]
                         : 15;
                     bool lineChanged = curLineNum != aftLineNum;
-                    var found = quranProvider.mistakes.firstWhereOrNull(
-                        (element) => element.wordID == item["wordID"]);
+                    var found;
+                    if (_mw != null) {
+                      found = _mw?.firstWhereOrNull(
+                          (element) => element.wordID == item["wordID"]);
+                    }
                     //   found = mistakes.firstWhere(
                     //       (e) => e.id == page[index]["wordID"]);
                     // }
@@ -82,7 +110,7 @@ class RenderPage extends StatelessWidget {
                           text: item["text"],
                           style: TextStyle(
                             color: const Color(0xffae8f74),
-                            fontFamily: "p${page[index]['pageNumber']}",
+                            fontFamily: "p${widget.page[index]['pageNumber']}",
                           ));
                     }
                     if (item["charType"] == "end" && lineChanged) {
@@ -90,20 +118,22 @@ class RenderPage extends StatelessWidget {
                           text: "${item["text"]}\n",
                           style: TextStyle(
                             color: const Color(0xffae8f74),
-                            fontFamily: "p${page[index]['pageNumber']}",
+                            fontFamily: "p${widget.page[index]['pageNumber']}",
                           ));
                     }
                     return lineChanged
                         ? TextSpan(
-                            text: "${page[index]['text']}\n",
+                            text: "${widget.page[index]['text']}\n",
                             style: TextStyle(
                               color: found != null
                                   ? Color(int.parse(found.color))
                                   : Colors.black,
-                              fontFamily: "p${page[index]['pageNumber']}",
+                              fontFamily:
+                                  "p${widget.page[index]['pageNumber']}",
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => {
+                                    setMW(),
                                     quranProvider.addMistake(
                                         id: item["wordID"],
                                         pageNumber: item["pageNumber"],
@@ -113,16 +143,18 @@ class RenderPage extends StatelessWidget {
                                   })
                         : TextSpan(
                             text: index == 0
-                                ? "${page[index]['text']} "
-                                : page[index]['text'],
+                                ? "${widget.page[index]['text']} "
+                                : widget.page[index]['text'],
                             style: TextStyle(
                               color: found != null
                                   ? Color(int.parse(found.color))
                                   : Colors.black,
-                              fontFamily: "p${page[index]['pageNumber']}",
+                              fontFamily:
+                                  "p${widget.page[index]['pageNumber']}",
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => {
+                                    setMW(),
                                     quranProvider.addMistake(
                                         id: item["wordID"],
                                         pageNumber: item["pageNumber"],

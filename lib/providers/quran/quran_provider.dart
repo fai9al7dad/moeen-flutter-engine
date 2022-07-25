@@ -5,13 +5,12 @@ import 'package:moeen/helpers/general/constants.dart';
 
 class QuranProvider with ChangeNotifier {
   final wordsColorsMap = WordColorMap();
-  final _pageController = PageController(initialPage: _initalPage);
+  final _pageController = PageController(initialPage: 0);
 
   List _quran = [];
   List<WordColorMapModel> _mistakes = [];
   bool _loadingGetData = false;
   // used mainly when changing to another page, ex: sleect surah
-  static int _initalPage = 1;
 
   // late JoinedQuran _currentPage;
   List<WordColorMapModel> get mistakes {
@@ -22,22 +21,12 @@ class QuranProvider with ChangeNotifier {
     return _loadingGetData;
   }
 
-  int get initalPage {
-    return _initalPage;
-  }
-
   PageController get pageController {
     return _pageController;
   }
 
   List get quran {
     return _quran;
-  }
-
-  void changeInitalPage({pageNumber}) {
-    _initalPage = pageNumber;
-    print(pageNumber);
-    notifyListeners();
   }
 
   void getData() async {

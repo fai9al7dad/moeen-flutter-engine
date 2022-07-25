@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 class RenderQuranList extends StatelessWidget {
   const RenderQuranList({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<QuranProvider>(
