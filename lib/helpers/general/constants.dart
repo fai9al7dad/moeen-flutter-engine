@@ -1,3 +1,5 @@
+import 'package:moeen/screens/auth/login_screen.dart';
+import 'package:moeen/screens/auth/register_screen.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:moeen/screens/surahList/surah_list.dart';
 
@@ -14,6 +16,8 @@ class CustomColors {
 class CustomRouter {
   static var routes = {
     '/': (context) => const RenderQuranList(),
-    '/surah-list': (context) => const SurahList()
+    '/surah-list': (context) => const SurahList(),
+    '/login': (context) => const LoginScreen(),
+    '/register': (context) => const RegisterScreen()
   };
 }

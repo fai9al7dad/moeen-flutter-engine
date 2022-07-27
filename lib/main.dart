@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moeen/helpers/general/constants.dart';
 
 void main() {
+  // debugRepaintRainbowEnabled = true;
   runApp(const MyApp());
 }
 

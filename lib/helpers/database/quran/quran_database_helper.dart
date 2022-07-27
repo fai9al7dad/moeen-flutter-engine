@@ -37,7 +37,7 @@ class DatabaseHelper {
   }
 
   Future<List<List>> getJoinedQuran() async {
-    int limit = 20;
+    int limit = 10;
     List<List> initializePagesArray() {
       List<List> pages = [];
       // initialze lines
@@ -58,18 +58,7 @@ class DatabaseHelper {
     List<List> pages = initializePagesArray();
     for (int i = 0; i < list.length; i++) {
       var item = list[i];
-      // quran.add(JoinedQuran(
-      //     id: item["id"],
-      //     text: item["text"],
-      //     pageNumber: item["pageNumber"],
-      //     lineNumber: item["lineNumber"]));
-      // var pageColors =
-      //     await wordColorsMap.getPageColors(pageNumber: item["pageNumber"]);
-      // var newItem = {
-      //   ...item,
-      //   "mistakes": pageColors["mistakes"],
-      //   "warnings": pageColors["warnings"],
-      // };
+
       pages[item["pageNumber"] - 1].add(item);
     }
     return pages;

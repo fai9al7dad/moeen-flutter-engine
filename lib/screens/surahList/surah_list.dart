@@ -142,7 +142,7 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
   Widget build(BuildContext context) {
     if (_loading) return const SizedBox(width: 10);
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 40),
+      constraints: const BoxConstraints(maxWidth: 60),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

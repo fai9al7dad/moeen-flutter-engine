@@ -8,8 +8,6 @@ import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
-var textColor = int.parse(CustomColors.textColor);
-
 class PageHeader extends StatelessWidget {
   final page;
   const PageHeader({Key? key, required this.page}) : super(key: key);
@@ -26,16 +24,16 @@ class PageHeader extends StatelessWidget {
           children: [
             Text(
               "الحزب ${page["hizbNumber"].toString()}",
-              style: TextStyle(
-                  color: Color(textColor),
+              style: const TextStyle(
+                  color: Color(0xffae8f74),
                   fontFamily: "montserrat",
                   fontSize: 12),
             ),
             const SizedBox(width: 5),
             Text(
               "الجزء ${page["juzNumber"].toString()}",
-              style: TextStyle(
-                  color: Color(textColor),
+              style: const TextStyle(
+                  color: Color(0xffae8f74),
                   fontFamily: "montserrat",
                   fontSize: 12),
             ),
@@ -56,11 +54,12 @@ class PageHeader extends StatelessWidget {
             ),
             CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
+
               radius: 8,
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
-                  onPressed: () => {},
+                  onPressed: () => {Navigator.pushNamed(context, "/login")},
                   icon: const Icon(
                     Icons.group,
                     size: 12,
@@ -91,8 +90,10 @@ class _SurahNameState extends State<SurahName> {
           const Icon(Icons.unfold_more, size: 10, color: Color(0xffae8f74)),
           Text(
             "${widget.surah}surah",
-            style: TextStyle(
-                color: Color(textColor), fontFamily: "surahname", fontSize: 18),
+            style: const TextStyle(
+                color: Color(0xffae8f74),
+                fontFamily: "surahname",
+                fontSize: 18),
           ),
         ],
       ),

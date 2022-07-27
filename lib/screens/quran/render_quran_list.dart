@@ -33,19 +33,25 @@ class _MainScaffoldState extends State<MainScaffold> {
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => Scaffold(
         body: quranProvider.loadingGetData
-            ? (CircularProgressIndicator(
-                strokeWidth: 7,
-                color: Colors.green[700],
-              ))
+            ? Center(
+                child: (CircularProgressIndicator(
+                  strokeWidth: 7,
+                  color: Colors.green[700],
+                )),
+              )
             : (PageView.builder(
                 controller: quranProvider.pageController,
                 allowImplicitScrolling: true,
-                reverse: true,
-                physics: const AlwaysScrollableScrollPhysics(),
+
+                reverse: false,
+                // physics: const AlwaysScrollableScrollPhysics(),
                 // scrollDirection: Axis.horizontal,
+                clipBehavior: Clip.none,
                 itemCount: quranProvider.quran.length,
                 itemBuilder: (context, index) {
                   return RenderPage(page: quranProvider.quran[index]);
+                  // return const Text("sdf");
+                  // return const Text("sdf");
                 },
                 // itemBuilder: (context, index) {
                 //   return RenderPage(lines: _items[index]["lines"]);
