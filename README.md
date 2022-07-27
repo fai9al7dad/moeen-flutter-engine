@@ -1,25 +1,21 @@
 # moeen
 
-## to do's
+## bugs
 
 - [ ] switch text spans to Word widget?
-- [x] condition colors on only words that are not ayas or bismillah or surah start
-- [x] different ayah colors
-- [x] shadow text -> removed due to performance ressons
-- [x] make mistakes = mistakes and warnings and reverts
+- [ ] words on right column cant be highlighted -> quran screen
 - [ ] optimize sql init query on android, ios->?
 
-## testing
+## improvments
 
-- [ ] test on iphone
-- [ ] test on android
-- [x] check if mistake persist when scrolling out of window
-- [x] click on ayah numbers, should not be added to mistkes, or surah headers
-- [ ] test performance on morning
+- [ ] add border bottom to button
 
 ## current iteration
 
-- [x] add surah header
+- [x] create login ui
+- [x] create register ui
+- [x] create forget password ui
+- [ ]
 
 ## finished
 

@@ -72,15 +72,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     children: [
                       CustomInput(
-                          prefixIcon: Icons.person,
+                          prefixIcon: Icons.person_outline,
                           label: "اسم المستخدم",
-                          validator: (v) => null),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomInput(
-                          prefixIcon: Icons.email,
-                          label: "البريد الإلكتروني",
                           validator: (v) => null),
                       const SizedBox(
                         height: 20,
@@ -89,35 +82,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomInput(
-                            prefixIcon: Icons.lock,
-                            label: "كلمة المرور",
-                            obsecureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your password';
-                              }
-                              return null;
-                            },
-                          ),
+                              prefixIcon: Icons.email_outlined,
+                              label: "البريد الإلكتروني",
+                              validator: (v) => null),
                           const SizedBox(
                             height: 5,
                           ),
-                          const Text(
-                            'تحتاج الإيميل في حال نسيت كلمة المرور',
-                            // textAlign: TextAlign.end,
-                            style: TextStyle(
-                              fontFamily: "montserrat",
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          const Text('تحتاج الإيميل في حال نسيت كلمة المرور',
+                              // textAlign: TextAlign.end,
+                              style: TextStyle(
+                                fontFamily: "montserrat",
+                                fontSize: 10,
+                                color: Colors.grey,
+                              )),
                         ],
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       CustomInput(
-                        prefixIcon: Icons.lock,
+                        prefixIcon: Icons.lock_outline,
+                        label: "كلمة المرور",
+                        obsecureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomInput(
+                        prefixIcon: Icons.lock_outline,
                         label: "تأكيد كلمة المرور",
                         obsecureText: true,
                         validator: (value) {
@@ -127,34 +125,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'نسيت كلمة المرور ؟',
-                            style: TextStyle(
-                                fontFamily: "montserrat", fontSize: 10),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // Navigator.pushReplacement(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         // const RegisterPage(title: 'Register UI'),
-                              //   ),
-                              // );
-                            },
-                            style: TextButton.styleFrom(
-                                padding: const EdgeInsets.all(3)),
-                            child: const Text('اضغط هنا للإستعادة',
-                                style: TextStyle(
-                                    fontFamily: "montserrat", fontSize: 10)),
-                          ),
-                        ],
-                      ),
                       const SizedBox(
-                        height: 5,
+                        height: 20,
                       ),
                       CustomButton(onPressed: () => {}, text: "سجل"),
                       Row(

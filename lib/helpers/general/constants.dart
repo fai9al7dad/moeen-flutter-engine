@@ -1,3 +1,4 @@
+import 'package:moeen/screens/auth/forgot_password.dart';
 import 'package:moeen/screens/auth/login_screen.dart';
 import 'package:moeen/screens/auth/register_screen.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
@@ -18,6 +19,7 @@ class CustomRouter {
     '/': (context) => const RenderQuranList(),
     '/surah-list': (context) => const SurahList(),
     '/login': (context) => const LoginScreen(),
-    '/register': (context) => const RegisterScreen()
+    '/register': (context) => const RegisterScreen(),
+    '/forgot-password': (context) => const ForgotPassword(),
   };
 }
