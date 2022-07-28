@@ -14,8 +14,8 @@
 ## current iteration
 
 - [x] download dio
-- [ ] register user
-- [ ] login
+- [x] register user
+- [x] login
 
 ## finished
 
