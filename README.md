@@ -11,16 +11,17 @@
 
 - [ ] add border bottom to button
 - [ ] switch warning to svg -> select duo
+- [ ] show empty state -> duo
 
 ## current iteration
 
-- [x] auth
-  - [x] auth to local storage
 - [ ] duos
   - [x] show need to login if not auth
+  - [x] view duos
+  - [x] view duos invites
+  - [x] accept duo invite
+  - [x] reject duo invite
   - [ ] send duo invites
-  - [ ] accept duo invite
-  - [ ] view duos
 
 ## finished
 
@@ -49,6 +50,8 @@
   - [x] local storage auth
 - [ ] duos
   - [x] show need to login if not auth
+  - [x] view duos
+  - [x] view duos invites
+  - [x] accept duo invite
+  - [x] reject duo invite
   - [ ] send duo invites
-  - [ ] accept duo invite
-  - [ ] view duos

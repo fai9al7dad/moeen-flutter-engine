@@ -1,14 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/cupertino.dart';
-import 'package:moeen/helpers/dio/dio.dart';
+import 'package:moeen/helpers/dio/api.dart';
 
 class AuthProvider with ChangeNotifier {
   bool _isAuth = false;
   final storage = const FlutterSecureStorage();
-
   late UserModel? _authUser;
   bool get isAuth {
     return _isAuth;
@@ -22,22 +22,19 @@ class AuthProvider with ChangeNotifier {
     _isAuth = true;
     UserModel user = UserModel.fromJson(creds);
     _authUser = user;
-    dio().options.headers["Authorization"] = "Bearer ${user.accessToken}";
     await storage.write(key: "accessToken", value: user.accessToken);
 
     notifyListeners();
   }
 
   void tryToken() async {
-    var token = await storage.read(key: "accessToken");
-    if (token == null) return;
     try {
-      Dio.Response res = await dio().get("/api/users/me",
-          options: Dio.Options(headers: {"Authorization": "Bearer $token"}));
+      Api api = Api();
+      var user = await api.getAuthUser();
+      if (user == null) return;
       _isAuth = true;
-      UserModel user = UserModel.fromJson(res.data);
       _authUser = user;
-      // await storage.write(key: "accessToken", value: token);
+
       notifyListeners();
     } catch (e) {
       logout();
@@ -48,7 +45,7 @@ class AuthProvider with ChangeNotifier {
   void logout() {
     _isAuth = false;
     _authUser = null;
-    dio().options.headers["Authorization"] = "";
+    // dio().options.headers["Authorization"] = "";
     notifyListeners();
   }
 }
@@ -70,7 +67,7 @@ class UserModel {
       : accessToken = json["accessToken"],
         username = json["username"],
         email = json["email"],
-        id = json["userID"];
+        id = json["id"];
 
   Map<String, dynamic> toMap() {
     return {

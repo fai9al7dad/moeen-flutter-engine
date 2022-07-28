@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
-import 'package:moeen/helpers/dio/dio.dart';
+import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -148,8 +148,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  await dio().post("/api/auth/register",
-                                      data: payload);
+                                  Api api = Api();
+                                  await api.register(data: payload);
                                   // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(

@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
-import 'package:moeen/helpers/dio/dio.dart';
+import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -128,8 +128,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    Dio.Response res = await dio()
-                                        .post("/api/auth/login", data: payload);
+                                    Api api = Api();
+
+                                    Dio.Response res =
+                                        await api.login(data: payload);
                                     // ignore: use_build_context_synchronously
                                     Provider.of<AuthProvider>(context,
                                             listen: false)
