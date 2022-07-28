@@ -5,6 +5,7 @@
 - [ ] switch text spans to Word widget?
 - [ ] words on right column cant be highlighted -> quran screen
 - [ ] optimize sql init query on android, ios->?
+- [ ] need to add remaining fonts
 
 ## improvments
 
@@ -12,10 +13,9 @@
 
 ## current iteration
 
-- [x] create login ui
-- [x] create register ui
-- [x] create forget password ui
-- [ ]
+- [x] download dio
+- [ ] register user
+- [ ] login
 
 ## finished
 

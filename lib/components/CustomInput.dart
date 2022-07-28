@@ -4,10 +4,12 @@ class CustomInput extends StatelessWidget {
   final String label;
   final IconData prefixIcon;
   final bool? obsecureText;
+  final TextEditingController controller;
   final String? Function(String?)? validator;
   const CustomInput(
       {Key? key,
       required this.prefixIcon,
+      required this.controller,
       required this.label,
       this.obsecureText,
       required this.validator})
@@ -18,6 +20,7 @@ class CustomInput extends StatelessWidget {
     return DecoratedBox(
       decoration: const BoxDecoration(color: Colors.white),
       child: TextFormField(
+        controller: controller,
         validator: validator,
         obscureText: obsecureText ?? false,
         maxLines: 1,

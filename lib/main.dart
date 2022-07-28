@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<AuthProvider>(
+      create: (_) => AuthProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

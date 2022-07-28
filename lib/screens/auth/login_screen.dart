@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/helpers/dio/dio.dart';
+import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,13 +18,16 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: const CustomAppBar(title: "تسجيل الدخول"),
+        appBar: CustomAppBar(title: "تسجيل الدخول", showLoading: isLoading),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Container(
@@ -66,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         CustomInput(
+                            controller: usernameController,
                             prefixIcon: Icons.person_outline,
                             label: "اسم المستخدم",
                             validator: (v) => null),
@@ -73,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 20,
                         ),
                         CustomInput(
+                          controller: passwordController,
                           prefixIcon: Icons.lock_outline,
                           label: "كلمة المرور",
                           obsecureText: true,
@@ -107,7 +116,44 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(
                           height: 5,
                         ),
-                        CustomButton(onPressed: () => {}, text: "ادخل"),
+                        CustomButton(
+                            onPressed: () {
+                              Map payload = {
+                                "password": passwordController.text,
+                                "username": usernameController.text,
+                              };
+                              if (_formKey.currentState!.validate()) {
+                                void login() async {
+                                  try {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    Dio.Response res = await dio()
+                                        .post("/api/auth/login", data: payload);
+                                    // ignore: use_build_context_synchronously
+                                    Provider.of<AuthProvider>(context,
+                                            listen: false)
+                                        .login(creds: res.data);
+                                  } on Dio.DioError catch (e) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.red[200],
+                                            content: Text(
+                                              e.response?.data["message"],
+                                              style: TextStyle(
+                                                  color: Colors.red[900]),
+                                            )));
+                                  } finally {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                }
+
+                                login();
+                              }
+                            },
+                            text: "ادخل"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [

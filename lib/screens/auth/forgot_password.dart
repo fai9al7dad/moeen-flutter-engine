@@ -5,6 +5,11 @@ import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
 
+TextEditingController emailController = TextEditingController();
+TextEditingController tokenController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+TextEditingController confirmPasswordController = TextEditingController();
+
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
 
@@ -97,6 +102,7 @@ class _Step1State extends State<Step1> {
           child: Column(
             children: [
               CustomInput(
+                  controller: emailController,
                   prefixIcon: Icons.email_outlined,
                   label: "الإيميل",
                   validator: (v) => null),
@@ -169,6 +175,7 @@ class _Step2State extends State<Step2> {
           child: Column(
             children: [
               CustomInput(
+                  controller: tokenController,
                   prefixIcon: Icons.numbers_outlined,
                   label: "الرمز",
                   validator: (v) => null),
@@ -176,6 +183,7 @@ class _Step2State extends State<Step2> {
                 height: 20,
               ),
               CustomInput(
+                  controller: passwordController,
                   prefixIcon: Icons.lock_outline,
                   obsecureText: true,
                   label: "الرقم السري الجديد",
@@ -184,6 +192,7 @@ class _Step2State extends State<Step2> {
                 height: 20,
               ),
               CustomInput(
+                  controller: confirmPasswordController,
                   prefixIcon: Icons.lock_outline,
                   obsecureText: true,
                   label: "أعد كتابة الرقم السري",

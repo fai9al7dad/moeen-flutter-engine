@@ -59,7 +59,7 @@ class PageHeader extends StatelessWidget {
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
-                  onPressed: () => {Navigator.pushNamed(context, "/login")},
+                  onPressed: () => {Navigator.pushNamed(context, "/duos")},
                   icon: const Icon(
                     Icons.group,
                     size: 12,

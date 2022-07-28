@@ -1,8 +1,13 @@
+import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/helpers/dio/dio.dart';
+import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -13,22 +18,19 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "حساب جديد",
-            style: TextStyle(fontFamily: "montserrat", fontSize: 14),
-          ),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          foregroundColor: Colors.black,
-          elevation: 0,
-        ),
+        appBar: CustomAppBar(title: "حساب جديد", showLoading: isLoading),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Container(
@@ -72,6 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     children: [
                       CustomInput(
+                          controller: usernameController,
                           prefixIcon: Icons.person_outline,
                           label: "اسم المستخدم",
                           validator: (v) => null),
@@ -82,6 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomInput(
+                              controller: emailController,
                               prefixIcon: Icons.email_outlined,
                               label: "البريد الإلكتروني",
                               validator: (v) => null),
@@ -101,6 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 10,
                       ),
                       CustomInput(
+                        controller: passwordController,
                         prefixIcon: Icons.lock_outline,
                         label: "كلمة المرور",
                         obsecureText: true,
@@ -115,6 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 20,
                       ),
                       CustomInput(
+                        controller: confirmPasswordController,
                         prefixIcon: Icons.lock_outline,
                         label: "تأكيد كلمة المرور",
                         obsecureText: true,
@@ -128,7 +134,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      CustomButton(onPressed: () => {}, text: "سجل"),
+                      CustomButton(
+                          onPressed: () {
+                            Map payload = {
+                              "username": usernameController.text,
+                              "password": passwordController.text,
+                              "email": emailController.text,
+                              "confirmPassword": confirmPasswordController.text,
+                            };
+                            if (_formKey.currentState!.validate()) {
+                              void register() async {
+                                try {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await dio().post("/api/auth/register",
+                                      data: payload);
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.green[200],
+                                          content: Text(
+                                            "تم تسجيل حسابك بنجاح يمكنك تسجيل الدخول الآن",
+                                            style: TextStyle(
+                                                color: Colors.green[900]),
+                                          )));
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pop(context);
+                                } on Dio.DioError catch (e) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.red[200],
+                                          content: Text(
+                                            e.response?.data["message"],
+                                            style: TextStyle(
+                                                color: Colors.red[900]),
+                                          )));
+                                } finally {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
+                              }
+
+                              register();
+                            }
+                          },
+                          text: "سجل"),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
