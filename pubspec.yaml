@@ -37,6 +37,7 @@ dependencies:
   provider: ^6.0.3
   flutter_svg: ^1.1.1+1
   dio: ^4.0.6
+  flutter_secure_storage: ^5.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -68,6 +69,8 @@ flutter:
     - assets/databases/quran.db
     - assets/json/SURAHS.json
     - assets/svg/surah_header_svg.svg
+    - assets/svg/warning.svg
+    - assets/images/warning.png
 
   fonts:
     - family: "montserrat-bold"

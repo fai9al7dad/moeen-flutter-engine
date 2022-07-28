@@ -10,12 +10,17 @@
 ## improvments
 
 - [ ] add border bottom to button
+- [ ] switch warning to svg -> select duo
 
 ## current iteration
 
-- [x] download dio
-- [x] register user
-- [x] login
+- [x] auth
+  - [x] auth to local storage
+- [ ] duos
+  - [x] show need to login if not auth
+  - [ ] send duo invites
+  - [ ] accept duo invite
+  - [ ] view duos
 
 ## finished
 
@@ -37,3 +42,13 @@
     - [ ] type ... low pri
     - [x] verses count
     - [x] click go to first page
+- [ ] auth
+  - [x] login
+  - [x] register
+  - [ ] forgot password
+  - [x] local storage auth
+- [ ] duos
+  - [x] show need to login if not auth
+  - [ ] send duo invites
+  - [ ] accept duo invite
+  - [ ] view duos

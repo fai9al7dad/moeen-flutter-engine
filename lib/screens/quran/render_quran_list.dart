@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +28,9 @@ class _MainScaffoldState extends State<MainScaffold> {
     super.initState();
     Provider.of<QuranProvider>(context, listen: false).getData();
     Provider.of<QuranProvider>(context, listen: false).refreshData();
+    Provider.of<AuthProvider>(context, listen: false).tryToken();
+
+    // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
   }
 
   @override

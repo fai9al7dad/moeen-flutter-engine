@@ -134,6 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Provider.of<AuthProvider>(context,
                                             listen: false)
                                         .login(creds: res.data);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
                                   } on Dio.DioError catch (e) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
