@@ -6,11 +6,15 @@ class CustomInput extends StatelessWidget {
   final bool? obsecureText;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final TextInputAction? textInputAction;
+  final void Function(String?)? onFieldSubmitted;
   const CustomInput(
       {Key? key,
       required this.prefixIcon,
       required this.controller,
       required this.label,
+      this.textInputAction,
+      this.onFieldSubmitted,
       this.obsecureText,
       required this.validator})
       : super(key: key);
@@ -24,6 +28,8 @@ class CustomInput extends StatelessWidget {
         validator: validator,
         obscureText: obsecureText ?? false,
         maxLines: 1,
+        onFieldSubmitted: onFieldSubmitted,
+        textInputAction: textInputAction,
         decoration: InputDecoration(
           fillColor: Colors.white,
           label: Text(
@@ -32,6 +38,7 @@ class CustomInput extends StatelessWidget {
           ),
           // hintText: 'اسم المستخدم',
           prefixIcon: Icon(prefixIcon),
+
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
             borderSide: BorderSide(color: Colors.grey.shade200, width: 1.0),

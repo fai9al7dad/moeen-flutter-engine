@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
 
@@ -25,10 +26,12 @@ class _SelectDuoState extends State<SelectDuo> {
     try {
       final Api api = Api();
       var response = await api.getDuos();
-      setState(() {
-        duos = response;
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          duos = response;
+          loading = false;
+        });
+      }
     } on Dio.DioError catch (e) {
       print(e);
     }
@@ -56,30 +59,11 @@ class _SelectDuoState extends State<SelectDuo> {
                 color: Color(0xffe4e4e7),
               ),
           itemBuilder: (context, index) {
-            int num = index + 1;
-            return ListTile(
-              tileColor: Colors.white,
-              leading: Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                    color: const Color(0xffecfdf5),
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: const Color(0xffd1fae5))),
-                child: Center(
-                    child: Text(
-                  num.toString(),
-                  style:
-                      const TextStyle(color: Color(0xff047857), fontSize: 12),
-                )),
-              ),
-              title: Text("${duos[index].username}"),
-              subtitle: Text("رقم المعرف: ${duos[index].id}"),
-              trailing: const Icon(
-                Icons.chevron_right,
-                color: Color(0xff059669),
-              ),
-            );
+            return ListItem(
+                index: index,
+                title: duos[index].username,
+                subtitle: "رقم المعرف: ${duos[index].id}",
+                trailingIcon: Icons.chevron_right);
           }),
     );
   }

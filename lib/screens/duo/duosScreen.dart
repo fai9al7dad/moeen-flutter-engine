@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:moeen/helpers/dio/api.dart';
+import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
 
 import 'package:moeen/providers/auth/auth_provider.dart';
@@ -25,17 +26,39 @@ class DuosScreen extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.startFloat,
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                // Add your onPressed code here!
+                Navigator.pushNamed(context, "/search-users");
+              },
+              label: const Text('ارسال دعوة'),
+              // icon: const Icon(Icons.send),
+
+              backgroundColor: const Color(0xff059669),
+            ),
             appBar: AppBar(
-              // elevation: 0,
+              elevation: 0.8,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              foregroundColor: Tertiary().s800,
               title: const Text(
                 "اختر الثنائي",
                 style: TextStyle(fontFamily: "montserrat", fontSize: 14),
               ),
               centerTitle: true,
-              bottom: const TabBar(tabs: [
-                Tab(text: "الثنائيات"),
-                Tab(text: "طلبات الإضافة"),
-              ]),
+              bottom: TabBar(
+                  labelStyle: TextStyle(
+                      fontFamily: "montserrat",
+                      fontSize: 14,
+                      color: Tertiary().s800),
+                  labelColor: Tertiary().s800,
+                  tabs: const [
+                    Tab(
+                      text: "الثنائيات",
+                    ),
+                    Tab(text: "طلبات الإضافة"),
+                  ]),
             ),
             body: const TabBarView(children: [SelectDuo(), ViewDuoInvites()]),
           ),

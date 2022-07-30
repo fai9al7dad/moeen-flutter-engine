@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
+import 'package:moeen/helpers/general/constants.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -20,8 +20,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           centerTitle: true,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          foregroundColor: Colors.black,
-          elevation: 0,
+          foregroundColor: Tertiary().s800,
+          elevation: 0.8,
           bottom: showLoading == true
               ? const PreferredSize(
                   preferredSize: Size.fromHeight(6.0),

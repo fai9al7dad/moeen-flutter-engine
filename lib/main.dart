@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'تطبيق معين',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: "montserrat",
         scaffoldBackgroundColor: const Color(0xfffff8ed),
         primarySwatch: Colors.green,
       ),

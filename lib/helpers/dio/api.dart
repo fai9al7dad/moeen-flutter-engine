@@ -94,4 +94,30 @@ class Api {
       rethrow;
     }
   }
+
+  Future searchUsers({query}) async {
+    Map payload = {"query": query};
+    try {
+      Response res = await api.post("/api/users/search", data: payload);
+      List data = res.data["result"];
+      List<SearchUserModel> list = [];
+      for (var i = 0; i < data.length; i++) {
+        SearchUserModel duo = SearchUserModel.fromJson(data[i]);
+        list.add(duo);
+      }
+      return list;
+    } on DioError catch (e) {
+      return null;
+    }
+  }
+
+  Future sendInvite({toUserID}) async {
+    Map payload = {"toUserID": toUserID};
+    try {
+      Response res = await api.post("/api/duo/send-invite", data: payload);
+      return res;
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
 }

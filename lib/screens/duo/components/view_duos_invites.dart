@@ -25,10 +25,12 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
     try {
       final Api api = Api();
       var response = await api.getDuosInvites();
-      setState(() {
-        invites = response;
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          invites = response;
+          loading = false;
+        });
+      }
     } on Dio.DioError catch (e) {
       print(e);
     }

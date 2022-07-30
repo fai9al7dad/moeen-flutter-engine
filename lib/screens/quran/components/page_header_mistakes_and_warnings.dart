@@ -17,7 +17,7 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textColor = int.parse(CustomColors.textColor);
+    var textColor = 0xffae8f74;
 
     return Consumer<QuranProvider>(builder: (context, quranProvider, _) {
       var ff = quranProvider.mistakes

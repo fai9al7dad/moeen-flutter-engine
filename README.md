@@ -15,13 +15,13 @@
 
 ## current iteration
 
-- [ ] duos
+- [x] duos
   - [x] show need to login if not auth
   - [x] view duos
   - [x] view duos invites
   - [x] accept duo invite
   - [x] reject duo invite
-  - [ ] send duo invites
+  - [x] send duo invites
 
 ## finished
 
@@ -54,4 +54,4 @@
   - [x] view duos invites
   - [x] accept duo invite
   - [x] reject duo invite
-  - [ ] send duo invites
+  - [x] send duo invites
