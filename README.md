@@ -12,6 +12,9 @@
 - [ ] add border bottom to button
 - [ ] switch warning to svg -> select duo
 - [ ] show empty state -> duo
+- [ ] update empty state -> werd
+- [ ] update empty state -> invites
+- [ ] switch fab to custom button?
 
 ## current iteration
 
