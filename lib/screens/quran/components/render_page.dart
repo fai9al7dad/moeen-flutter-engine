@@ -50,9 +50,15 @@ class RenderPage extends StatelessWidget {
                       ? page[index + 1]["lineNumber"]
                       : 15;
                   bool lineChanged = curLineNum != aftLineNum;
-                  var found = quranProvider.mistakes.firstWhereOrNull(
-                      (element) => element.wordID == item["wordID"]);
 
+                  var found = [];
+                  if (quranProvider.isWerd) {
+                    found = quranProvider.werdMistakes.firstWhereOrNull(
+                        (element) => element.wordID == item["wordID"]);
+                  } else {
+                    found = quranProvider.mistakes.firstWhereOrNull(
+                        (element) => element.wordID == item["wordID"]);
+                  }
                   if (item["isNewChapter"] == 1) {
                     if (item["isBismillah"] == 1 && item["pageNumber"] != 187) {
                       return const TextSpan(

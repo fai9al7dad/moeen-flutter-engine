@@ -10,8 +10,7 @@ class RenderQuranList extends StatelessWidget {
   const RenderQuranList({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<QuranProvider>(
-        create: (_) => QuranProvider(), child: const MainScaffold());
+    return const MainScaffold();
   }
 }
 

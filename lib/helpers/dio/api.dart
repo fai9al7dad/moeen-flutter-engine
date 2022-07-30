@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
+import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 
@@ -134,6 +135,34 @@ class Api {
 
       for (var i = 0; i < data.length; i++) {
         WerdsModel duo = WerdsModel.fromJson(res.data[i]);
+        list.add(duo);
+      }
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future addWerd({duoID, reciterID}) async {
+    Map payload = {"duoID": duoID.toString(), "reciterID": reciterID};
+    try {
+      Response res = await api.post("/api/werd/add", data: payload);
+      return res.data;
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<HighlightsModel>> getHighlightsByUserID({userID}) async {
+    try {
+      Response res = await api.get(
+        "/api/highlight/user-id/$userID",
+      );
+      List data = res.data;
+      List<HighlightsModel> list = [];
+
+      for (var i = 0; i < data.length; i++) {
+        HighlightsModel duo = HighlightsModel.fromJson(res.data[i]);
         list.add(duo);
       }
       return list;

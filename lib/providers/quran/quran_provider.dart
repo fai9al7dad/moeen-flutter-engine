@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/helpers/models/highlights_model.dart';
+import 'package:moeen/helpers/models/werds_model.dart';
 
 class QuranProvider with ChangeNotifier {
   final wordsColorsMap = WordColorMap();
@@ -9,7 +11,10 @@ class QuranProvider with ChangeNotifier {
 
   List _quran = [];
   List<WordColorMapModel> _mistakes = [];
+  List<HighlightsModel> _werdMistakes = [];
   bool _loadingGetData = false;
+
+  bool _isWerd = false;
   // used mainly when changing to another page, ex: sleect surah
 
   // late JoinedQuran _currentPage;
@@ -17,8 +22,16 @@ class QuranProvider with ChangeNotifier {
     return _mistakes;
   }
 
+  List<HighlightsModel> get werdMistakes {
+    return _werdMistakes;
+  }
+
   bool get loadingGetData {
     return _loadingGetData;
+  }
+
+  bool get isWerd {
+    return _isWerd;
   }
 
   PageController get pageController {
@@ -44,6 +57,11 @@ class QuranProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setWerdMistakes({required data}) {
+    _isWerd = true;
+    _werdMistakes = data;
+  }
+
   void addMistake(
       {required id,
       required pageNumber,
@@ -65,14 +83,20 @@ class QuranProvider with ChangeNotifier {
     //   _mistakes[id] = newMistake;
     // });
     // inspect(s);
-    var word = WordColorMapModel(
-        pageNumber: pageNumber,
-        verseNumber: int.parse(verseNumber),
-        chapterCode: chapterCode,
-        color: newColor,
-        wordID: id);
-    await wordsColorsMap.insertWord(word);
-    refreshData();
+    if (!_isWerd) {
+      var word = WordColorMapModel(
+          pageNumber: pageNumber,
+          verseNumber: int.parse(verseNumber),
+          chapterCode: chapterCode,
+          color: newColor,
+          wordID: id);
+      await wordsColorsMap.insertWord(word);
+      refreshData();
+    } else {
+      HighlightsModel data =
+          {"color": newColor, "wordID": id} as HighlightsModel;
+      _werdMistakes.add(data);
+    }
     // notifyListeners();
   }
 }

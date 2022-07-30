@@ -18,11 +18,11 @@
 
 ## current iteration
 
-- [ ] werd
+- [x] werd
   - [x] get werd
-  - [ ] add werds
-    - [ ] send api
-    - [ ] set global isWerd true, duoid, werd id, reciter username
+  - [x] add werds
+    - [x] send api
+    - [x] set global isWerd true, duoid, werd id, reciter username
 - [ ] highlights
   - [ ] change local mw to reciter mw
   - [ ] change grean duo header to red werd header
@@ -62,5 +62,8 @@
   - [x] accept duo invite
   - [x] reject duo invite
   - [x] send duo invites
-- [ ] werd -> 3 remainig
+- [x] werd
   - [x] get werd
+  - [x] add werds
+    - [x] send api
+    - [x] set global isWerd true, duoid, werd id, reciter username

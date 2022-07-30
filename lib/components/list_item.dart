@@ -14,7 +14,7 @@ class ListItem extends StatelessWidget {
       this.onTap,
       required this.title,
       required this.subtitle,
-      required this.trailingIcon})
+      this.trailingIcon})
       : super(key: key);
 
   @override

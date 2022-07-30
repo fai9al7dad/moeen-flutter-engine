@@ -68,6 +68,7 @@ class _SelectDuoState extends State<SelectDuo> {
                     MaterialPageRoute(
                       builder: (context) => WerdsScreen(
                         duoID: duos[index].duoID,
+                        username: duos[index].username,
                       ),
                     )),
                 subtitle: "رقم المعرف: ${duos[index].id}",
