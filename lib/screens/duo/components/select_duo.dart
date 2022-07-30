@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
+import 'package:moeen/screens/werds/werds_screen.dart';
 
 class SelectDuo extends StatefulWidget {
   const SelectDuo({Key? key}) : super(key: key);
@@ -62,6 +63,13 @@ class _SelectDuoState extends State<SelectDuo> {
             return ListItem(
                 index: index,
                 title: duos[index].username,
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WerdsScreen(
+                        duoID: duos[index].duoID,
+                      ),
+                    )),
                 subtitle: "رقم المعرف: ${duos[index].id}",
                 trailingIcon: Icons.chevron_right);
           }),

@@ -15,13 +15,17 @@
 
 ## current iteration
 
-- [x] duos
-  - [x] show need to login if not auth
-  - [x] view duos
-  - [x] view duos invites
-  - [x] accept duo invite
-  - [x] reject duo invite
-  - [x] send duo invites
+- [ ] werd
+  - [x] get werd
+  - [ ] add werds
+    - [ ] send api
+    - [ ] set global isWerd true, duoid, werd id, reciter username
+- [ ] highlights
+  - [ ] change local mw to reciter mw
+  - [ ] change grean duo header to red werd header
+  - [ ] add highlight by werd id
+  - [ ] view werd highlights and mistakes
+  - [ ] finish werd
 
 ## finished
 
@@ -48,10 +52,12 @@
   - [x] register
   - [ ] forgot password
   - [x] local storage auth
-- [ ] duos
+- [x] duos
   - [x] show need to login if not auth
   - [x] view duos
   - [x] view duos invites
   - [x] accept duo invite
   - [x] reject duo invite
   - [x] send duo invites
+- [ ] werd -> 3 remainig
+  - [x] get werd

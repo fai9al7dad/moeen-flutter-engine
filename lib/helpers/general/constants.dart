@@ -6,6 +6,7 @@ import 'package:moeen/screens/duo/duosScreen.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:moeen/screens/search_users/search_users.dart';
 import 'package:moeen/screens/surahList/surah_list.dart';
+import 'package:moeen/screens/werds/werds_screen.dart';
 
 class MistakesColors {
   static const warning = "0xfff59e0b";
@@ -22,6 +23,7 @@ class CustomRouter {
     '/register': (context) => const RegisterScreen(),
     '/forgot-password': (context) => const ForgotPassword(),
     '/search-users': (context) => const SearchUsers(),
+    '/werds': (context) => const WerdsScreen(),
   };
 }
 

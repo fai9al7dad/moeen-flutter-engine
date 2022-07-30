@@ -21,7 +21,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           centerTitle: true,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           foregroundColor: Tertiary().s800,
-          elevation: 0.8,
+          // elevation: 0.8,
+          elevation: 0,
           bottom: showLoading == true
               ? const PreferredSize(
                   preferredSize: Size.fromHeight(6.0),

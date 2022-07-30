@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
+import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 
 class Api {
@@ -118,6 +119,26 @@ class Api {
       return res;
     } on DioError catch (e) {
       rethrow;
+    }
+  }
+
+  // werds
+
+  Future<List<WerdsModel>> getWerds({duoID}) async {
+    try {
+      Response res = await api.get(
+        "/api/werd/duo-id/$duoID",
+      );
+      List data = res.data;
+      List<WerdsModel> list = [];
+
+      for (var i = 0; i < data.length; i++) {
+        WerdsModel duo = WerdsModel.fromJson(res.data[i]);
+        list.add(duo);
+      }
+      return list;
+    } catch (e) {
+      return [];
     }
   }
 }
