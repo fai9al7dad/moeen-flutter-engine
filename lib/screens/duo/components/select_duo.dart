@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart' as Dio;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/dio/API.dart';
@@ -18,7 +17,6 @@ class _SelectDuoState extends State<SelectDuo> {
   bool loading = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchDuos();
   }
@@ -67,9 +65,9 @@ class _SelectDuoState extends State<SelectDuo> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => WerdsScreen(
-                        duoID: duos[index].duoID,
-                        username: duos[index].username,
-                      ),
+                          duoID: duos[index].duoID,
+                          username: duos[index].username,
+                          reciterID: duos[index].id),
                     )),
                 subtitle: "رقم المعرف: ${duos[index].id}",
                 trailingIcon: Icons.chevron_right);

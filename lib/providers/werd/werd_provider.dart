@@ -33,12 +33,11 @@ class WerdProvider with ChangeNotifier {
   }
 
   void startWerd({required creds}) async {
-    print(creds);
-    // _isWerd = true;
-    // _werdID = creds.werdID;
-    // _duoID = creds.duoID;
-    // _username = creds.username;
-    // notifyListeners();
+    _isWerd = true;
+    _werdID = creds["werdID"];
+    _duoID = creds["duoID"];
+    _username = creds["username"];
+    notifyListeners();
   }
 
   void finishWerd() {

@@ -3,18 +3,20 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/list_item.dart';
+import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
+import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
-import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
-import 'package:moeen/providers/werd/werd_provider.dart';
 import 'package:provider/provider.dart';
 
 class WerdsScreen extends StatefulWidget {
   final int? duoID;
   final String? username;
-  const WerdsScreen({Key? key, this.duoID, this.username}) : super(key: key);
+  final int? reciterID;
+  const WerdsScreen({Key? key, this.duoID, this.username, this.reciterID})
+      : super(key: key);
 
   @override
   State<WerdsScreen> createState() => _WerdsScreenState();
@@ -23,10 +25,10 @@ class WerdsScreen extends StatefulWidget {
 class _WerdsScreenState extends State<WerdsScreen> {
   List<WerdsModel>? werds = [];
   bool loading = true;
+  bool appBarLoading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getWerds();
   }
@@ -51,37 +53,68 @@ class _WerdsScreenState extends State<WerdsScreen> {
   }
 
   void startWerd() async {
+    setState(() {
+      appBarLoading = true;
+    });
+    final DatabaseHelper db = DatabaseHelper();
     var werd =
-        await api.addWerd(duoID: widget.duoID, reciterID: werds![0].reciterID);
+        await api.addWerd(duoID: widget.duoID, reciterID: widget.reciterID);
 
     var highlightsRes =
-        await api.getHighlightsByUserID(userID: werds![0].reciterID);
+        await api.getHighlightsByUserID(userID: widget.reciterID);
 
-    List<HighlightsModel> arr = [];
+    // this will not return pagenumber, chaptercode, but will return wordID
+    // so we need to fetch word by id from local db, and append it
 
-    for (var item in highlightsRes) {
+    List<WordColorMapModel> arr = [];
+    // init warnings and mistakes as map
+    // record page number and i
+    // compare with i and page
+    // if prev page != i page; reset mw
+    Map mw = {"page": 0, "mistakes": 0, "warnings": 0};
+    for (var i = 0; i < highlightsRes.length; i++) {
+      var item = highlightsRes[i];
+      var word = await db.getWordByID(id: item.id);
+      var line = await db.getLineByID(id: word.id); // to get pagenumber
+      mw = {...mw, "page": line.pageID};
+      if (mw["page"] != line.pageID) {
+        mw = {...mw, "mistakes": 0, "warnings": 0};
+      }
+
       var color;
+
       switch (item.type) {
         case "warning":
+          mw = {...mw, "warnings": mw["warnings"] + 1};
           color = MistakesColors.warning;
           break;
         case "mistake":
+          mw = {...mw, "mistakes": mw["mistakes"] + 1};
           color = MistakesColors.mistake;
           break;
       }
       // arr.push({color: color, wordID: item.wordID});
-      HighlightsModel data =
-          HighlightsModel(color: item.color, wordID: item.wordID);
+      WordColorMapModel data = WordColorMapModel(
+          color: color,
+          wordID: item.wordID,
+          pageNumber: line.pageID,
+          chapterCode: word.chapterCode,
+          warnings: mw["warnings"],
+          mistakes: mw["mistakes"]);
       arr.add(data);
     }
 
-    Provider.of<WerdProvider>(context, listen: false).startWerd(creds: {
+    Provider.of<QuranProvider>(context, listen: false).startWerd(creds: {
       "duoID": widget.duoID,
       "username": widget.username,
-      "werdID": werd["id"]
+      "werdID": werd["id"],
+      "reciterID": widget.reciterID,
+      "mistakes": highlightsRes.isEmpty ? [WordColorMapModel()] : arr
     });
-    Provider.of<QuranProvider>(context, listen: false)
-        .setWerdMistakes(data: arr);
+    setState(() {
+      appBarLoading = false;
+    });
+    Navigator.pushReplacementNamed(context, "/");
   }
 
   @override
@@ -89,7 +122,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
     // final args = ModalRoute.of(context)!.settings.arguments as DuosScreen;
 
     return Scaffold(
-      appBar: const CustomAppBar(title: "الأوراد", showLoading: false),
+      appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: const Color(0xff059669),
           onPressed: () => startWerd(),

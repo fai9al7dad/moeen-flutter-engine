@@ -1,5 +1,6 @@
 import "dart:io" as io;
 import 'package:flutter/services.dart';
+import 'package:moeen/helpers/database/quran/quran_models.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -34,6 +35,29 @@ class DatabaseHelper {
     var dbClient = await db;
     List<Map> list = await dbClient!.rawQuery("SELECT * FROM page");
     return list;
+  }
+
+  Future<Word> getWordByID({id}) async {
+    var dbClient = await db;
+    List<Map> word =
+        await dbClient!.query("word", where: "id = ?", whereArgs: [id]);
+
+    return Word(
+      id: word[0]["id"],
+      text: word[0]["text"],
+      chapterCode: word[0]["chapterCode"],
+    );
+  }
+
+  Future<Line> getLineByID({id}) async {
+    var dbClient = await db;
+    List<Map> line =
+        await dbClient!.query("line", where: "id = ?", whereArgs: [id]);
+
+    return Line(
+      id: line[0]["id"],
+      pageID: line[0]["pageID"],
+    );
   }
 
   Future<List<List>> getJoinedQuran() async {

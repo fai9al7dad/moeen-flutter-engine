@@ -3,16 +3,14 @@ class HighlightsModel {
   int? selfUserID;
   int? werdID;
   String? type;
-  var color;
-  int? wordID;
-
-  HighlightsModel(
-      {this.id,
-      this.selfUserID,
-      this.werdID,
-      this.type,
-      this.wordID,
-      this.color});
+  late int wordID;
+  HighlightsModel({
+    this.id,
+    this.selfUserID,
+    this.werdID,
+    this.type,
+    required this.wordID,
+  });
 
   HighlightsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -23,7 +21,7 @@ class HighlightsModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
     data['selfUserID'] = selfUserID;
     data['werdID'] = werdID;

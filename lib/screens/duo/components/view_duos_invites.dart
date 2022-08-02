@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart' as Dio;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
@@ -16,7 +15,6 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
   bool loading = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchInvites();
   }
@@ -39,7 +37,7 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
   void acceptOrRejectInvite({inviteID, type}) async {
     final Api api = Api();
     try {
-      var r = await api.acceptOrRejectInvite(fromUserID: inviteID, type: type);
+      await api.acceptOrRejectInvite(fromUserID: inviteID, type: type);
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green[200],
@@ -108,7 +106,7 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
                           onPressed: () => acceptOrRejectInvite(
                               inviteID: invites[index].firstUser?.id,
                               type: "accept"),
-                          child: Text("قبول")),
+                          child: const Text("قبول")),
                       TextButton(
                           onPressed: () => acceptOrRejectInvite(
                               inviteID: invites[index].firstUser?.id,

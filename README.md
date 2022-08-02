@@ -18,22 +18,17 @@
 
 ## current iteration
 
-- [x] werd
-  - [x] get werd
-  - [x] add werds
-    - [x] send api
-    - [x] set global isWerd true, duoid, werd id, reciter username
-- [ ] highlights
-  - [ ] change local mw to reciter mw
-  - [ ] change grean duo header to red werd header
-  - [ ] add highlight by werd id
-  - [ ] view werd highlights and mistakes
-  - [ ] finish werd
+- [x] werd highlights
+  - [x] change local mw to reciter mw
+  - [x] change grean duo header to red werd header
+  - [x] add highlight by werd id
+  - [x] view werd highlights and mistakes
+  - [x] finish werd
+  - [x] return to local mw
 
 ## finished
 
 - [x] word highlight = black->warning->mistake->revert
-- [x] make sqlite from page to list
 - [x] page header
   - [x] add juz number
   - [x] add hizb number
@@ -67,3 +62,10 @@
   - [x] add werds
     - [x] send api
     - [x] set global isWerd true, duoid, werd id, reciter username
+- [x] werd highlights
+  - [x] change local mw to reciter mw
+  - [x] change grean duo header to red werd header
+  - [x] add highlight by werd id
+  - [x] view werd highlights and mistakes
+  - [x] finish werd
+  - [x] return to local mw

@@ -12,10 +12,10 @@ class DuosModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['username'] = this.username;
-    data['id'] = this.id;
-    data['duoID'] = this.duoID;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['username'] = username;
+    data['id'] = id;
+    data['duoID'] = duoID;
     return data;
   }
 }

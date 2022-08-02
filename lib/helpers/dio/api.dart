@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
@@ -28,7 +30,7 @@ class Api {
     try {
       Response res = await api.post("/api/auth/register", data: data);
       return res;
-    } on DioError catch (e) {
+    } on DioError {
       rethrow;
     }
   }
@@ -37,7 +39,7 @@ class Api {
     try {
       Response res = await api.post("/api/auth/login", data: data);
       return res;
-    } on DioError catch (e) {
+    } on DioError {
       rethrow;
     }
   }
@@ -92,7 +94,7 @@ class Api {
     try {
       Response res = await api.post("/api/duo/$type-invite", data: payload);
       return res;
-    } on DioError catch (e) {
+    } on DioError {
       rethrow;
     }
   }
@@ -108,7 +110,7 @@ class Api {
         list.add(duo);
       }
       return list;
-    } on DioError catch (e) {
+    } on DioError {
       return null;
     }
   }
@@ -118,7 +120,7 @@ class Api {
     try {
       Response res = await api.post("/api/duo/send-invite", data: payload);
       return res;
-    } on DioError catch (e) {
+    } on DioError {
       rethrow;
     }
   }
@@ -148,11 +150,12 @@ class Api {
     try {
       Response res = await api.post("/api/werd/add", data: payload);
       return res.data;
-    } on DioError catch (e) {
+    } on DioError {
       rethrow;
     }
   }
 
+  // highlights
   Future<List<HighlightsModel>> getHighlightsByUserID({userID}) async {
     try {
       Response res = await api.get(
@@ -165,9 +168,25 @@ class Api {
         HighlightsModel duo = HighlightsModel.fromJson(res.data[i]);
         list.add(duo);
       }
+      inspect(list);
       return list;
     } catch (e) {
       return [];
+    }
+  }
+
+  Future addHighlightByWerdID({werdID, reciterUserID, type, wordID}) async {
+    Map payload = {
+      "werdID": werdID.toString(),
+      "reciterID": reciterUserID,
+      "type": type,
+      "wordID": wordID
+    };
+    try {
+      Response res = await api.post("/api/highlight/add", data: payload);
+      return res.data;
+    } on DioError {
+      rethrow;
     }
   }
 }

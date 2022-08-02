@@ -121,6 +121,7 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
         mw["mistakes"] == 0 || mw["mistakes"] == null ? 0 : mw["mistakes"];
     var warnings =
         mw["warnings"] == 0 || mw["warnings"] == null ? 0 : mw["warnings"];
+
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) {
         setState(() {
@@ -135,6 +136,7 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
   @override
   void initState() {
     super.initState();
+
     getMW();
   }
 

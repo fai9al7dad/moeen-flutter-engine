@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:moeen/helpers/dio/api.dart';

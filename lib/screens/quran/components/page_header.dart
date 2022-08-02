@@ -52,7 +52,39 @@ class PageHeader extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            CircleAvatar(
+            const DuosOrWerd()
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class DuosOrWerd extends StatelessWidget {
+  const DuosOrWerd({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<QuranProvider>(
+      builder: (context, quranProvider, child) => quranProvider.isWerd
+          ? CircleAvatar(
+              // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
+              backgroundColor: Colors.red,
+              radius: 8,
+              child: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
+                  onPressed: () =>
+                      {Navigator.pushNamed(context, "/finish-werd")},
+                  icon: const Icon(
+                    Icons.group,
+                    size: 12,
+                    color: Colors.white,
+                  )),
+            )
+          : CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
 
               radius: 8,
@@ -64,10 +96,7 @@ class PageHeader extends StatelessWidget {
                     Icons.group,
                     size: 12,
                   )),
-            )
-          ],
-        )
-      ],
+            ),
     );
   }
 }

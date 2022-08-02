@@ -8,21 +8,21 @@ const WordsColorsMapTable = "WordsColorsMap";
 
 class WordColorMapModel {
   final int? id;
-  final int wordID;
-  final int pageNumber;
-  final int verseNumber;
-  final String chapterCode;
-  final String color;
+  final int? wordID;
+  final int? pageNumber;
+  final int? verseNumber;
+  final String? chapterCode;
+  final String? color;
   final int? mistakes;
   final int? warnings;
 
   const WordColorMapModel(
       {this.id,
-      required this.wordID,
-      required this.chapterCode,
-      required this.color,
-      required this.pageNumber,
-      required this.verseNumber,
+      this.wordID,
+      this.chapterCode,
+      this.color,
+      this.pageNumber,
+      this.verseNumber,
       this.mistakes,
       this.warnings});
 
@@ -135,34 +135,6 @@ class WordColorMap {
     });
 
     return {"mistakes": mistakes, "warnings": warnings};
-  }
-
-  Future<List<WordColorMapModel>> getPageColorsPage({pageNumber}) async {
-    // Get a reference to the database.
-    var dbClient = await db;
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await dbClient!.query(
-        WordsColorsMapTable,
-        where: "pageNumber = ?",
-        whereArgs: [pageNumber]);
-
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-
-    List<WordColorMapModel> payload = [];
-    for (var item in maps) {
-      var pageColors = await getPageColors(pageNumber: item["pageNumber"]);
-      payload.add(WordColorMapModel(
-        id: item['id'],
-        wordID: item['wordID'],
-        chapterCode: item['chapterCode'],
-        verseNumber: item['verseNumber'],
-        pageNumber: item['pageNumber'],
-        color: item['color'],
-        mistakes: pageColors["mistakes"],
-        warnings: pageColors["warnings"],
-      ));
-    }
-    return payload;
   }
 
   Future<Map<String, int>> getChapterColors({chapterCode}) async {
