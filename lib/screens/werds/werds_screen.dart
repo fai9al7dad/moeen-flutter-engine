@@ -67,40 +67,48 @@ class _WerdsScreenState extends State<WerdsScreen> {
     // so we need to fetch word by id from local db, and append it
 
     List<WordColorMapModel> arr = [];
-    // init warnings and mistakes as map
-    // record page number and i
-    // compare with i and page
-    // if prev page != i page; reset mw
-    Map mw = {"page": 0, "mistakes": 0, "warnings": 0};
+    // mw will have pagenumber as key
+    // and mistakes and warnings as value
+    // output: 3-> {mistakes: 1, warnings: 2}
+    Map mw = {};
     for (var i = 0; i < highlightsRes.length; i++) {
       var item = highlightsRes[i];
-      var word = await db.getWordByID(id: item.id);
-      var line = await db.getLineByID(id: word.id); // to get pagenumber
-      mw = {...mw, "page": line.pageID};
-      if (mw["page"] != line.pageID) {
-        mw = {...mw, "mistakes": 0, "warnings": 0};
-      }
+      var word = await db.getWordByID(id: item.wordID);
+      var line = await db.getLineByID(id: word.lineID); // to get pagenumber
 
+      if (mw[line.pageID] == null) {
+        mw[line.pageID] = {"warnings": 0, "mistakes": 0};
+      }
       var color;
 
       switch (item.type) {
         case "warning":
-          mw = {...mw, "warnings": mw["warnings"] + 1};
+          mw[line.pageID] = {
+            ...mw[line.pageID],
+            "warnings": mw[line.pageID]["warnings"] + 1
+          };
           color = MistakesColors.warning;
           break;
         case "mistake":
-          mw = {...mw, "mistakes": mw["mistakes"] + 1};
+          mw[line.pageID] = {
+            ...mw[line.pageID],
+            "mistakes": mw[line.pageID]["mistakes"] + 1
+          };
           color = MistakesColors.mistake;
+          break;
+        case "revert":
+          color = MistakesColors.revert;
           break;
       }
       // arr.push({color: color, wordID: item.wordID});
+
       WordColorMapModel data = WordColorMapModel(
           color: color,
           wordID: item.wordID,
           pageNumber: line.pageID,
           chapterCode: word.chapterCode,
-          warnings: mw["warnings"],
-          mistakes: mw["mistakes"]);
+          mistakes: mw[line.pageID]["mistakes"],
+          warnings: mw[line.pageID]["warnings"]);
       arr.add(data);
     }
 

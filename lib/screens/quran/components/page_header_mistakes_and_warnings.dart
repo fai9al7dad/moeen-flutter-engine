@@ -31,10 +31,6 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
             .firstWhereOrNull((element) => element.pageNumber == pageNumber);
       }
 
-      // print("ff ${ff!.mistakes}");
-      // if(mistakes != null){
-      // return Text(ff!.mistakes.toString());
-      // }
       var mistakes =
           ff?.mistakes == 0 || ff?.mistakes == null ? 0 : ff?.mistakes;
       var warnings =

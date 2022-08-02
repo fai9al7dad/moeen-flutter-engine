@@ -2,29 +2,35 @@
 
 ## bugs
 
-- [ ] switch text spans to Word widget?
 - [ ] words on right column cant be highlighted -> quran screen
-- [ ] optimize sql init query on android, ios->?
 - [ ] need to add remaining fonts
 
 ## improvments
 
+- [ ] optimize sql init query on android, ios->?
+- [ ] switch text spans to Word widget?
 - [ ] add border bottom to button
 - [ ] switch warning to svg -> select duo
 - [ ] show empty state -> duo
 - [ ] update empty state -> werd
 - [ ] update empty state -> invites
 - [ ] switch fab to custom button?
+- [ ] on highlight word, first show new color with state, then refresh
+- [ ] show animation on highlight -> [warning,mistake]
 
 ## current iteration
 
-- [x] werd highlights
-  - [x] change local mw to reciter mw
-  - [x] change grean duo header to red werd header
-  - [x] add highlight by werd id
-  - [x] view werd highlights and mistakes
-  - [x] finish werd
-  - [x] return to local mw
+- [ ] sync
+  - [ ] create tempWCM
+  - [ ] on add mistake, if not auth add to temp
+  - [ ] on login, check if temp is not empty
+    - [ ] if not show alert
+      - [ ] on accept sync from temp to backend
+        - [ ] clear temp
+      - [ ] on reject clear temp
+  - [ ] on settings page
+    - [ ] show sync account
+      - [ ] sync from backend to sqlite
 
 ## finished
 

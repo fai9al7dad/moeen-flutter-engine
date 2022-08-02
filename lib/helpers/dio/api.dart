@@ -168,7 +168,6 @@ class Api {
         HighlightsModel duo = HighlightsModel.fromJson(res.data[i]);
         list.add(duo);
       }
-      inspect(list);
       return list;
     } catch (e) {
       return [];

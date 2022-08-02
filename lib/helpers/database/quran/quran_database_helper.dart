@@ -46,6 +46,7 @@ class DatabaseHelper {
       id: word[0]["id"],
       text: word[0]["text"],
       chapterCode: word[0]["chapterCode"],
+      lineID: word[0]["lineID"],
     );
   }
 
