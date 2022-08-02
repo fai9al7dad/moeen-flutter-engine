@@ -25,7 +25,7 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
       var ff;
       if (quranProvider.isWerd) {
         ff = quranProvider.werdMistakes
-            .firstWhereOrNull((element) => element.pageNumber == pageNumber);
+            .lastWhereOrNull((element) => element.pageNumber == pageNumber);
       } else {
         ff = quranProvider.mistakes
             .firstWhereOrNull((element) => element.pageNumber == pageNumber);

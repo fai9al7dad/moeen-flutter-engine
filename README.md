@@ -16,6 +16,9 @@
 - [ ] update empty state -> invites
 - [ ] switch fab to custom button?
 - [ ] on highlight word, first show new color with state, then refresh
+- [ ] optimize page header
+  - [ ] last where or null
+  - [ ] state on init not on builder
 - [ ] show animation on highlight -> [warning,mistake]
 
 ## current iteration
