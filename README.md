@@ -17,12 +17,16 @@
 - [ ] switch fab to custom button?
 - [ ] on highlight word, first show new color with state, then refresh
 - [ ] optimize page header
-  - [ ] last where or null
+  - [ ] last where or null -> make query on backend ?
   - [ ] state on init not on builder
 - [ ] show animation on highlight -> [warning,mistake]
 
 ## current iteration
 
+- [x] werds
+  - [x] view werd highlights
+  - [x] accept highlights
+    - [x] dont show accept if not reciter
 - [ ] sync
   - [ ] create tempWCM
   - [ ] on add mistake, if not auth add to temp
@@ -78,3 +82,6 @@
   - [x] view werd highlights and mistakes
   - [x] finish werd
   - [x] return to local mw
+  - [x] view werd highlights
+  - [x] accept highlights
+    - [x] dont show accept if not reciter

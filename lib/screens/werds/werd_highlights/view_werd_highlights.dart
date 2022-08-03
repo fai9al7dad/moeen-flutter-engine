@@ -1,0 +1,175 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/components/list_item.dart';
+import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
+import 'package:moeen/helpers/database/quran/quran_models.dart';
+import 'package:moeen/helpers/dio/api.dart';
+import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/helpers/models/highlights_model.dart';
+import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:provider/provider.dart';
+
+class ViewWerdHighlights extends StatefulWidget {
+  final int? werdID;
+  final bool? isAccepted;
+  final String? type;
+  const ViewWerdHighlights({Key? key, this.werdID, this.isAccepted, this.type})
+      : super(key: key);
+
+  @override
+  State<ViewWerdHighlights> createState() => _ViewWerdHighlightsState();
+}
+
+class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
+  final Api api = Api();
+  final DatabaseHelper db = DatabaseHelper();
+  bool? acceptedState;
+  late final List<Word> highlights;
+  bool loading = true;
+  bool appBarLoading = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchHighlights();
+  }
+
+  // call function api to get highlights by werdID
+  void fetchHighlights() async {
+    // set loading state to true
+    setState(() {
+      loading = true;
+      acceptedState = widget.isAccepted ?? false;
+    });
+    var res = await api.getHighlightsByWerdID(werdID: widget.werdID);
+
+    List<Word> data = [];
+    if (res.isNotEmpty) {
+      for (var i = 0; i < res.length; i++) {
+        Word word = await db.getWordByID(id: res[i].wordID);
+        // console.log(word);
+        data.add(Word(
+          id: word.id,
+          verseNumber: word.verseNumber,
+          text: word.text,
+          chapterCode: word.chapterCode,
+          pageID: word.pageID,
+          color: res[i].type == "mistake"
+              ? MistakesColors.mistake
+              : MistakesColors.warning,
+        ));
+      }
+    }
+    if (mounted) {
+      setState(() {
+        highlights = data;
+        loading = false;
+      });
+    }
+  }
+
+  void acceptHighlights() async {
+    if (acceptedState == true) return;
+    setState(() {
+      appBarLoading = true;
+    });
+    for (var i = 0; i < highlights.length; i++) {
+      Provider.of<QuranProvider>(context, listen: false).addMistake(
+          id: highlights[i].id,
+          pageNumber: highlights[i].pageID,
+          verseNumber: highlights[i].verseNumber,
+          chapterCode: highlights[i].chapterCode);
+    }
+    await api.acceptWerd(werdID: widget.werdID);
+
+    setState(() {
+      acceptedState = true;
+      appBarLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'تفاصيل الورد',
+        showLoading: appBarLoading,
+      ),
+      floatingActionButton: widget.type == "asReciter"
+          ? FloatingActionButton.extended(
+              onPressed: () => acceptHighlights(),
+              label:
+                  Text(acceptedState == true ? "تم القبول 👍" : 'قبول الورد'),
+              backgroundColor: const Color(0xff059669),
+            )
+          : null,
+      body: Center(
+        child: highlights.isEmpty
+            ? const Text('لم تسجل أخطاء أو تنبيهات في هذا الورد')
+            : Directionality(
+                textDirection: TextDirection.rtl,
+                child: ListView.separated(
+                  itemCount: highlights.length,
+                  separatorBuilder: (context, index) => const Divider(
+                    thickness: 0.8,
+                    height: 1,
+                    color: Color(0xffe4e4e7),
+                  ),
+                  itemBuilder: (context, index) {
+                    return ListItem(
+                        index: index,
+                        title: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.8,
+                          ),
+                          child: Row(children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(int.parse(
+                                    highlights[index].color ==
+                                            MistakesColors.warning
+                                        ? MistakesColors.warning
+                                        : MistakesColors.mistake,
+                                  ))),
+                              height: 8,
+                              width: 8,
+                            ),
+                            const SizedBox(width: 8),
+                            Text("${highlights[index].text}",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily:
+                                        "p${highlights[index].pageID}")),
+                          ]),
+                        ),
+                        subtitle: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.8,
+                            ),
+                            child: Row(children: [
+                              Text("${highlights[index].chapterCode}surah",
+                                  style: const TextStyle(
+                                      fontSize: 18, fontFamily: "surahname")),
+                              const SizedBox(width: 8),
+                              Text(
+                                "رقم الصفحة: ${highlights[index].pageID}",
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "رقم الآية: ${highlights[index].verseNumber}",
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                            ])));
+                  },
+                ),
+              ),
+      ),
+    );
+  }
+}

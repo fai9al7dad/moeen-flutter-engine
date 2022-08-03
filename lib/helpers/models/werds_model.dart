@@ -4,9 +4,15 @@ class WerdsModel {
   int? duoID;
   int? reciterID;
   int? correctorID;
+  bool? isAccepted;
 
   WerdsModel(
-      {this.id, this.createdAt, this.duoID, this.reciterID, this.correctorID});
+      {this.id,
+      this.createdAt,
+      this.duoID,
+      this.reciterID,
+      this.correctorID,
+      this.isAccepted});
 
   WerdsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -14,6 +20,7 @@ class WerdsModel {
     duoID = json['duoID'];
     reciterID = json['reciterID'];
     correctorID = json['correctorID'];
+    isAccepted = json['isAccepted'];
   }
 
   Map<String, dynamic> toJson() {

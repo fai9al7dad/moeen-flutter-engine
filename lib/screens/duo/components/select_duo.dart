@@ -60,7 +60,7 @@ class _SelectDuoState extends State<SelectDuo> {
           itemBuilder: (context, index) {
             return ListItem(
                 index: index,
-                title: duos[index].username,
+                title: Text("${duos[index].username}"),
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -69,7 +69,7 @@ class _SelectDuoState extends State<SelectDuo> {
                           username: duos[index].username,
                           reciterID: duos[index].id),
                     )),
-                subtitle: "رقم المعرف: ${duos[index].id}",
+                subtitle: Text("رقم المعرف: ${duos[index].id}"),
                 trailingIcon: Icons.chevron_right);
           }),
     );

@@ -10,9 +10,16 @@ class Line {
 }
 
 class Word {
-  String? chapterCode, audioUrl, charType, transliteration, verseNumber, text;
+  String? chapterCode,
+      audioUrl,
+      charType,
+      transliteration,
+      verseNumber,
+      text,
+      color;
   int? id, lineID, isNewChapter, wordID, isBismillah;
   int? lineNumber;
+  int? pageID;
   Word(
       {this.id,
       this.audioUrl,
@@ -24,7 +31,9 @@ class Word {
       this.chapterCode,
       this.text,
       this.transliteration,
-      this.verseNumber});
+      this.verseNumber,
+      this.pageID,
+      this.color});
 }
 
 class JoinedQuran {

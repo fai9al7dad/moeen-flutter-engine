@@ -188,4 +188,34 @@ class Api {
       rethrow;
     }
   }
+
+  // api.post api higlight werds by werdID
+  Future<List<HighlightsModel>> getHighlightsByWerdID({werdID}) async {
+    try {
+      Response res = await api.get(
+        "/api/highlight/werd-id/$werdID",
+      );
+      List data = res.data;
+      List<HighlightsModel> list = [];
+
+      for (var i = 0; i < data.length; i++) {
+        HighlightsModel duo = HighlightsModel.fromJson(res.data[i]);
+        list.add(duo);
+      }
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // api.post api accept werd by werdID
+  Future acceptWerd({werdID}) async {
+    Map payload = {"werdID": werdID.toString()};
+    try {
+      Response res = await api.post("/api/werd/accept-werd", data: payload);
+      return res.data;
+    } on DioError {
+      rethrow;
+    }
+  }
 }

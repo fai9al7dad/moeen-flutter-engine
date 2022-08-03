@@ -7,6 +7,7 @@ import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:moeen/screens/search_users/search_users.dart';
 import 'package:moeen/screens/surahList/surah_list.dart';
 import 'package:moeen/screens/werds/finish_werd.dart';
+import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
 import 'package:moeen/screens/werds/werds_screen.dart';
 
 class MistakesColors {
@@ -26,6 +27,7 @@ class CustomRouter {
     '/search-users': (context) => const SearchUsers(),
     '/werds': (context) => const WerdsScreen(),
     '/finish-werd': (context) => const FinishWerd(),
+    '/view-werd-highlights': (context) => const ViewWerdHighlights(),
   };
 }
 

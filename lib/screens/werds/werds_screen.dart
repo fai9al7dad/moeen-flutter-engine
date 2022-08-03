@@ -8,7 +8,9 @@ import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
+import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
 import 'package:provider/provider.dart';
 
 class WerdsScreen extends StatefulWidget {
@@ -74,25 +76,24 @@ class _WerdsScreenState extends State<WerdsScreen> {
     for (var i = 0; i < highlightsRes.length; i++) {
       var item = highlightsRes[i];
       var word = await db.getWordByID(id: item.wordID);
-      var line = await db.getLineByID(id: word.lineID); // to get pagenumber
 
-      if (mw[line.pageID] == null) {
-        mw[line.pageID] = {"warnings": 0, "mistakes": 0};
+      if (mw[word.pageID] == null) {
+        mw[word.pageID] = {"warnings": 0, "mistakes": 0};
       }
       var color;
 
       switch (item.type) {
         case "warning":
-          mw[line.pageID] = {
-            ...mw[line.pageID],
-            "warnings": mw[line.pageID]["warnings"] + 1
+          mw[word.pageID] = {
+            ...mw[word.pageID],
+            "warnings": mw[word.pageID]["warnings"] + 1
           };
           color = MistakesColors.warning;
           break;
         case "mistake":
-          mw[line.pageID] = {
-            ...mw[line.pageID],
-            "mistakes": mw[line.pageID]["mistakes"] + 1
+          mw[word.pageID] = {
+            ...mw[word.pageID],
+            "mistakes": mw[word.pageID]["mistakes"] + 1
           };
           color = MistakesColors.mistake;
           break;
@@ -105,10 +106,10 @@ class _WerdsScreenState extends State<WerdsScreen> {
       WordColorMapModel data = WordColorMapModel(
           color: color,
           wordID: item.wordID,
-          pageNumber: line.pageID,
+          pageNumber: word.pageID,
           chapterCode: word.chapterCode,
-          mistakes: mw[line.pageID]["mistakes"],
-          warnings: mw[line.pageID]["warnings"]);
+          mistakes: mw[word.pageID]["mistakes"],
+          warnings: mw[word.pageID]["warnings"]);
       arr.add(data);
     }
 
@@ -150,10 +151,31 @@ class _WerdsScreenState extends State<WerdsScreen> {
                                 color: Color(0xffe4e4e7),
                               ),
                           itemBuilder: (context, index) {
+                            String type;
+                            if (Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .authUser
+                                    ?.id ==
+                                werds![index].reciterID) {
+                              type = "asReciter";
+                            } else {
+                              type = "asCorrector";
+                            }
                             return ListItem(
                                 index: index,
-                                title: parseDate(date: werds![index].createdAt),
-                                subtitle: "رقم المعرف: ${werds![index].id}");
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ViewWerdHighlights(
+                                                werdID: werds![index].id,
+                                                isAccepted:
+                                                    werds![index].isAccepted,
+                                                type: type))),
+                                title: Text(
+                                    "${parseDate(date: werds![index].createdAt)}"),
+                                subtitle:
+                                    Text("رقم المعرف: ${werds![index].id}"));
                           })
                       : const Center(child: Text("لا يوجد أوراد بينكم"))),
             ),

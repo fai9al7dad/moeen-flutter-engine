@@ -102,11 +102,12 @@ class _SearchUsersState extends State<SearchUsers> {
                             itemBuilder: (context, index) {
                               return ListItem(
                                   index: index,
-                                  title: searchResult![index].username,
+                                  title:
+                                      Text("${searchResult![index].username}"),
                                   onTap: () => sendInvite(
                                       toUserID: searchResult![index].id),
-                                  subtitle:
-                                      "رقم المعرف: ${searchResult![index].id}",
+                                  subtitle: Text(
+                                      "رقم المعرف: ${searchResult![index].id}"),
                                   trailingIcon: Icons.touch_app_outlined);
                             },
                           ),

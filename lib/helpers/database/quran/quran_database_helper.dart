@@ -39,14 +39,16 @@ class DatabaseHelper {
 
   Future<Word> getWordByID({id}) async {
     var dbClient = await db;
-    List<Map> word =
-        await dbClient!.query("word", where: "id = ?", whereArgs: [id]);
+    List<Map> word = await dbClient!.rawQuery(
+        "select * from line join word on word.lineID = line.id where word.id = $id");
 
     return Word(
       id: word[0]["id"],
       text: word[0]["text"],
       chapterCode: word[0]["chapterCode"],
       lineID: word[0]["lineID"],
+      pageID: word[0]["pageID"],
+      verseNumber: word[0]["verseNumber"],
     );
   }
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class ListItem extends StatelessWidget {
   final int index;
   final void Function()? onTap;
-  final String? title;
-  final String? subtitle;
+  final Widget? title;
+  final Widget? subtitle;
   final IconData? trailingIcon;
   const ListItem(
       {Key? key,
@@ -34,8 +34,8 @@ class ListItem extends StatelessWidget {
           style: const TextStyle(color: Color(0xff047857), fontSize: 12),
         )),
       ),
-      title: Text("$title"),
-      subtitle: Text("$subtitle"),
+      title: title,
+      subtitle: subtitle,
       trailing: Icon(
         trailingIcon,
         color: const Color(0xff059669),
