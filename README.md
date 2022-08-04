@@ -26,7 +26,7 @@
 
 ## current iteration
 
-- [ ] sync
+- [x] sync
   - [x] create tempWCM
   - [x] on add mistake, if not auth add to temp
   - [x] on login, check if temp is not empty
@@ -34,16 +34,16 @@
       - [x] on accept sync from temp to backend
         - [x] clear temp
       - [x] on reject clear temp
-  - [ ] on settings page
+  - [x] on settings page
     - [x] show sync account
-      - [ ] sync from backend to sqlite
-- [ ] settings
+      - [x] sync from backend to sqlite
+- [x] settings
   - [x] add setting icon
   - [x] user info -> if auth
   - [x] about app
-  - [ ] send report
-  - [ ] send suggestion
-  - [ ] sync from backend to sqlite
+  - [x] send report -> need physical device testing
+  - [x] send suggestion -> need physical device testing
+  - [x] sync from backend to sqlite
   - [x] log out
 
 ## finished
@@ -92,7 +92,7 @@
   - [x] view werd highlights
   - [x] accept highlights
     - [x] dont show accept if not reciter
-- [ ] sync -> 3 left
+- [x] sync
   - [x] create tempWCM
   - [x] on add mistake, if not auth add to temp
   - [x] on login, check if temp is not empty
@@ -100,3 +100,14 @@
       - [x] on accept sync from temp to backend
         - [x] clear temp
       - [x] on reject clear temp
+  - [x] on settings page
+    - [x] show sync account
+      - [x] sync from backend to sqlite
+- [x] settings
+  - [x] add setting icon
+  - [x] user info -> if auth
+  - [x] about app
+  - [x] send report -> need physical device testing
+  - [x] send suggestion -> need physical device testing
+  - [x] sync from backend to sqlite
+  - [x] log out

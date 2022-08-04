@@ -16,4 +16,20 @@ class GeneralHelpers {
     }
     return type;
   }
+
+  getColorFromType(type) {
+    var color;
+    switch (type) {
+      case "revert":
+        color = MistakesColors.revert;
+        break;
+      case "warning":
+        color = MistakesColors.warning;
+        break;
+      case "mistake":
+        color = MistakesColors.mistake;
+        break;
+    }
+    return color;
+  }
 }

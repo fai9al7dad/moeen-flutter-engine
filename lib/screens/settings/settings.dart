@@ -1,10 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
+import 'package:moeen/helpers/database/quran/quran_models.dart';
+import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
+import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
+import 'package:moeen/helpers/dio/api.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -15,6 +24,44 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool showAlertDialog = false;
+  bool showSyncDialog = false;
+  bool isLoadingSync = false;
+
+  void onSync({userID}) async {
+    if (isLoadingSync) return;
+    final wcm = WordColorMap();
+    final api = Api();
+    final db = DatabaseHelper();
+
+    List<HighlightsModel> colors =
+        await api.getHighlightsByUserID(userID: userID);
+
+    await wcm.deleteAllColors();
+    await Future.forEach(colors, (HighlightsModel color) async {
+      var colorFromType = GeneralHelpers().getColorFromType(color.type);
+
+      Word word = await db.getWordByID(id: color.wordID);
+      var data = WordColorMapModel(
+          color: colorFromType,
+          wordID: word.id,
+          pageNumber: word.pageID,
+          verseNumber: int.parse(word.verseNumber ?? ""),
+          chapterCode: word.chapterCode);
+      await wcm.insertWord(data);
+    });
+
+    // show success snackbar
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green[200],
+        content: Text(
+          'تم المزامنة بنجاح',
+          style: TextStyle(color: Colors.green[900]),
+        )));
+    setState(() {
+      showSyncDialog = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,37 +94,62 @@ class _SettingsState extends State<Settings> {
                     CustomListTile(
                         title: 'ارسال بلاغ',
                         icon: Icons.warning_amber_rounded,
-                        onTap: () {},
+                        onTap: () async {
+                          final Email email = Email(
+                            body:
+                                '\n \n ------------- \n اسم المستخدم : ${authProvider.authUser?.username} \n  رقم المستخدم : ${authProvider.authUser?.id}',
+                            subject: 'بلاغ | معين',
+                            recipients: ['moeen-app@outlook.com'],
+                            isHTML: false,
+                          );
+
+                          await FlutterEmailSender.send(email);
+                        },
                         isNavigation: false,
                         order: "first"),
                     CustomListTile(
                       title: 'ارسال اقتراح',
                       icon: Icons.chat_outlined,
-                      onTap: () {},
+                      onTap: () async {
+                        final Email email = Email(
+                          body:
+                              '\n \n ------------- \n اسم المستخدم : ${authProvider.authUser?.username} \n  رقم المستخدم : ${authProvider.authUser?.id}',
+                          subject: 'اقتراح | معين',
+                          recipients: ['moeen-app@outlook.com'],
+                          isHTML: false,
+                        );
+
+                        await FlutterEmailSender.send(email);
+                      },
                       isNavigation: false,
                     ),
                     if (authProvider.isAuth)
                       CustomListTile(
                           title: 'مزامنة البيانات على هذا الجهاز',
                           icon: Icons.sync,
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              showSyncDialog = true;
+                            });
+                          },
                           isNavigation: false,
                           order: "last"),
                     const SizedBox(height: 20),
-                    StyledContainer(
-                        onTap: () => setState(() {
-                              showAlertDialog = true;
-                            }),
-                        child: const Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Center(
-                            child: Text("تسجيل الخروج",
-                                style: TextStyle(
-                                    fontFamily: "montserrat-bold",
-                                    fontSize: 14,
-                                    color: Colors.red)),
-                          ),
-                        ))
+                    if (authProvider.isAuth)
+                      StyledContainer(
+                          onTap: () => setState(() {
+                                showAlertDialog = true;
+                              }),
+                          child: const Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Center(
+                              child: Text("تسجيل الخروج",
+                                  style: TextStyle(
+                                      fontFamily: "montserrat-bold",
+                                      fontSize: 14,
+                                      color: Colors.red)),
+                            ),
+                          ))
                   ],
                 ),
               ),
@@ -91,6 +163,9 @@ class _SettingsState extends State<Settings> {
                       ),
                       onPressed: () {
                         authProvider.logout();
+                        setState(() {
+                          showAlertDialog = false;
+                        });
                       },
                     ),
                     TextButton(
@@ -106,7 +181,40 @@ class _SettingsState extends State<Settings> {
                     ),
                   ],
                   title: const Text("هل فعلا تريد تسجيل الخروج ؟"),
-                )
+                ),
+              if (showSyncDialog)
+                AlertDialog(
+                  actions: [
+                    TextButton(
+                      child: isLoadingSync
+                          ? const CircularProgressIndicator(strokeWidth: 2)
+                          : const Text(
+                              'مزامنة',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                      onPressed: () {
+                        onSync(userID: authProvider.authUser?.id);
+                        setState(() {
+                          isLoadingSync = true;
+                        });
+                      },
+                    ),
+                    TextButton(
+                      child: Text(
+                        'الغاء',
+                        style: TextStyle(color: Colors.blueGrey.shade500),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          showSyncDialog = false;
+                        });
+                      },
+                    ),
+                  ],
+                  title: const Text("هل فعلا تريد مزامنة البيانات ؟"),
+                  content: const Text(
+                      "سيتم إستبدال الاخطاء والتنبيهات الموجودة في هذا الجهاز، بالأخطاء والتنبيهات المربوطة بالحساب"),
+                ),
             ]),
           ),
         ),
@@ -193,7 +301,6 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StyledContainer(
-        child: GestureDetector(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -230,6 +337,6 @@ class CustomListTile extends StatelessWidget {
           ],
         ),
       ),
-    ));
+    );
   }
 }
