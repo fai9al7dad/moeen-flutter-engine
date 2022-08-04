@@ -91,3 +91,11 @@
   - [x] view werd highlights
   - [x] accept highlights
     - [x] dont show accept if not reciter
+- [ ] sync -> 3 left
+  - [x] create tempWCM
+  - [x] on add mistake, if not auth add to temp
+  - [x] on login, check if temp is not empty
+    - [x] if not show alert
+      - [x] on accept sync from temp to backend
+        - [x] clear temp
+      - [x] on reject clear temp
