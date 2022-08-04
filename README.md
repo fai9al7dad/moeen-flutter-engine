@@ -3,8 +3,8 @@
 ## bugs
 
 - [ ] words on right column cant be highlighted -> quran screen
-- [ ] need to add remaining fonts
 - [ ] on highlight word, first show new color with state, then refresh
+- [ ] need to add remaining fonts
 
 ## improvments
 
@@ -35,15 +35,16 @@
         - [x] clear temp
       - [x] on reject clear temp
   - [ ] on settings page
-    - [ ] show sync account
+    - [x] show sync account
       - [ ] sync from backend to sqlite
 - [ ] settings
-  - [ ] user info -> if auth
-  - [ ] about app
+  - [x] add setting icon
+  - [x] user info -> if auth
+  - [x] about app
   - [ ] send report
   - [ ] send suggestion
   - [ ] sync from backend to sqlite
-  - [ ] log out
+  - [x] log out
 
 ## finished
 

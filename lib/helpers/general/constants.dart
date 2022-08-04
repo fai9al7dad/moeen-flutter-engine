@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:moeen/screens/about/about_app.dart';
 import 'package:moeen/screens/auth/forgot_password.dart';
 import 'package:moeen/screens/auth/login_screen.dart';
 import 'package:moeen/screens/auth/register_screen.dart';
 import 'package:moeen/screens/duo/duosScreen.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:moeen/screens/search_users/search_users.dart';
+import 'package:moeen/screens/settings/settings.dart';
 import 'package:moeen/screens/surahList/surah_list.dart';
 import 'package:moeen/screens/werds/finish_werd.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
@@ -28,6 +30,8 @@ class CustomRouter {
     '/werds': (context) => const WerdsScreen(),
     '/finish-werd': (context) => const FinishWerd(),
     '/view-werd-highlights': (context) => const ViewWerdHighlights(),
+    '/settings': (context) => const Settings(),
+    '/about-app': (context) => const AboutApp(),
   };
 }
 

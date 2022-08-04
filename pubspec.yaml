@@ -71,6 +71,7 @@ flutter:
     - assets/svg/surah_header_svg.svg
     - assets/svg/warning.svg
     - assets/images/warning.png
+    - assets/images/logo.png
 
   fonts:
     - family: "montserrat-bold"

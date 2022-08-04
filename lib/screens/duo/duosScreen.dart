@@ -46,7 +46,7 @@ class DuosScreen extends StatelessWidget {
                     Icons.settings,
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/search-users");
+                    Navigator.pushNamed(context, "/settings");
                   },
                 ),
               ],
