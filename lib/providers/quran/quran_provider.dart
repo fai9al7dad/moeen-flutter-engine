@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
+import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
@@ -135,6 +137,20 @@ class QuranProvider with ChangeNotifier {
           wordID: id);
       await wordsColorsMap.insertWord(word);
       refreshData();
+      try {
+        await api.addHighlightBySelfUserID(wordID: id, type: type);
+      } on DioError catch (e) {
+        print("error from highlight/add endpoint... adding to temp colors ");
+        // init tempwrodsColorsMap, and add word to it
+        final tempWordsColorsMap = TempWordColorMap();
+        var word = TempWordColorMapModel(
+            pageNumber: pageNumber,
+            verseNumber: int.parse(verseNumber),
+            chapterCode: chapterCode,
+            color: newColor,
+            wordID: id);
+        await tempWordsColorsMap.insertWord(word);
+      }
     } else {
       if (type == "warning") {
         _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] += 1};

@@ -189,6 +189,17 @@ class Api {
     }
   }
 
+  // api.post add highlight by self user id
+  Future addHighlightBySelfUserID({type, wordID}) async {
+    Map payload = {"type": type, "wordID": wordID};
+    try {
+      Response res = await api.post("/api/highlight/add", data: payload);
+      return res.data;
+    } on DioError {
+      rethrow;
+    }
+  }
+
   // api.post api higlight werds by werdID
   Future<List<HighlightsModel>> getHighlightsByWerdID({werdID}) async {
     try {

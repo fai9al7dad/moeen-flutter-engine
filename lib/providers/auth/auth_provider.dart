@@ -39,9 +39,10 @@ class AuthProvider with ChangeNotifier {
     // dio().options.headers["Authorization"] = user.accessToken;
   }
 
-  void logout() {
+  void logout() async {
     _isAuth = false;
     _authUser = null;
+    await storage.delete(key: "accessToken");
     // dio().options.headers["Authorization"] = "";
     notifyListeners();
   }
