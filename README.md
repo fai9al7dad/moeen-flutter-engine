@@ -2,7 +2,7 @@
 
 ## bugs
 
-- [ ] on highlight word, first show new color with state, then refresh
+- [x] on highlight word, first show new color with state, then refresh
 - [ ] need to add remaining fonts
 
 ## improvments
