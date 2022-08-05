@@ -26,7 +26,7 @@
 
 ## current iteration
 
-- [ ] words on right column cant be highlighted -> quran screen : bug
+- [x] words on right column cant be highlighted -> quran screen : bug
 - [ ] on boarding
   - [ ]
 
