@@ -2,7 +2,6 @@
 
 ## bugs
 
-- [x] on highlight word, first show new color with state, then refresh
 - [ ] need to add remaining fonts
 
 ## improvments
@@ -25,7 +24,6 @@
 
 ## current iteration
 
-- [x] on highlight word, first show new color with state, then refresh -> bug
 - [ ] on boarding
   - [ ] create onbaording design , use existing design from prev react native app
 

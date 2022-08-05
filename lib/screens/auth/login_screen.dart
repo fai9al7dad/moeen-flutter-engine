@@ -224,29 +224,30 @@ class SyncDialog extends StatelessWidget {
   const SyncDialog({
     Key? key,
   }) : super(key: key);
-  Future<void> onSync() async {
-    // get all colors from temp
-    // and send them to server
-    // then delete all colors from temp
-    final temp = TempWordColorMap();
-    final api = Api();
-    List<Future> promises = [];
-    var colors = await temp.getAllColors();
-
-    for (var i = 0; i < colors.length; i++) {
-      var type = GeneralHelpers().getTypeFromColor(colors[i].color);
-      promises.add(
-          api.addHighlightBySelfUserID(wordID: colors[i].wordID, type: type));
-    }
-    await Future.wait(promises);
-    print("finished request");
-    await temp.deleteAllColors();
-    // navigate pop
-    // Navigator.of(context).pop();
-  }
 
   @override
   Widget build(BuildContext context) {
+    Future<void> onSync() async {
+      // get all colors from temp
+      // and send them to server
+      // then delete all colors from temp
+      final temp = TempWordColorMap();
+      final api = Api();
+      List<Future> promises = [];
+      var colors = await temp.getAllColors();
+
+      for (var i = 0; i < colors.length; i++) {
+        var type = GeneralHelpers().getTypeFromColor(colors[i].color);
+        promises.add(
+            api.addHighlightBySelfUserID(wordID: colors[i].wordID, type: type));
+      }
+      await Future.wait(promises);
+      print("finished request");
+      await temp.deleteAllColors();
+      // navigate pop
+      Navigator.of(context).pop();
+    }
+
     return AlertDialog(
       title: Text(
         "لديك أخطاء وتنبيهات لم يتم مزامنتها",
@@ -283,6 +284,7 @@ class SyncDialog extends StatelessWidget {
           onPressed: () async {
             final temp = TempWordColorMap();
             await temp.deleteAllColors();
+            Navigator.of(context).pop();
           },
         ),
       ],
