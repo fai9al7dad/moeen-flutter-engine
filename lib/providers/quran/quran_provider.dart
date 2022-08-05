@@ -93,7 +93,7 @@ class QuranProvider with ChangeNotifier {
   Future refreshData() async {
     var m = await wordsColorsMap.getAllColors();
     _mistakes = m;
-    notifyListeners();
+    // notifyListeners();
   }
 
   // void setWerdMistakes({required List<WordColorMapModel> data}) {
@@ -129,12 +129,25 @@ class QuranProvider with ChangeNotifier {
     // });
     // inspect(s);
     if (!_isWerd) {
+      if (newColor == MistakesColors.revert) {
+        _mistakes.removeWhere((element) => element.wordID == id);
+        notifyListeners();
+
+        return;
+      }
+      var isExist =
+          _mistakes.firstWhereOrNull((element) => element.wordID == id);
+      if (isExist != null) {
+        _mistakes.removeWhere((element) => element.wordID == id);
+      }
       var word = WordColorMapModel(
           pageNumber: pageNumber,
           verseNumber: int.parse(verseNumber),
           chapterCode: chapterCode,
           color: newColor,
           wordID: id);
+      _mistakes.add(word);
+      notifyListeners();
       await wordsColorsMap.insertWord(word);
       refreshData();
       try {
