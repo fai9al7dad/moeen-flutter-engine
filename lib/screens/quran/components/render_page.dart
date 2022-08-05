@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import 'package:moeen/screens/quran/components/page_header.dart';
@@ -20,7 +18,7 @@ class RenderPage extends StatelessWidget {
       children: [
         const SizedBox(height: 40),
         PageHeader(page: page[0]),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         PageWords(page: page),
       ],
     );

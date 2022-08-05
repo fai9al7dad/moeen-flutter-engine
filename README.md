@@ -2,7 +2,7 @@
 
 ## bugs
 
-- [ ] words on right column cant be highlighted -> quran screen
+- [x] words on right column cant be highlighted -> quran screen
 - [ ] on highlight word, first show new color with state, then refresh
 - [ ] need to add remaining fonts
 
@@ -26,25 +26,9 @@
 
 ## current iteration
 
-- [x] sync
-  - [x] create tempWCM
-  - [x] on add mistake, if not auth add to temp
-  - [x] on login, check if temp is not empty
-    - [x] if not show alert
-      - [x] on accept sync from temp to backend
-        - [x] clear temp
-      - [x] on reject clear temp
-  - [x] on settings page
-    - [x] show sync account
-      - [x] sync from backend to sqlite
-- [x] settings
-  - [x] add setting icon
-  - [x] user info -> if auth
-  - [x] about app
-  - [x] send report -> need physical device testing
-  - [x] send suggestion -> need physical device testing
-  - [x] sync from backend to sqlite
-  - [x] log out
+- [ ] words on right column cant be highlighted -> quran screen : bug
+- [ ] on boarding
+  - [ ]
 
 ## finished
 

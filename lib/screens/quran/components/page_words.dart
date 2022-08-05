@@ -20,8 +20,8 @@ class PageWords extends StatelessWidget {
         text: TextSpan(
             style: const TextStyle(
               color: Colors.black,
-              fontSize: 20,
-              height: 1.8,
+              fontSize: 22,
+              height: 1.7,
             ),
             // shadows: [
             //   Shadow(
@@ -87,47 +87,54 @@ class PageWords extends StatelessWidget {
                       fontFamily: "p${page[index]['pageNumber']}",
                     ));
               }
-              return lineChanged
-                  ? TextSpan(
-                      text: "${page[index]['text']}\n",
-                      style: TextStyle(
-                        color: found != null
-                            ? Color(int.parse(found.color))
-                            : Colors.black,
-                        fontFamily: "p${page[index]['pageNumber']}",
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => {
-                              // setMW(),
-                              quranProvider.addMistake(
-                                  id: item["wordID"],
-                                  pageNumber: item["pageNumber"],
-                                  verseNumber: item["verseNumber"],
-                                  chapterCode: item["chapterCode"],
-                                  color: found?.color)
-                            })
-                  : TextSpan(
-                      text: index == 0
-                          ? "${page[index]['text']} "
-                          : page[index]['text'],
-                      style: TextStyle(
-                        color: found != null
-                            ? Color(int.parse(found.color))
-                            : Colors.black,
-                        fontFamily: "p${page[index]['pageNumber']}",
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => {
-                              // setMW(),
-                              quranProvider.addMistake(
-                                  id: item["wordID"],
-                                  pageNumber: item["pageNumber"],
-                                  verseNumber: item["verseNumber"],
-                                  chapterCode: item["chapterCode"],
-                                  color: found?.color)
-                            });
+              // for fatihah
+              if ((item["chapterCode"] == "001" ||
+                      page[index]['pageNumber'] == 2) &&
+                  lineChanged) {
+                return TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => {
+                            // setMW(),
+                            quranProvider.addMistake(
+                                id: item["wordID"],
+                                pageNumber: item["pageNumber"],
+                                verseNumber: item["verseNumber"],
+                                chapterCode: item["chapterCode"],
+                                color: found?.color)
+                          },
+                    text: "${item["text"]}                       ",
+                    style: TextStyle(
+                      color: found != null
+                          ? Color(int.parse(found.color))
+                          : Colors.black,
+                      fontFamily: "p${page[index]['pageNumber']}",
+                    ));
+              }
+              return TextSpan(
+                  text: lineChanged
+                      ? page[index]['text'] + " "
+                      : index != 0
+                          ? page[index]['text']
+                          : page[index]['text'] + " ",
+                  style: TextStyle(
+                    color: found != null
+                        ? Color(int.parse(found.color))
+                        : Colors.black,
+                    fontFamily: "p${page[index]['pageNumber']}",
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => {
+                          // setMW(),
+                          quranProvider.addMistake(
+                              id: item["wordID"],
+                              pageNumber: item["pageNumber"],
+                              verseNumber: item["verseNumber"],
+                              chapterCode: item["chapterCode"],
+                              color: found?.color)
+                        });
             })),
         textAlign: TextAlign.center,
+        softWrap: true,
       ),
     );
   }
