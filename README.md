@@ -2,7 +2,7 @@
 
 ## bugs
 
-- [ ] need to add remaining fonts
+- [x] need to add remaining fonts
 
 ## improvments
 
@@ -24,7 +24,7 @@
 
 ## current iteration
 
-- [ ] need to add remaining fonts
+- [x] need to add remaining fonts
 
 ## finished
 
