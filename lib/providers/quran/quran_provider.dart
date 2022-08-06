@@ -137,7 +137,7 @@ class QuranProvider with ChangeNotifier {
     if (!_isWerd) {
       await wordsColorsMap.insertWord(word);
       try {
-        // await api.addHighlightBySelfUserID(wordID: id, type: type);
+        await api.addHighlightBySelfUserID(wordID: id, type: type);
       } on DioError catch (e) {
         print("error from highlight/add endpoint... adding to temp colors ");
         // init tempwrodsColorsMap, and add word to it
@@ -152,7 +152,11 @@ class QuranProvider with ChangeNotifier {
       }
     } else {
       await werdColorsMaps.insertWord(word);
-
+      await api.addHighlightByWerdID(
+          werdID: _werd["werdID"],
+          reciterUserID: _werd["reciterID"],
+          type: type,
+          wordID: id);
       if (type == "warning") {
         _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] += 1};
       }
@@ -177,11 +181,6 @@ class QuranProvider with ChangeNotifier {
     //   return;
     // }
 
-    // await api.addHighlightByWerdID(
-    //     werdID: _werd["werdID"],
-    //     reciterUserID: _werd["reciterID"],
-    //     type: type,
-    //     wordID: id);
     // notifyListeners();
   }
 }

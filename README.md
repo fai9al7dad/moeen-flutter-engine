@@ -24,8 +24,8 @@
 
 ## current iteration
 
-- [ ] on boarding
-  - [ ] create onbaording design , use existing design from prev react native app
+- [x] on boarding
+  - [x] create onbaording design , use existing design from prev react native app
 
 ## finished
 
@@ -92,3 +92,5 @@
   - [x] send suggestion -> need physical device testing
   - [x] sync from backend to sqlite
   - [x] log out
+- [x] on boarding
+  - [x] create onbaording design , use existing design from prev react native app
