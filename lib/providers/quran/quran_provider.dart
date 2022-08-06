@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
+import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
@@ -12,11 +13,11 @@ import 'package:collection/collection.dart';
 
 class QuranProvider with ChangeNotifier {
   final wordsColorsMap = WordColorMap();
+  final werdColorsMaps = WerdsColorsMap();
   final _pageController = PageController(initialPage: 0);
   final Api api = Api();
   List _quran = [];
   List<WordColorMapModel> _mistakes = [];
-  List<WordColorMapModel> _werdMistakes = [];
   bool _loadingGetData = false;
 
   // ignore: prefer_final_fields
@@ -34,10 +35,6 @@ class QuranProvider with ChangeNotifier {
   // late JoinedQuran _currentPage;
   List<WordColorMapModel> get mistakes {
     return _mistakes;
-  }
-
-  List<WordColorMapModel> get werdMistakes {
-    return _werdMistakes;
   }
 
   bool get loadingGetData {
@@ -66,7 +63,6 @@ class QuranProvider with ChangeNotifier {
     _werd["duoID"] = creds["duoID"];
     _werd["username"] = creds["username"];
     _werd["reciterID"] = creds["reciterID"];
-    _werdMistakes = creds["mistakes"];
 
     notifyListeners();
   }
@@ -81,6 +77,7 @@ class QuranProvider with ChangeNotifier {
     _werd["mistakesCounter"] = 0;
     _werd["warningsCounter"] = 0;
     notifyListeners();
+    await werdColorsMaps.deleteAllColors();
   }
 
   void getData() async {
@@ -92,16 +89,18 @@ class QuranProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future refreshData() async {
-    var m = await wordsColorsMap.getAllColors();
-    _mistakes = m;
-    // notifyListeners();
-  }
+  Future refreshData({pageNumber}) async {
+    var m;
+    if (_isWerd) {
+      m = await werdColorsMaps.getPageColors(pageNumber: pageNumber);
+    } else {
+      m = await wordsColorsMap.getPageColors(pageNumber: pageNumber);
+    }
 
-  // void setWerdMistakes({required List<WordColorMapModel> data}) {
-  //   _isWerd = true;
-  //   _werdMistakes = data;
-  // }
+    _mistakes = m;
+    // disabling notify listeners here might mean that first two renderd pages will not show colors
+    notifyListeners();
+  }
 
   void addMistake(
       {required id,
@@ -121,39 +120,24 @@ class QuranProvider with ChangeNotifier {
       }
       if (color == MistakesColors.mistake) {
         type = "revert";
-
         newColor = MistakesColors.revert;
       }
     }
 
-    // setState(() {
-    //   _mistakes[id] = newMistake;
-    // });
-    // inspect(s);
+    var isExist = _mistakes.firstWhereOrNull((element) => element.wordID == id);
+    if (isExist != null) {
+      _mistakes.removeWhere((element) => element.wordID == id);
+    }
+    var word = WordColorMapModel(
+        pageNumber: pageNumber,
+        verseNumber: int.parse(verseNumber),
+        chapterCode: chapterCode,
+        color: newColor,
+        wordID: id);
     if (!_isWerd) {
-      if (newColor == MistakesColors.revert) {
-        _mistakes.removeWhere((element) => element.wordID == id);
-        notifyListeners();
-
-        return;
-      }
-      var isExist =
-          _mistakes.firstWhereOrNull((element) => element.wordID == id);
-      if (isExist != null) {
-        _mistakes.removeWhere((element) => element.wordID == id);
-      }
-      var word = WordColorMapModel(
-          pageNumber: pageNumber,
-          verseNumber: int.parse(verseNumber),
-          chapterCode: chapterCode,
-          color: newColor,
-          wordID: id);
-      _mistakes.add(word);
-      notifyListeners();
       await wordsColorsMap.insertWord(word);
-      refreshData();
       try {
-        await api.addHighlightBySelfUserID(wordID: id, type: type);
+        // await api.addHighlightBySelfUserID(wordID: id, type: type);
       } on DioError catch (e) {
         print("error from highlight/add endpoint... adding to temp colors ");
         // init tempwrodsColorsMap, and add word to it
@@ -167,6 +151,8 @@ class QuranProvider with ChangeNotifier {
         await tempWordsColorsMap.insertWord(word);
       }
     } else {
+      await werdColorsMaps.insertWord(word);
+
       if (type == "warning") {
         _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] += 1};
       }
@@ -180,47 +166,22 @@ class QuranProvider with ChangeNotifier {
         } else {
           _werd = {..._werd, "mistakesCounter": 0};
         }
-        _werdMistakes.removeWhere((element) => element.wordID == id);
       }
-      // if (newColor == MistakesColors.revert) {
-      //   _werdMistakes.removeWhere((element) => element.wordID == id);
-      //   notifyListeners();
-
-      //   return;
-      // }
-
-      var isExist =
-          _werdMistakes.firstWhereOrNull((element) => element.wordID == id);
-      if (isExist != null) {
-        _werdMistakes.removeWhere((element) => element.wordID == id);
-      }
-
-      var headerMistakes = _werdMistakes.lastWhere(
-          (element) => element.pageNumber == pageNumber,
-          orElse: (() => const WordColorMapModel(mistakes: 0, warnings: 0)));
-      WordColorMapModel data = WordColorMapModel(
-        color: newColor,
-        wordID: id,
-        pageNumber: pageNumber,
-        chapterCode: chapterCode,
-        mistakes: headerMistakes.mistakes != null && type == "mistake"
-            ? headerMistakes.mistakes! + 1
-            : type == "revert"
-                ? headerMistakes.mistakes! - 1
-                : headerMistakes.mistakes,
-        warnings: headerMistakes.warnings != null && type == "warning"
-            ? headerMistakes.warnings! + 1
-            : headerMistakes.warnings,
-      );
-      _werdMistakes.add(data);
-      notifyListeners();
-
-      await api.addHighlightByWerdID(
-          werdID: _werd["werdID"],
-          reciterUserID: _werd["reciterID"],
-          type: type,
-          wordID: id);
     }
+    refreshData(pageNumber: pageNumber);
+
+    // if (newColor == MistakesColors.revert) {
+    //   _werdMistakes.removeWhere((element) => element.wordID == id);
+    //   notifyListeners();
+
+    //   return;
+    // }
+
+    // await api.addHighlightByWerdID(
+    //     werdID: _werd["werdID"],
+    //     reciterUserID: _werd["reciterID"],
+    //     type: type,
+    //     wordID: id);
     // notifyListeners();
   }
 }

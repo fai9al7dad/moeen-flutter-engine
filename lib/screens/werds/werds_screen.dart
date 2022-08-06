@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
+import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
@@ -58,6 +59,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
     setState(() {
       appBarLoading = true;
     });
+    final werdColorsMaps = WerdsColorsMap();
     final DatabaseHelper db = DatabaseHelper();
     var werd =
         await api.addWerd(duoID: widget.duoID, reciterID: widget.reciterID);
@@ -68,33 +70,16 @@ class _WerdsScreenState extends State<WerdsScreen> {
     // this will not return pagenumber, chaptercode, but will return wordID
     // so we need to fetch word by id from local db, and append it
 
-    List<WordColorMapModel> arr = [];
-    // mw will have pagenumber as key
-    // and mistakes and warnings as value
-    // output: 3-> {mistakes: 1, warnings: 2}
-    Map mw = {};
     for (var i = 0; i < highlightsRes.length; i++) {
       var item = highlightsRes[i];
       var word = await db.getWordByID(id: item.wordID);
 
-      if (mw[word.pageID] == null) {
-        mw[word.pageID] = {"warnings": 0, "mistakes": 0};
-      }
       var color;
-
       switch (item.type) {
         case "warning":
-          mw[word.pageID] = {
-            ...mw[word.pageID],
-            "warnings": mw[word.pageID]["warnings"] + 1
-          };
           color = MistakesColors.warning;
           break;
         case "mistake":
-          mw[word.pageID] = {
-            ...mw[word.pageID],
-            "mistakes": mw[word.pageID]["mistakes"] + 1
-          };
           color = MistakesColors.mistake;
           break;
         case "revert":
@@ -102,15 +87,17 @@ class _WerdsScreenState extends State<WerdsScreen> {
           break;
       }
       // arr.push({color: color, wordID: item.wordID});
-
+      // cause of null, mostly will not be null
+      var vn = int.parse(word.verseNumber ?? "0");
       WordColorMapModel data = WordColorMapModel(
-          color: color,
-          wordID: item.wordID,
-          pageNumber: word.pageID,
-          chapterCode: word.chapterCode,
-          mistakes: mw[word.pageID]["mistakes"],
-          warnings: mw[word.pageID]["warnings"]);
-      arr.add(data);
+        color: color,
+        wordID: item.wordID,
+        pageNumber: word.pageID,
+        chapterCode: word.chapterCode,
+        verseNumber: vn,
+      );
+
+      werdColorsMaps.insertWord(data);
     }
 
     Provider.of<QuranProvider>(context, listen: false).startWerd(creds: {
@@ -118,7 +105,6 @@ class _WerdsScreenState extends State<WerdsScreen> {
       "username": widget.username,
       "werdID": werd["id"],
       "reciterID": widget.reciterID,
-      "mistakes": highlightsRes.isEmpty ? [WordColorMapModel()] : arr
     });
     setState(() {
       appBarLoading = false;

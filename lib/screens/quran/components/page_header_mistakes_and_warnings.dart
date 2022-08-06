@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,14 +20,8 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
     var textColor = 0xffae8f74;
 
     return Consumer<QuranProvider>(builder: (context, quranProvider, _) {
-      var ff;
-      if (quranProvider.isWerd) {
-        ff = quranProvider.werdMistakes
-            .lastWhereOrNull((element) => element.pageNumber == pageNumber);
-      } else {
-        ff = quranProvider.mistakes
-            .firstWhereOrNull((element) => element.pageNumber == pageNumber);
-      }
+      var ff = quranProvider.mistakes
+          .firstWhereOrNull((element) => element.pageNumber == pageNumber);
 
       var mistakes =
           ff?.mistakes == 0 || ff?.mistakes == null ? 0 : ff?.mistakes;

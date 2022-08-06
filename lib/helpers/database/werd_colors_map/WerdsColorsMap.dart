@@ -1,51 +1,13 @@
 import 'dart:async';
 
+import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-const WordsColorsMapTable = "WordsColorsMap";
+const WerdsColorsMapTable = "WerdsColorsMapTable";
 
-class WordColorMapModel {
-  final int? id;
-  final int? wordID;
-  final int? pageNumber;
-  final int? verseNumber;
-  final String? chapterCode;
-  final String? color;
-  final int? mistakes;
-  final int? warnings;
-
-  const WordColorMapModel(
-      {this.id,
-      this.wordID,
-      this.chapterCode,
-      this.color,
-      this.pageNumber,
-      this.verseNumber,
-      this.mistakes,
-      this.warnings});
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'wordID': wordID,
-      'pageNumber': pageNumber,
-      'color': color,
-      'verseNumber': verseNumber,
-      'chapterCode': chapterCode,
-    };
-  }
-
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
-  @override
-  String toString() {
-    return '$WordsColorsMapTable{id: $id, wordID: $wordID, pageNumber: $pageNumber, color: $color,verseNumber: $verseNumber,chapterCode: $chapterCode,}';
-  }
-}
-
-class WordColorMap {
+class WerdsColorsMap {
   static Database? _db;
   Future<Database?> get db async {
     if (_db != null) return _db;
@@ -55,11 +17,11 @@ class WordColorMap {
 
   Future<Database> initDB() async {
     final database = openDatabase(
-      join(await getDatabasesPath(), '$WordsColorsMapTable.db'),
+      join(await getDatabasesPath(), '$WerdsColorsMapTable.db'),
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
-          'create table $WordsColorsMapTable (id INTEGER PRIMARY KEY NOT NULL,wordID INTEGER NOT NULL ON CONFLICT REPLACE,color TEXT NOT NULL,pageNumber INTEGER NOT NULL,verseNumber INTEGER NOT NULL,chapterCode TEXT NOT NULL)',
+          'create table $WerdsColorsMapTable (id INTEGER PRIMARY KEY NOT NULL,wordID INTEGER NOT NULL ON CONFLICT REPLACE,color TEXT NOT NULL,pageNumber INTEGER NOT NULL,verseNumber INTEGER NOT NULL,chapterCode TEXT NOT NULL)',
         );
       },
       version: 1,
@@ -77,24 +39,24 @@ class WordColorMap {
     var isExist = await getColorByID(id: payload["wordID"]);
     // inspect(isExist);
     if (isExist != null) {
-      dbClient!.delete(WordsColorsMapTable,
+      dbClient!.delete(WerdsColorsMapTable,
           where: "wordID = ?", whereArgs: [payload["wordID"]]);
     }
     if (payload["wordID"] != MistakesColors.revert) {
       await dbClient!.insert(
-        WordsColorsMapTable,
+        WerdsColorsMapTable,
         payload,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
   }
 
-  Future<List<WordColorMapModel>> getAllColors({pageNumber}) async {
+  Future<List<WordColorMapModel>> getAllColors() async {
     // Get a reference to the database.
     var dbClient = await db;
     // Query the table for all The Dogs.
-    List<Map<String, dynamic>> maps =
-        await dbClient!.query(WordsColorsMapTable);
+    final List<Map<String, dynamic>> maps =
+        await dbClient!.query(WerdsColorsMapTable);
 
     List<WordColorMapModel> payload = [];
     for (var item in maps) {
@@ -119,7 +81,7 @@ class WordColorMap {
     var dbClient = await db;
     // Query the table for all The Dogs.
     List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
-        "select * from $WordsColorsMapTable where pageNumber = $pageNumber");
+        "select * from $WerdsColorsMapTable where pageNumber = $pageNumber");
 
     List<WordColorMapModel> payload = [];
     for (var item in maps) {
@@ -144,7 +106,7 @@ class WordColorMap {
     var dbClient = await db;
     // Query the table for all The Dogs.
     final List<Map<String, dynamic>> maps = await dbClient!.query(
-        WordsColorsMapTable,
+        WerdsColorsMapTable,
         where: "pageNumber = ?",
         whereArgs: [pageNumber]);
 
@@ -168,7 +130,7 @@ class WordColorMap {
     var dbClient = await db;
     // Query the table for all The Dogs.
     final List<Map<String, dynamic>> maps = await dbClient!.query(
-        WordsColorsMapTable,
+        WerdsColorsMapTable,
         where: "chapterCode = ?",
         whereArgs: [chapterCode]);
 
@@ -192,7 +154,7 @@ class WordColorMap {
     var dbClient = await db;
 
     // Query the table for all The Dogs.
-    await dbClient!.delete(WordsColorsMapTable);
+    await dbClient!.delete(WerdsColorsMapTable);
   }
 
   Future getColorByID({id}) async {
@@ -201,7 +163,7 @@ class WordColorMap {
 
     // Query the table for all The Dogs.
     final List<Map<String, dynamic>> maps = await dbClient!
-        .query(WordsColorsMapTable, where: 'wordID = ?', whereArgs: [id]);
+        .query(WerdsColorsMapTable, where: 'wordID = ?', whereArgs: [id]);
 
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     if (maps.isNotEmpty) {

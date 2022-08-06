@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:provider/provider.dart';
 
 class SurahList extends StatelessWidget {
   const SurahList({Key? key}) : super(key: key);
@@ -113,9 +116,17 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
   var _warnings;
   bool _loading = true;
   final wordsColorsMap = WordColorMap();
+  final werdColorsMap = WerdsColorsMap();
   void getMW() async {
-    var mw =
-        await wordsColorsMap.getChapterColors(chapterCode: widget.chapterCode);
+    // if _isWerd;
+    var mw;
+    if (Provider.of<QuranProvider>(context, listen: false).isWerd) {
+      mw =
+          await werdColorsMap.getChapterColors(chapterCode: widget.chapterCode);
+    } else {
+      mw = await wordsColorsMap.getChapterColors(
+          chapterCode: widget.chapterCode);
+    }
 
     var mistakes =
         mw["mistakes"] == 0 || mw["mistakes"] == null ? 0 : mw["mistakes"];

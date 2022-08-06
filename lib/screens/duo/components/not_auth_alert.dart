@@ -10,14 +10,27 @@ class NotAuthAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "الثنائيات"),
+      appBar: CustomAppBar(
+        title: "الثنائيات",
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, "/settings");
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Image(image: AssetImage("assets/images/warning.png")),
+              const Image(
+                  image: AssetImage("assets/images/not_auth_warning.png")),
               const SizedBox(height: 20),
               const Text(
                 "تحتاج لأن تكون مسجل الدخول للإستمرار",

@@ -40,13 +40,9 @@ class PageWords extends StatelessWidget {
               bool lineChanged = curLineNum != aftLineNum;
 
               var found;
-              if (quranProvider.isWerd) {
-                found = quranProvider.werdMistakes.firstWhereOrNull(
-                    (element) => element.wordID == item["wordID"]);
-              } else {
-                found = quranProvider.mistakes.firstWhereOrNull(
-                    (element) => element.wordID == item["wordID"]);
-              }
+
+              found = quranProvider.mistakes.firstWhereOrNull(
+                  (element) => element.wordID == item["wordID"]);
               if (item["isNewChapter"] == 1) {
                 if (item["isBismillah"] == 1 && item["pageNumber"] != 187) {
                   return const TextSpan(

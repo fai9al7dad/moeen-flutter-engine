@@ -20,6 +20,7 @@ class RenderPage extends StatelessWidget {
         PageHeader(page: page[0]),
         const SizedBox(height: 10),
         PageWords(page: page),
+        // PageWords(page: page),
       ],
     );
   }

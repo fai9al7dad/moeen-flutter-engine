@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
 import 'package:provider/provider.dart';
 
@@ -22,19 +24,41 @@ class MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
+  bool showOnBoarding = false;
   @override
   void initState() {
     super.initState();
     Provider.of<QuranProvider>(context, listen: false).getData();
-    Provider.of<QuranProvider>(context, listen: false).refreshData();
+
+    // Provider.of<QuranProvider>(context, listen: false).refreshData();
     Provider.of<AuthProvider>(context, listen: false).tryToken();
 
+    checkOnBoarding();
+
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
+  }
+
+  void checkOnBoarding() async {
+    final storage = const FlutterSecureStorage();
+
+    var finishedOnBoarding = await storage.read(key: "finishedOnBoarding");
+    if (finishedOnBoarding != "true") {
+      setState(() {
+        showOnBoarding = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // final pageController = PageController();
+    if (showOnBoarding) {
+      return OnBoarding(updateOnBoarding: () {
+        setState(() {
+          showOnBoarding = false;
+        });
+      });
+    }
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => Scaffold(
         body: quranProvider.loadingGetData
@@ -48,11 +72,14 @@ class _MainScaffoldState extends State<MainScaffold> {
                 controller: quranProvider.pageController,
                 allowImplicitScrolling: true,
 
-                reverse: false,
+                reverse: true,
                 // physics: const AlwaysScrollableScrollPhysics(),
                 // scrollDirection: Axis.horizontal,
                 clipBehavior: Clip.none,
                 itemCount: quranProvider.quran.length,
+                onPageChanged: (p) {
+                  quranProvider.refreshData(pageNumber: p + 1);
+                },
                 itemBuilder: (context, index) {
                   return RenderPage(page: quranProvider.quran[index]);
                   // return const Text("sdf");

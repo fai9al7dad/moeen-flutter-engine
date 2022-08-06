@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
@@ -184,8 +182,7 @@ class Api {
     try {
       Response res = await api.post("/api/highlight/add", data: payload);
       return res.data;
-    } on DioError catch (e) {
-      print(e.response?.data);
+    } on DioError {
       rethrow;
     }
   }

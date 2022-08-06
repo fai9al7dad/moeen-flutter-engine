@@ -242,7 +242,6 @@ class SyncDialog extends StatelessWidget {
             api.addHighlightBySelfUserID(wordID: colors[i].wordID, type: type));
       }
       await Future.wait(promises);
-      print("finished request");
       await temp.deleteAllColors();
       // navigate pop
       Navigator.of(context).pop();
