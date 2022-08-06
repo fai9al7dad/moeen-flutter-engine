@@ -64,7 +64,7 @@ class DatabaseHelper {
   }
 
   Future<List<List>> getJoinedQuran() async {
-    int limit = 10;
+    int limit = 604;
     List<List> initializePagesArray() {
       List<List> pages = [];
       // initialze lines
@@ -79,7 +79,7 @@ class DatabaseHelper {
     // List list = await dbClient!.rawQuery(
     //     "select * from (select * from page limit 10) page inner join line on line.pageID = page.id inner join word on word.lineID = line.id order by pageNumber,lineNumber");
     List list = await dbClient!.rawQuery(
-        "select page.id as pageID, page.pageNumber, page.rubNumber, page.hizbNumber, page.juzNumber,word.text,word.lineNumber, word.transliteration,word.isBismillah,word.isNewChapter,word.color,word.chapterCode,word.id as wordID,word.charType, word.verseNumber  from (select * from page limit $limit) page inner join line  on line.pageID = page.id inner join word on word.lineID = line.id order by word.lineNumber ");
+        "select page.id as pageID, page.pageNumber, page.rubNumber, page.hizbNumber, page.juzNumber,word.text,word.lineNumber, word.transliteration,word.isBismillah,word.isNewChapter,word.color,word.chapterCode,word.id as wordID,word.charType, word.verseNumber  from  page inner join line  on line.pageID = page.id inner join word on word.lineID = line.id order by word.lineNumber ");
 
     // List<JoinedQuran> quran = [];
     List<List> pages = initializePagesArray();

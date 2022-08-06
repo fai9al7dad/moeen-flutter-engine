@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,10 +56,8 @@ class PageWords extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       "assets/svg/surah_header_svg.svg",
-                      // color: Colors.blueGrey,
-                      // matchTextDirection: true,
                     ),
-                    Text("${item["chapterCode"]}",
+                    Text("${item["chapterCode"].padLeft(3, '0')}",
                         style: const TextStyle(
                             fontFamily: "surahname", fontSize: 25))
                   ],

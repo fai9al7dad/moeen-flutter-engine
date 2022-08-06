@@ -24,8 +24,7 @@
 
 ## current iteration
 
-- [x] on boarding
-  - [x] create onbaording design , use existing design from prev react native app
+- [ ] need to add remaining fonts
 
 ## finished
 
