@@ -88,27 +88,28 @@ class PageWords extends StatelessWidget {
                     ));
               }
               // for fatihah
-              if ((item["chapterCode"] == "001" ||
+              if ((page[index]['pageNumber'] == 1 ||
                       page[index]['pageNumber'] == 2) &&
                   lineChanged) {
                 return TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => {
-                            // setMW(),
-                            quranProvider.addMistake(
-                                id: item["wordID"],
-                                pageNumber: item["pageNumber"],
-                                verseNumber: item["verseNumber"],
-                                chapterCode: item["chapterCode"],
-                                color: found?.color)
-                          },
-                    text: "${item["text"]}                       ",
-                    style: TextStyle(
-                      color: found != null
-                          ? Color(int.parse(found.color))
-                          : Colors.black,
-                      fontFamily: "p${page[index]['pageNumber']}",
-                    ));
+                  text: "${item["text"]}                       ",
+                  style: TextStyle(
+                    color: found != null
+                        ? Color(int.parse(found.color))
+                        : Colors.black,
+                    fontFamily: "p${page[index]['pageNumber']}",
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => {
+                          // setMW(),
+                          quranProvider.addMistake(
+                              id: item["wordID"],
+                              pageNumber: item["pageNumber"],
+                              verseNumber: item["verseNumber"],
+                              chapterCode: item["chapterCode"],
+                              color: found?.color)
+                        },
+                );
               }
               return TextSpan(
                   text: lineChanged
@@ -134,7 +135,6 @@ class PageWords extends StatelessWidget {
                         });
             })),
         textAlign: TextAlign.center,
-        softWrap: true,
       ),
     );
   }

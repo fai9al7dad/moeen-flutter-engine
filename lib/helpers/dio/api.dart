@@ -177,14 +177,15 @@ class Api {
   Future addHighlightByWerdID({werdID, reciterUserID, type, wordID}) async {
     Map payload = {
       "werdID": werdID.toString(),
-      "reciterID": reciterUserID,
+      "reciterUserID": reciterUserID,
       "type": type,
       "wordID": wordID
     };
     try {
       Response res = await api.post("/api/highlight/add", data: payload);
       return res.data;
-    } on DioError {
+    } on DioError catch (e) {
+      print(e.response?.data);
       rethrow;
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
@@ -173,27 +175,46 @@ class QuranProvider with ChangeNotifier {
         _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] -= 1};
       }
       if (type == "revert") {
-        _werd = {..._werd, "mistakesCounter": _werd["mistakesCounter"] -= 1};
-      }
-      if (newColor == MistakesColors.revert) {
+        if (_werd["mistakesCounter"] > 0) {
+          _werd = {..._werd, "mistakesCounter": _werd["mistakesCounter"] -= 1};
+        } else {
+          _werd = {..._werd, "mistakesCounter": 0};
+        }
         _werdMistakes.removeWhere((element) => element.wordID == id);
-        notifyListeners();
-
-        return;
       }
+      // if (newColor == MistakesColors.revert) {
+      //   _werdMistakes.removeWhere((element) => element.wordID == id);
+      //   notifyListeners();
+
+      //   return;
+      // }
 
       var isExist =
           _werdMistakes.firstWhereOrNull((element) => element.wordID == id);
       if (isExist != null) {
         _werdMistakes.removeWhere((element) => element.wordID == id);
       }
+
+      var headerMistakes = _werdMistakes.lastWhere(
+          (element) => element.pageNumber == pageNumber,
+          orElse: (() => const WordColorMapModel(mistakes: 0, warnings: 0)));
       WordColorMapModel data = WordColorMapModel(
-          color: newColor,
-          wordID: id,
-          pageNumber: pageNumber,
-          chapterCode: chapterCode);
+        color: newColor,
+        wordID: id,
+        pageNumber: pageNumber,
+        chapterCode: chapterCode,
+        mistakes: headerMistakes.mistakes != null && type == "mistake"
+            ? headerMistakes.mistakes! + 1
+            : type == "revert"
+                ? headerMistakes.mistakes! - 1
+                : headerMistakes.mistakes,
+        warnings: headerMistakes.warnings != null && type == "warning"
+            ? headerMistakes.warnings! + 1
+            : headerMistakes.warnings,
+      );
       _werdMistakes.add(data);
       notifyListeners();
+
       await api.addHighlightByWerdID(
           werdID: _werd["werdID"],
           reciterUserID: _werd["reciterID"],

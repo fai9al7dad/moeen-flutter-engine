@@ -73,7 +73,6 @@ class WordColorMap {
     // chaeck if exist
     // if exist delete old and add new, so no duplicate occur
     // and if color is black delete it
-    // inspect(wcm);
     var dbClient = await db;
     var payload = wcm.toMap();
     var isExist = await getColorByID(id: payload["wordID"]);
