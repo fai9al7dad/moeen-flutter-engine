@@ -26,11 +26,20 @@ class RenderPage extends StatelessWidget {
         const SizedBox(height: 50),
         PageHeader(page: page[0]),
         const SizedBox(height: 10),
-        PageWords(
-          page: page,
-          fontSize: fontSize,
-          lineHeight: lineHeight,
-        ),
+        page[0]["pageNumber"] == 1 || page[0]["pageNumber"] == 2
+            ? Expanded(
+                child: Center(
+                child: PageWords(
+                  page: page,
+                  fontSize: fontSize,
+                  lineHeight: lineHeight,
+                ),
+              ))
+            : PageWords(
+                page: page,
+                fontSize: fontSize,
+                lineHeight: lineHeight,
+              ),
         // PageWords(page: page),
       ],
     );
