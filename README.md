@@ -2,7 +2,7 @@
 
 ## bugs
 
-- [x] need to add remaining fonts
+- [x] cant scroll to page when on werd
 
 ## improvments
 
@@ -24,7 +24,7 @@
 
 ## current iteration
 
-- [x] need to add remaining fonts
+- [x] cant scroll to page when on werd
 
 ## finished
 

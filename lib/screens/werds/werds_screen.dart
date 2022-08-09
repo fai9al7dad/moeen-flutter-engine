@@ -109,7 +109,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
     setState(() {
       appBarLoading = false;
     });
-    Navigator.pushReplacementNamed(context, "/");
+    Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
   }
 
   @override

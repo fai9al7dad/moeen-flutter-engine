@@ -22,7 +22,8 @@ class FinishWerd extends StatelessWidget {
                 icon: const Icon(Icons.stop_circle_rounded),
                 onPressed: () {
                   quranProvider.finishWerd();
-                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (Route route) => false);
                 },
                 label: const Text("إنهاء الورد")),
           ),

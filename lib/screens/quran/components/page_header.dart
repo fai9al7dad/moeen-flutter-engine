@@ -87,14 +87,14 @@ class DuosOrWerd extends StatelessWidget {
           : CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
 
-              radius: 8,
+              radius: 10,
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
                   onPressed: () => {Navigator.pushNamed(context, "/duos")},
                   icon: const Icon(
                     Icons.group,
-                    size: 12,
+                    size: 13,
                   )),
             ),
     );

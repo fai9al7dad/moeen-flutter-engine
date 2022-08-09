@@ -8,8 +8,14 @@ import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
 import 'package:provider/provider.dart';
 
-class RenderQuranList extends StatelessWidget {
+class RenderQuranList extends StatefulWidget {
   const RenderQuranList({Key? key}) : super(key: key);
+
+  @override
+  State<RenderQuranList> createState() => _RenderQuranListState();
+}
+
+class _RenderQuranListState extends State<RenderQuranList> {
   @override
   Widget build(BuildContext context) {
     return const MainScaffold();
