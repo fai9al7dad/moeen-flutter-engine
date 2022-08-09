@@ -23,7 +23,7 @@ class PageWords extends StatelessWidget {
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
-              fontSize: (20 * unitHeightValue) / 680,
+              fontSize: (19 * unitHeightValue) / 680,
               height: (1.6 * unitHeightValue) / 680,
               shadows: const [
                 Shadow(
