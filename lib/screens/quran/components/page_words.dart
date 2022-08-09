@@ -14,16 +14,17 @@ class PageWords extends StatelessWidget {
   }) : super(key: key);
 
   final List page;
-
   @override
   Widget build(BuildContext context) {
+    double unitHeightValue = MediaQuery.of(context).size.height * 0.01;
+    double multiplier = 2.9;
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => RichText(
         text: TextSpan(
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
-              fontSize: 22,
-              height: 1.7,
+              fontSize: multiplier * unitHeightValue,
+              height: 2,
             ),
             // shadows: [
             //   Shadow(

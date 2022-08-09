@@ -16,10 +16,10 @@ class RenderPage extends StatelessWidget {
         // Text(mistakes[0]['id'].toString()),
         Column(
       children: [
-        const SizedBox(height: 40),
+        const SizedBox(height: 50),
         PageHeader(page: page[0]),
-        const SizedBox(height: 10),
-        PageWords(page: page),
+        // const SizedBox(height: 10),
+        Expanded(child: Center(child: PageWords(page: page))),
         // PageWords(page: page),
       ],
     );
