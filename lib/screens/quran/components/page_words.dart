@@ -8,23 +8,26 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 class PageWords extends StatelessWidget {
+  final List page;
+  final double fontSize;
+  final double lineHeight;
+
   const PageWords({
     Key? key,
     required this.page,
+    required this.fontSize,
+    required this.lineHeight,
   }) : super(key: key);
 
-  final List page;
   @override
   Widget build(BuildContext context) {
-    double unitHeightValue = MediaQuery.of(context).size.height;
-
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => RichText(
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
-              fontSize: (19 * unitHeightValue) / 680,
-              height: (1.4 * unitHeightValue) / 680,
+              fontSize: fontSize,
+              height: lineHeight,
               shadows: const [
                 Shadow(
                   offset: Offset(0.0, 0.0),

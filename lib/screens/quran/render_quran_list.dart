@@ -8,14 +8,8 @@ import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
 import 'package:provider/provider.dart';
 
-class RenderQuranList extends StatefulWidget {
+class RenderQuranList extends StatelessWidget {
   const RenderQuranList({Key? key}) : super(key: key);
-
-  @override
-  State<RenderQuranList> createState() => _RenderQuranListState();
-}
-
-class _RenderQuranListState extends State<RenderQuranList> {
   @override
   Widget build(BuildContext context) {
     return const MainScaffold();
@@ -57,6 +51,9 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    double unitHeightValue = MediaQuery.of(context).size.height / 100;
+    final double fontSize = (2.9 * unitHeightValue);
+    final double lineHeight = (0.239 * unitHeightValue);
     // final pageController = PageController();
     if (showOnBoarding) {
       return OnBoarding(updateOnBoarding: () {
@@ -87,7 +84,10 @@ class _MainScaffoldState extends State<MainScaffold> {
                   quranProvider.refreshData(pageNumber: p + 1);
                 },
                 itemBuilder: (context, index) {
-                  return RenderPage(page: quranProvider.quran[index]);
+                  return RenderPage(
+                      page: quranProvider.quran[index],
+                      fontSize: fontSize,
+                      lineHeight: lineHeight);
                   // return const Text("sdf");
                   // return const Text("sdf");
                 },
