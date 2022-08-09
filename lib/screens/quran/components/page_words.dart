@@ -24,7 +24,7 @@ class PageWords extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
               fontSize: (19 * unitHeightValue) / 680,
-              height: (1.6 * unitHeightValue) / 680,
+              height: (1.4 * unitHeightValue) / 680,
               shadows: const [
                 Shadow(
                   offset: Offset(0.0, 0.0),
