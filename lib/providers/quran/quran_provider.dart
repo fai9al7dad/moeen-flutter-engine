@@ -136,6 +136,7 @@ class QuranProvider with ChangeNotifier {
         wordID: id);
     if (!_isWerd) {
       await wordsColorsMap.insertWord(word);
+      refreshData(pageNumber: pageNumber);
       try {
         await api.addHighlightBySelfUserID(wordID: id, type: type);
       } on DioError catch (e) {
@@ -152,6 +153,8 @@ class QuranProvider with ChangeNotifier {
       }
     } else {
       await werdColorsMaps.insertWord(word);
+      refreshData(pageNumber: pageNumber);
+
       await api.addHighlightByWerdID(
           werdID: _werd["werdID"],
           reciterUserID: _werd["reciterID"],
@@ -172,7 +175,6 @@ class QuranProvider with ChangeNotifier {
         }
       }
     }
-    refreshData(pageNumber: pageNumber);
 
     // if (newColor == MistakesColors.revert) {
     //   _werdMistakes.removeWhere((element) => element.wordID == id);

@@ -16,24 +16,23 @@ class PageWords extends StatelessWidget {
   final List page;
   @override
   Widget build(BuildContext context) {
-    double unitHeightValue = MediaQuery.of(context).size.height * 0.01;
+    double unitHeightValue = MediaQuery.of(context).size.height;
 
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => RichText(
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
-              fontSize: 2.95 * unitHeightValue,
-              height: 0.238 * unitHeightValue,
+              fontSize: (20 * unitHeightValue) / 680,
+              height: (1.6 * unitHeightValue) / 680,
+              shadows: const [
+                Shadow(
+                  offset: Offset(0.0, 0.0),
+                  blurRadius: 1,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ],
             ),
-            // shadows: [
-            //   Shadow(
-            //     offset: Offset(0.0, 0.0),
-            //     blurRadius: 0.5,
-            //     color: Color.fromARGB(255, 0, 0, 0),
-            //   ),
-            // ]),
-
             children: List.generate(page.length, (index) {
               var item = page[index];
               int curLineNum = page[index]["lineNumber"];
