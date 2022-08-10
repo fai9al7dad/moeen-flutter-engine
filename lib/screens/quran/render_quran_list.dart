@@ -52,8 +52,8 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     double unitHeightValue = MediaQuery.of(context).size.height / 100;
-    final double fontSize = (2.9 * unitHeightValue);
-    final double lineHeight = (0.239 * unitHeightValue);
+    final double fontSize = (2.8 * unitHeightValue);
+    final double lineHeight = (0.22 * unitHeightValue);
     // final pageController = PageController();
     if (showOnBoarding) {
       return OnBoarding(updateOnBoarding: () {
