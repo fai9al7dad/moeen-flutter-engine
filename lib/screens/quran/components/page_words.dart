@@ -23,15 +23,15 @@ class PageWords extends StatelessWidget {
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
-              fontSize: 17.5.sp,
+              fontSize: 18.3.sp,
               height: 1.45.sp,
-              shadows: const [
-                Shadow(
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 1,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
+              // shadows: const [
+              //   Shadow(
+              //     offset: Offset(0.0, 0.0),
+              //     blurRadius: 0.2,
+              //     color: Color.fromARGB(255, 0, 0, 0),
+              //   ),
+              // ],
             ),
             children: List.generate(page.length, (index) {
               var item = page[index];
@@ -73,6 +73,13 @@ class PageWords extends StatelessWidget {
                     style: TextStyle(
                       color: const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
+                      // shadows: const [
+                      //   Shadow(
+                      //     offset: Offset(0.0, 0.0),
+                      //     blurRadius: 0.2,
+                      //     color: Color.fromARGB(255, 0, 0, 0),
+                      //   ),
+                      // ],
                     ));
               }
               if (item["charType"] == "end" && lineChanged) {
@@ -81,6 +88,13 @@ class PageWords extends StatelessWidget {
                     style: TextStyle(
                       color: const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
+                      // shadows: const [
+                      //   Shadow(
+                      //     offset: Offset(0.0, 0.0),
+                      //     blurRadius: 0.2,
+                      //     color: Color.fromARGB(255, 0, 0, 0),
+                      //   ),
+                      // ],
                     ));
               }
               // for fatihah
@@ -110,14 +124,13 @@ class PageWords extends StatelessWidget {
               return TextSpan(
                   text: lineChanged
                       ? page[index]['text'] + " "
-                      : index != 0
-                          ? page[index]['text']
-                          : page[index]['text'] + " ",
+                      : page[index]['text'],
                   style: TextStyle(
                     color: found != null
                         ? Color(int.parse(found.color))
                         : Colors.black,
                     fontFamily: "p${page[index]['pageNumber']}",
+                    fontSize: index == 0 ? 18.299.sp : 18.3.sp,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => {
