@@ -51,9 +51,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    double unitHeightValue = MediaQuery.of(context).size.height / 100;
-    final double fontSize = (2.8 * unitHeightValue);
-    final double lineHeight = (0.22 * unitHeightValue);
+
     // final pageController = PageController();
     if (showOnBoarding) {
       return OnBoarding(updateOnBoarding: () {
@@ -86,8 +84,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 itemBuilder: (context, index) {
                   return RenderPage(
                       page: quranProvider.quran[index],
-                      fontSize: fontSize,
-                      lineHeight: lineHeight);
+                      );
                   // return const Text("sdf");
                   // return const Text("sdf");
                 },

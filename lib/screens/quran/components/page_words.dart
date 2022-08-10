@@ -6,17 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:sizer/sizer.dart';
 
 class PageWords extends StatelessWidget {
   final List page;
-  final double fontSize;
-  final double lineHeight;
 
   const PageWords({
     Key? key,
     required this.page,
-    required this.fontSize,
-    required this.lineHeight,
   }) : super(key: key);
 
   @override
@@ -26,8 +23,8 @@ class PageWords extends StatelessWidget {
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
-              fontSize: fontSize,
-              height: lineHeight,
+              fontSize: 17.5.sp,
+              height: 1.45.sp,
               shadows: const [
                 Shadow(
                   offset: Offset(0.0, 0.0),

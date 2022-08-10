@@ -5,6 +5,7 @@ import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -27,16 +28,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: CustomRouter.routes,
-      title: 'تطبيق معين',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "montserrat",
-        scaffoldBackgroundColor: const Color(0xfffff8ed),
-        primarySwatch: Colors.green,
+    return Sizer(
+      builder: (context, orientation, deviceType) => MaterialApp(
+        routes: CustomRouter.routes,
+        title: 'تطبيق معين',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "montserrat",
+          scaffoldBackgroundColor: const Color(0xfffff8ed),
+          primarySwatch: Colors.green,
+        ),
+        // home: const RenderQuranList(),
       ),
-      // home: const RenderQuranList(),
     );
   }
 }

@@ -5,14 +5,11 @@ import 'package:moeen/screens/quran/components/page_words.dart';
 
 class RenderPage extends StatelessWidget {
   final List page;
-  final double fontSize;
-  final double lineHeight;
-  const RenderPage(
-      {Key? key,
-      required this.page,
-      required this.fontSize,
-      required this.lineHeight})
-      : super(key: key);
+
+  const RenderPage({
+    Key? key,
+    required this.page,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +28,10 @@ class RenderPage extends StatelessWidget {
                 child: Center(
                 child: PageWords(
                   page: page,
-                  fontSize: fontSize,
-                  lineHeight: lineHeight,
                 ),
               ))
             : PageWords(
                 page: page,
-                fontSize: fontSize,
-                lineHeight: lineHeight,
               ),
         // PageWords(page: page),
       ],
