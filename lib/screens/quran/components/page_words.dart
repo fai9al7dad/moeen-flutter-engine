@@ -32,13 +32,6 @@ class PageWords extends StatelessWidget {
               color: Colors.black,
               height: fixedLineHeightPercentage,
               fontSize: fixedFontSizePercentage,
-              shadows: const [
-                Shadow(
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 0.2,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
             ),
             children: List.generate(page.length, (index) {
               var item = page[index];
