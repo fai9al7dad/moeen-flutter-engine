@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,25 +7,31 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
-import 'package:sizer/sizer.dart';
 
 class PageWords extends StatelessWidget {
   final List page;
-
-  const PageWords({
-    Key? key,
-    required this.page,
-  }) : super(key: key);
+  final double fixedFontSizePercentage;
+  final double fixedLineHeightPercentage;
+  const PageWords(
+      {Key? key,
+      required this.page,
+      required this.fixedFontSizePercentage,
+      required this.fixedLineHeightPercentage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => RichText(
+        strutStyle: StrutStyle(
+          fontSize: fixedFontSizePercentage,
+          height: fixedLineHeightPercentage,
+        ),
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
-              fontSize: 18.3.sp,
-              height: 1.45.sp,
+              fontSize: fixedFontSizePercentage,
+
               // shadows: const [
               //   Shadow(
               //     offset: Offset(0.0, 0.0),
@@ -56,10 +63,16 @@ class PageWords extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       "assets/svg/surah_header_svg.svg",
+                      width: fixedFontSizePercentage > 30
+                          ? fixedFontSizePercentage * 20
+                          : Platform.isAndroid
+                              ? fixedFontSizePercentage * 15.5
+                              : fixedFontSizePercentage * 16,
                     ),
                     Text("${item["chapterCode"].padLeft(3, '0')}",
-                        style: const TextStyle(
-                            fontFamily: "surahname", fontSize: 25))
+                        style: TextStyle(
+                            fontFamily: "surahname",
+                            fontSize: fixedFontSizePercentage))
                   ],
                 ));
 
@@ -88,6 +101,7 @@ class PageWords extends StatelessWidget {
                     style: TextStyle(
                       color: const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
+
                       // shadows: const [
                       //   Shadow(
                       //     offset: Offset(0.0, 0.0),
@@ -130,7 +144,9 @@ class PageWords extends StatelessWidget {
                         ? Color(int.parse(found.color))
                         : Colors.black,
                     fontFamily: "p${page[index]['pageNumber']}",
-                    fontSize: index == 0 ? 18.299.sp : 18.3.sp,
+                    fontSize: index == 0
+                        ? fixedFontSizePercentage - 0.001
+                        : fixedFontSizePercentage,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => {

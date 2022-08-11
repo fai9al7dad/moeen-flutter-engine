@@ -9,8 +9,12 @@ import 'package:collection/collection.dart';
 
 class PageHeaderMistakesAndWarnings extends StatelessWidget {
   final int pageNumber;
+  final double fixedFontSizePercentageForHeader;
 
-  PageHeaderMistakesAndWarnings({Key? key, required this.pageNumber})
+  PageHeaderMistakesAndWarnings(
+      {Key? key,
+      required this.pageNumber,
+      required this.fixedFontSizePercentageForHeader})
       : super(key: key);
 
   final wordsColorsMap = WordColorMap();
@@ -36,7 +40,7 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
                     Text(
                       warnings.toString(),
                       style: TextStyle(
-                          fontSize: 12,
+                          fontSize: fixedFontSizePercentageForHeader,
                           color: Color(textColor),
                           fontFamily: "montserrat"),
                     ),
@@ -45,8 +49,8 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(int.parse(MistakesColors.warning))),
-                      height: 8,
-                      width: 8,
+                      height: fixedFontSizePercentageForHeader - 5,
+                      width: fixedFontSizePercentageForHeader - 5,
                     ),
                   ],
                 )
@@ -58,7 +62,7 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
                     Text(
                       mistakes.toString(),
                       style: TextStyle(
-                          fontSize: 12,
+                          fontSize: fixedFontSizePercentageForHeader,
                           color: Color(textColor),
                           fontFamily: "montserrat"),
                     ),
@@ -67,8 +71,8 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(int.parse(MistakesColors.mistake))),
-                      height: 8,
-                      width: 8,
+                      height: fixedFontSizePercentageForHeader - 5,
+                      width: fixedFontSizePercentageForHeader - 5,
                     ),
                   ],
                 )

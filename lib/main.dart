@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moeen/helpers/general/constants.dart';
@@ -5,7 +6,7 @@ import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -15,11 +16,17 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-    ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
-    ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
-  ], child: const MyApp()));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+      ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
+      ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
+    ],
+    child: DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(), // Wrap your app
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,18 +35,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) => MaterialApp(
-        routes: CustomRouter.routes,
-        title: 'تطبيق معين',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "montserrat",
-          scaffoldBackgroundColor: const Color(0xfffff8ed),
-          primarySwatch: Colors.green,
-        ),
-        // home: const RenderQuranList(),
+    return MaterialApp(
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      routes: CustomRouter.routes,
+      title: 'تطبيق معين',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "montserrat",
+        scaffoldBackgroundColor: const Color(0xfffff8ed),
+        primarySwatch: Colors.green,
       ),
+      // home: const RenderQuranList(),
     );
   }
 }

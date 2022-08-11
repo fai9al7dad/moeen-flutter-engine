@@ -1,68 +1,88 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:moeen/helpers/general/constants.dart';
+
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/page_header_mistakes_and_warnings.dart';
-import 'dart:math' as math;
 
 import 'package:provider/provider.dart';
 
 class PageHeader extends StatelessWidget {
   final page;
-  const PageHeader({Key? key, required this.page}) : super(key: key);
+  final double fixedFontSizePercentageForHeader;
+  const PageHeader(
+      {Key? key,
+      required this.page,
+      required this.fixedFontSizePercentageForHeader})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Expanded(
-        //     child: Row(children: [
-        // ])),
-        Row(
-          children: [
-            Text(
-              "الحزب ${page["hizbNumber"].toString()}",
-              style: const TextStyle(
-                  color: Color(0xffae8f74),
-                  fontFamily: "montserrat",
-                  fontSize: 12),
-            ),
-            const SizedBox(width: 5),
-            Text(
-              "الجزء ${page["juzNumber"].toString()}",
-              style: const TextStyle(
-                  color: Color(0xffae8f74),
-                  fontFamily: "montserrat",
-                  fontSize: 12),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Expanded(
+          //     child: Row(children: [
+          // ])),
+          Row(
+            children: [
+              Text(
+                "الحزب ${page["hizbNumber"].toString()}",
+                style: TextStyle(
+                    color: const Color(0xffae8f74),
+                    fontFamily: "montserrat",
+                    fontSize: fixedFontSizePercentageForHeader),
+              ),
+              const SizedBox(width: 5),
+              Text(
+                "الجزء ${page["juzNumber"].toString()}",
+                style: TextStyle(
+                    color: const Color(0xffae8f74),
+                    fontFamily: "montserrat",
+                    fontSize: fixedFontSizePercentageForHeader),
+              ),
+            ],
+          ),
 
-        Row(children: [
-          PageNumber(pageNumber: page["pageNumber"]),
-          PageHeaderMistakesAndWarnings(pageNumber: page["pageNumber"]),
-        ]),
-        Row(
-          children: [
-            SurahName(
-              surah: page["chapterCode"],
+          Row(children: [
+            PageNumber(
+              pageNumber: page["pageNumber"],
+              fixedFontSizePercentage: fixedFontSizePercentageForHeader,
             ),
-            const SizedBox(
-              width: 5,
+            PageHeaderMistakesAndWarnings(
+              pageNumber: page["pageNumber"],
+              fixedFontSizePercentageForHeader:
+                  fixedFontSizePercentageForHeader,
             ),
-            const DuosOrWerd()
-          ],
-        )
-      ],
+          ]),
+          Row(
+            children: [
+              SurahName(
+                surah: page["chapterCode"],
+                fixedFontSizePercentageForHeader:
+                    fixedFontSizePercentageForHeader,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              DuosOrWerd(
+                fixedFontSizePercentageForHeader:
+                    fixedFontSizePercentageForHeader,
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }
 
 class DuosOrWerd extends StatelessWidget {
+  final double fixedFontSizePercentageForHeader;
+
   const DuosOrWerd({
     Key? key,
+    required this.fixedFontSizePercentageForHeader,
   }) : super(key: key);
 
   @override
@@ -72,29 +92,29 @@ class DuosOrWerd extends StatelessWidget {
           ? CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
               backgroundColor: Colors.red,
-              radius: 8,
+              radius: fixedFontSizePercentageForHeader - 4,
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
                   onPressed: () =>
                       {Navigator.pushNamed(context, "/finish-werd")},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.group,
-                    size: 12,
+                    size: fixedFontSizePercentageForHeader,
                     color: Colors.white,
                   )),
             )
           : CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
 
-              radius: 10,
+              radius: fixedFontSizePercentageForHeader - 2,
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
                   onPressed: () => {Navigator.pushNamed(context, "/duos")},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.group,
-                    size: 13,
+                    size: fixedFontSizePercentageForHeader - 1,
                   )),
             ),
     );
@@ -103,7 +123,12 @@ class DuosOrWerd extends StatelessWidget {
 
 class SurahName extends StatefulWidget {
   final String surah;
-  const SurahName({Key? key, required this.surah}) : super(key: key);
+  final double fixedFontSizePercentageForHeader;
+  const SurahName(
+      {Key? key,
+      required this.surah,
+      required this.fixedFontSizePercentageForHeader})
+      : super(key: key);
 
   @override
   State<SurahName> createState() => _SurahNameState();
@@ -116,13 +141,15 @@ class _SurahNameState extends State<SurahName> {
       onTap: () => _navigateAndGoToPage(context),
       child: Row(
         children: [
-          const Icon(Icons.unfold_more, size: 10, color: Color(0xffae8f74)),
+          Icon(Icons.unfold_more,
+              size: widget.fixedFontSizePercentageForHeader - 2,
+              color: const Color(0xffae8f74)),
           Text(
             "${widget.surah}surah",
-            style: const TextStyle(
-                color: Color(0xffae8f74),
+            style: TextStyle(
+                color: const Color(0xffae8f74),
                 fontFamily: "surahname",
-                fontSize: 18),
+                fontSize: widget.fixedFontSizePercentageForHeader + 6),
           ),
         ],
       ),
@@ -152,7 +179,13 @@ TextEditingController pageNumberController = TextEditingController();
 
 class PageNumber extends StatelessWidget {
   final int pageNumber;
-  PageNumber({Key? key, required this.pageNumber}) : super(key: key);
+  final double fixedFontSizePercentage;
+
+  PageNumber(
+      {Key? key,
+      required this.pageNumber,
+      required this.fixedFontSizePercentage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -192,25 +225,25 @@ class PageNumber extends StatelessWidget {
               height: 15,
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Color(0xfff7f0e7)),
-              child: const Icon(
+              child: Icon(
                 Icons.unfold_more,
-                size: 10,
-                color: Color(0xffae8f74),
+                size: fixedFontSizePercentage - 3,
+                color: const Color(0xffae8f74),
               ),
             ),
             const SizedBox(width: 3),
             Text(pageNumber.toString(),
-                style: const TextStyle(
-                    color: Color(0xffae8f74),
-                    fontSize: 12,
+                style: TextStyle(
+                    color: const Color(0xffae8f74),
+                    fontSize: fixedFontSizePercentage,
                     fontFamily: "montserrat")),
             const SizedBox(width: 5),
             Transform.scale(
                 scaleX: pageNumber % 2 == 0 ? 1 : -1,
-                child: const Icon(
+                child: Icon(
                   Icons.menu_book_rounded,
-                  size: 15,
-                  color: Color(0xffae8f74),
+                  size: fixedFontSizePercentage + 3,
+                  color: const Color(0xffae8f74),
                 )),
             const SizedBox(width: 5),
           ],

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
@@ -51,8 +52,16 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   Widget build(BuildContext context) {
-
+    double height = MediaQuery.of(context).size.height;
+    // set default to shut up null errors
+    final gh = GeneralHelpers();
+    var flMap = gh.getResponsiveFontAndLineHeightPercentage(height: height);
+    var fixedFontSizePercentageForHeader =
+        gh.getResponsiveFontAndLineHeightPercentageForHeader(height: height);
     // final pageController = PageController();
+    double fixedFontSizePercentage = flMap["fixedFontSizePercentage"] ?? 25.928;
+    double fixedLineHeightPercentage =
+        flMap["fixedLineHeightPercentage"] ?? 1.852;
     if (showOnBoarding) {
       return OnBoarding(updateOnBoarding: () {
         setState(() {
@@ -84,7 +93,10 @@ class _MainScaffoldState extends State<MainScaffold> {
                 itemBuilder: (context, index) {
                   return RenderPage(
                       page: quranProvider.quran[index],
-                      );
+                      fixedFontSizePercentageForHeader:
+                          fixedFontSizePercentageForHeader,
+                      fixedFontSizePercentage: fixedFontSizePercentage,
+                      fixedLineHeightPercentage: fixedLineHeightPercentage);
                   // return const Text("sdf");
                   // return const Text("sdf");
                 },

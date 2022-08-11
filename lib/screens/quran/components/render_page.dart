@@ -5,11 +5,16 @@ import 'package:moeen/screens/quran/components/page_words.dart';
 
 class RenderPage extends StatelessWidget {
   final List page;
-
-  const RenderPage({
-    Key? key,
-    required this.page,
-  }) : super(key: key);
+  final double fixedFontSizePercentage;
+  final double fixedLineHeightPercentage;
+  final double fixedFontSizePercentageForHeader;
+  const RenderPage(
+      {Key? key,
+      required this.page,
+      required this.fixedFontSizePercentage,
+      required this.fixedFontSizePercentageForHeader,
+      required this.fixedLineHeightPercentage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +26,25 @@ class RenderPage extends StatelessWidget {
         Column(
       children: [
         const SizedBox(height: 50),
-        PageHeader(page: page[0]),
+
+        PageHeader(
+          page: page[0],
+          fixedFontSizePercentageForHeader: fixedFontSizePercentageForHeader,
+        ),
         const SizedBox(height: 10),
         page[0]["pageNumber"] == 1 || page[0]["pageNumber"] == 2
             ? Expanded(
                 child: Center(
                 child: PageWords(
                   page: page,
+                  fixedFontSizePercentage: fixedFontSizePercentage,
+                  fixedLineHeightPercentage: fixedLineHeightPercentage,
                 ),
               ))
             : PageWords(
                 page: page,
+                fixedFontSizePercentage: fixedFontSizePercentage,
+                fixedLineHeightPercentage: fixedLineHeightPercentage,
               ),
         // PageWords(page: page),
       ],
