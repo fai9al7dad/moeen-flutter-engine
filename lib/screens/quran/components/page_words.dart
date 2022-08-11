@@ -30,15 +30,15 @@ class PageWords extends StatelessWidget {
         text: TextSpan(
             style: TextStyle(
               color: Colors.black,
+              height: fixedLineHeightPercentage,
               fontSize: fixedFontSizePercentage,
-
-              // shadows: const [
-              //   Shadow(
-              //     offset: Offset(0.0, 0.0),
-              //     blurRadius: 0.2,
-              //     color: Color.fromARGB(255, 0, 0, 0),
-              //   ),
-              // ],
+              shadows: const [
+                Shadow(
+                  offset: Offset(0.0, 0.0),
+                  blurRadius: 0.2,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ],
             ),
             children: List.generate(page.length, (index) {
               var item = page[index];
@@ -97,7 +97,9 @@ class PageWords extends StatelessWidget {
               }
               if (item["charType"] == "end" && lineChanged) {
                 return TextSpan(
-                    text: "${item["text"]}\n",
+                    text: page[index]['pageNumber'] == 1
+                        ? "${item["text"]}\n"
+                        : "${item["text"]} ",
                     style: TextStyle(
                       color: const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
