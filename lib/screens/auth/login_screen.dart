@@ -90,10 +90,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           children: [
                             CustomInput(
-                                controller: usernameController,
-                                prefixIcon: Icons.person_outline,
-                                label: "اسم المستخدم",
-                                validator: (v) => null),
+                              controller: usernameController,
+                              prefixIcon: Icons.person_outline,
+                              label: "اسم المستخدم",
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'الرجاء ادخال اسم المستخدم';
+                                }
+                                return null;
+                              },
+                            ),
                             const SizedBox(
                               height: 20,
                             ),
@@ -104,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               obsecureText: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your password';
+                                  return 'الرجاء ادخال كلمة المرور';
                                 }
                                 return null;
                               },

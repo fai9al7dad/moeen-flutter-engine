@@ -74,7 +74,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: usernameController,
                           prefixIcon: Icons.person_outline,
                           label: "اسم المستخدم",
-                          validator: (v) => null),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'الرجاء ادخال اسم المستخدم';
+                            }
+                            return null;
+                          }),
                       const SizedBox(
                         height: 20,
                       ),
@@ -82,10 +87,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomInput(
-                              controller: emailController,
-                              prefixIcon: Icons.email_outlined,
-                              label: "البريد الإلكتروني",
-                              validator: (v) => null),
+                            controller: emailController,
+                            prefixIcon: Icons.email_outlined,
+                            label: "البريد الإلكتروني",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'الرجاء ادخال البريد الإلكتروني';
+                              }
+                              return null;
+                            },
+                          ),
                           const SizedBox(
                             height: 5,
                           ),
@@ -108,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obsecureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'الرجاء ادخال كلمة المرور';
                           }
                           return null;
                         },
@@ -123,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obsecureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'الرجاء ادخال تأكيد كلمة المرور';
                           }
                           return null;
                         },
