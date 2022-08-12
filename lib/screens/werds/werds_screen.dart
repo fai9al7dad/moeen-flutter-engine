@@ -56,18 +56,9 @@ class _WerdsScreenState extends State<WerdsScreen> {
     return "${d.year}-${d.month}-${d.day}";
   }
 
-  void checkIfFirstWerd() async {
+  void startWerd() async {
     const storage = FlutterSecureStorage();
     String? showWerdTutorial = await storage.read(key: "showWerdTutorial");
-    startWerd();
-    if (showWerdTutorial != "false") {
-      Navigator.pushNamed(context, "/werd-introduction");
-    } else {
-      Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
-    }
-  }
-
-  void startWerd() async {
     setState(() {
       appBarLoading = true;
     });
@@ -117,7 +108,11 @@ class _WerdsScreenState extends State<WerdsScreen> {
       "werdID": werd["id"],
       "reciterID": widget.reciterID,
     });
-    // Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
+    if (showWerdTutorial != "false") {
+      Navigator.pushNamed(context, "/werd-introduction");
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
+    }
   }
 
   @override
@@ -128,7 +123,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
       appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: const Color(0xff059669),
-          onPressed: () => checkIfFirstWerd(),
+          onPressed: () => startWerd(),
           label: const Text("إضافة ورد")),
       body: loading
           ? const Center(child: CircularProgressIndicator())
