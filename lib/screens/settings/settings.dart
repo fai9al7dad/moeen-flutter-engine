@@ -12,6 +12,7 @@ import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:moeen/screens/contact/contactScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -90,46 +91,22 @@ class _SettingsState extends State<Settings> {
                       },
                       isNavigation: true,
                     ),
-                    const SizedBox(height: 20),
                     CustomListTile(
-                        title: 'ارسال بلاغ',
-                        icon: Icons.warning_amber_rounded,
-                        onTap: () async {
-                          final Email email = Email(
-                            body:
-                                '\n \n ------------- \n اسم المستخدم : ${authProvider.authUser?.username} \n  رقم المستخدم : ${authProvider.authUser?.id}',
-                            subject: 'بلاغ | معين',
-                            recipients: ['moeen-app@outlook.com'],
-                            isHTML: false,
-                          );
-                          try {
-                            await FlutterEmailSender.send(email);
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                        isNavigation: false,
-                        order: "first"),
-                    CustomListTile(
-                      title: 'ارسال اقتراح',
+                      title: 'تواصل معنا',
                       icon: Icons.chat_outlined,
-                      onTap: () async {
-                        final Email email = Email(
-                          body:
-                              '\n \n ------------- \n اسم المستخدم : ${authProvider.authUser?.username} \n  رقم المستخدم : ${authProvider.authUser?.id}',
-                          subject: 'اقتراح | معين',
-                          recipients: ['moeen-app@outlook.com'],
-                          isHTML: false,
-                        );
-
-                        try {
-                          await FlutterEmailSender.send(email);
-                        } catch (e) {
-                          print(e);
-                        }
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ContactScreen(
+                                      authUserName:
+                                          authProvider.authUser?.username,
+                                      authEmail: authProvider.authUser?.email,
+                                    )));
                       },
-                      isNavigation: false,
+                      isNavigation: true,
                     ),
+                    const SizedBox(height: 20),
                     if (authProvider.isAuth)
                       CustomListTile(
                           title: 'مزامنة البيانات على هذا الجهاز',
@@ -246,7 +223,7 @@ class AuthUserInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(20.0),
             child: Text(
               "اسم المستخدم: $username",
               style: const TextStyle(fontFamily: "montserrat-bold"),
@@ -257,11 +234,16 @@ class AuthUserInfo extends StatelessWidget {
             thickness: 1,
           ),
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(20.0),
             child: Text(
               "رقم المستخدم: $userID ",
               style: const TextStyle(fontFamily: "montserrat-bold"),
             ),
+          ),
+          Divider(
+            color: Colors.grey.shade200,
+            thickness: 0.5,
+            height: 0,
           ),
           CustomListTile(
               title: "حذف الحساب",

@@ -4,6 +4,7 @@ import 'package:moeen/screens/about/about_app.dart';
 import 'package:moeen/screens/auth/forgot_password.dart';
 import 'package:moeen/screens/auth/login_screen.dart';
 import 'package:moeen/screens/auth/register_screen.dart';
+import 'package:moeen/screens/contact/contactScreen.dart';
 import 'package:moeen/screens/delete_user/delete_user_screen.dart';
 import 'package:moeen/screens/duo/duosScreen.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
@@ -13,6 +14,7 @@ import 'package:moeen/screens/settings/settings.dart';
 import 'package:moeen/screens/surahList/surah_list.dart';
 import 'package:moeen/screens/werds/finish_werd.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
+import 'package:moeen/screens/werds/werd_introduction/werd_introduction_screen.dart';
 import 'package:moeen/screens/werds/werds_screen.dart';
 
 class MistakesColors {
@@ -36,6 +38,8 @@ class CustomRouter {
     '/settings': (context) => const Settings(),
     '/delete-user': (context) => const DeleteUserScreen(),
     '/about-app': (context) => const AboutApp(),
+    '/contact-us': (context) => const ContactScreen(),
+    '/werd-introduction': (context) => const WerdIntroductionScreen(),
   };
 }
 

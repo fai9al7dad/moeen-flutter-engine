@@ -237,4 +237,14 @@ class Api {
       rethrow;
     }
   }
+
+  // contact
+  Future sendEmail({payload}) async {
+    try {
+      Response res = await api.post("/api/contact/send-email", data: payload);
+      return res.data;
+    } on DioError {
+      rethrow;
+    }
+  }
 }

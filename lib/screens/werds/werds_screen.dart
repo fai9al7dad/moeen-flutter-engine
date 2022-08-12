@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
@@ -55,6 +56,17 @@ class _WerdsScreenState extends State<WerdsScreen> {
     return "${d.year}-${d.month}-${d.day}";
   }
 
+  void checkIfFirstWerd() async {
+    const storage = FlutterSecureStorage();
+    String? showWerdTutorial = await storage.read(key: "showWerdTutorial");
+    startWerd();
+    if (showWerdTutorial != "false") {
+      Navigator.pushNamed(context, "/werd-introduction");
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
+    }
+  }
+
   void startWerd() async {
     setState(() {
       appBarLoading = true;
@@ -99,17 +111,13 @@ class _WerdsScreenState extends State<WerdsScreen> {
 
       werdColorsMaps.insertWord(data);
     }
-
     Provider.of<QuranProvider>(context, listen: false).startWerd(creds: {
       "duoID": widget.duoID,
       "username": widget.username,
       "werdID": werd["id"],
       "reciterID": widget.reciterID,
     });
-    setState(() {
-      appBarLoading = false;
-    });
-    Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
+    // Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
   }
 
   @override
@@ -120,7 +128,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
       appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: const Color(0xff059669),
-          onPressed: () => startWerd(),
+          onPressed: () => checkIfFirstWerd(),
           label: const Text("إضافة ورد")),
       body: loading
           ? const Center(child: CircularProgressIndicator())

@@ -2,8 +2,6 @@
 
 ## bugs
 
-- [x] cant scroll to page when on werd
-
 ## improvments
 
 - [ ] optimize sql init query on android, ios->?
@@ -24,7 +22,10 @@
 
 ## current iteration
 
-- [x] cant scroll to page when on werd
+- [x] delete account
+- [x] send email
+- [x] better font for < 820 h
+- [x] show werd start tutorial
 
 ## finished
 

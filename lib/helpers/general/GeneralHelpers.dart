@@ -40,6 +40,10 @@ class GeneralHelpers {
       // iphone se
       fixedFontSizePercentage = height * 0.0345;
       fixedLineHeightPercentage = height * 0.0021;
+    } else if (height < 820) {
+      // iphone 10
+      fixedFontSizePercentage = height * 0.0278;
+      fixedLineHeightPercentage = height * 0.00217;
     } else if (height < 850) {
       // iphone 12
       fixedFontSizePercentage = height * 0.028;
