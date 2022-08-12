@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
@@ -47,6 +49,14 @@ class Api {
       "/api/users/me",
     );
     UserModel user = UserModel.fromJson(res.data);
+    return user;
+  }
+
+  Future<UserModel?> deleteAuthUser() async {
+    Response res = await api.post(
+      "/api/users/delete-user",
+    );
+    UserModel user = UserModel.fromJson(res.data["user"]);
     return user;
   }
 

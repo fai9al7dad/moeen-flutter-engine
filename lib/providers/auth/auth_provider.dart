@@ -22,7 +22,6 @@ class AuthProvider with ChangeNotifier {
     UserModel user = UserModel.fromJson(creds);
     _authUser = user;
     await storage.write(key: "accessToken", value: user.accessToken);
-    inspect(user);
     notifyListeners();
   }
 
@@ -67,7 +66,7 @@ class UserModel {
       : accessToken = json["accessToken"],
         username = json["username"],
         email = json["email"],
-        id = json["userID"];
+        id = json["userID"] ?? json["id"];
 
   Map<String, dynamic> toMap() {
     return {

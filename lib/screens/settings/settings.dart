@@ -102,8 +102,11 @@ class _SettingsState extends State<Settings> {
                             recipients: ['moeen-app@outlook.com'],
                             isHTML: false,
                           );
-
-                          await FlutterEmailSender.send(email);
+                          try {
+                            await FlutterEmailSender.send(email);
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         isNavigation: false,
                         order: "first"),
@@ -119,7 +122,11 @@ class _SettingsState extends State<Settings> {
                           isHTML: false,
                         );
 
-                        await FlutterEmailSender.send(email);
+                        try {
+                          await FlutterEmailSender.send(email);
+                        } catch (e) {
+                          print(e);
+                        }
                       },
                       isNavigation: false,
                     ),
@@ -256,6 +263,11 @@ class AuthUserInfo extends StatelessWidget {
               style: const TextStyle(fontFamily: "montserrat-bold"),
             ),
           ),
+          CustomListTile(
+              title: "حذف الحساب",
+              icon: Icons.delete_forever_outlined,
+              onTap: () => Navigator.pushNamed(context, "/delete-user"),
+              isNavigation: true)
         ],
       ),
     );
@@ -276,8 +288,8 @@ class StyledContainer extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
               color: const Color(0xffFFFCF7),
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.grey.shade200, width: 1)),
+              borderRadius: BorderRadius.circular(0),
+              border: Border.all(color: Colors.grey.shade200, width: 0.5)),
           child: child),
     );
   }

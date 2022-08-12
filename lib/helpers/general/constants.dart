@@ -4,6 +4,7 @@ import 'package:moeen/screens/about/about_app.dart';
 import 'package:moeen/screens/auth/forgot_password.dart';
 import 'package:moeen/screens/auth/login_screen.dart';
 import 'package:moeen/screens/auth/register_screen.dart';
+import 'package:moeen/screens/delete_user/delete_user_screen.dart';
 import 'package:moeen/screens/duo/duosScreen.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
@@ -33,6 +34,7 @@ class CustomRouter {
     '/finish-werd': (context) => const FinishWerd(),
     '/view-werd-highlights': (context) => const ViewWerdHighlights(),
     '/settings': (context) => const Settings(),
+    '/delete-user': (context) => const DeleteUserScreen(),
     '/about-app': (context) => const AboutApp(),
   };
 }
