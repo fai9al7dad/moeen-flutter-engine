@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moeen/components/CustomAppBar.dart';
@@ -75,7 +77,23 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
       appBarLoading = true;
     });
     for (var i = 0; i < highlights.length; i++) {
+      // old color is required, because add mistake takes current color and gives next color, but in this context we are giving new color. so we need to save old color
+      var oldColor;
+      switch (highlights[i].color) {
+        case MistakesColors.revert:
+          oldColor = MistakesColors.mistake;
+          break;
+
+        case MistakesColors.mistake:
+          oldColor = MistakesColors.warning;
+          break;
+        case MistakesColors.warning:
+          oldColor = MistakesColors.revert;
+          break;
+      }
+
       Provider.of<QuranProvider>(context, listen: false).addMistake(
+          color: oldColor,
           id: highlights[i].id,
           pageNumber: highlights[i].pageID,
           verseNumber: highlights[i].verseNumber,

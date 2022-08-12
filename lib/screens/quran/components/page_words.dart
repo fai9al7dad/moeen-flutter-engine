@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
@@ -126,7 +127,8 @@ class PageWords extends StatelessWidget {
                               pageNumber: item["pageNumber"],
                               verseNumber: item["verseNumber"],
                               chapterCode: item["chapterCode"],
-                              color: found?.color)
+                              color: found?.color),
+                          HapticFeedback.lightImpact(),
                         },
                 );
               }
@@ -151,7 +153,8 @@ class PageWords extends StatelessWidget {
                               pageNumber: item["pageNumber"],
                               verseNumber: item["verseNumber"],
                               chapterCode: item["chapterCode"],
-                              color: found?.color)
+                              color: found?.color),
+                          HapticFeedback.lightImpact(),
                         });
             })),
         textAlign: TextAlign.center,

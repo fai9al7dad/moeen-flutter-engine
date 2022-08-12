@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -20,7 +22,7 @@ class AuthProvider with ChangeNotifier {
     UserModel user = UserModel.fromJson(creds);
     _authUser = user;
     await storage.write(key: "accessToken", value: user.accessToken);
-
+    inspect(user);
     notifyListeners();
   }
 
@@ -65,7 +67,7 @@ class UserModel {
       : accessToken = json["accessToken"],
         username = json["username"],
         email = json["email"],
-        id = json["id"];
+        id = json["userID"];
 
   Map<String, dynamic> toMap() {
     return {
