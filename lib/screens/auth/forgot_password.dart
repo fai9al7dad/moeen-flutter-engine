@@ -1,8 +1,12 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/helpers/dio/api.dart';
 
 TextEditingController emailController = TextEditingController();
 TextEditingController tokenController = TextEditingController();
@@ -59,6 +63,32 @@ class Step1 extends StatefulWidget {
 
 class _Step1State extends State<Step1> {
   final _formKey = GlobalKey<FormState>();
+  void sendToken() async {
+    if (_formKey.currentState!.validate()) {
+      // await Future.delayed(Duration(seconds: 1));
+      final api = Api();
+      try {
+        await api.createForgotPasswordToken(
+          email: emailController.text,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green[200],
+            content: Text(
+              "تم ارسال رابط استعادة كلمة المرور الى البريد الخاص بك",
+              style: TextStyle(color: Colors.green[900]),
+            )));
+        widget.changeStep(2);
+      } on DioError catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red[200],
+            content: Text(
+              e.response?.data["message"],
+              style: TextStyle(color: Colors.red[900]),
+            )));
+      }
+      // widget.changeStep(2);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,18 +131,23 @@ class _Step1State extends State<Step1> {
           child: Column(
             children: [
               CustomInput(
-                  controller: emailController,
-                  prefixIcon: Icons.email_outlined,
-                  label: "الإيميل",
-                  validator: (v) => null),
+                controller: emailController,
+                prefixIcon: Icons.email_outlined,
+                label: "الإيميل",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال البريد الإلكتروني';
+                  }
+                  return null;
+                },
+              ),
               const SizedBox(
                 height: 20,
               ),
               const SizedBox(
                 height: 5,
               ),
-              CustomButton(
-                  onPressed: () => {widget.changeStep(2)}, text: "ادخل"),
+              CustomButton(onPressed: () => sendToken(), text: "ارسل الرمز"),
             ],
           ),
         )
@@ -132,6 +167,36 @@ class Step2 extends StatefulWidget {
 
 class _Step2State extends State<Step2> {
   final _formKey = GlobalKey<FormState>();
+  void verifyToken() async {
+    if (_formKey.currentState!.validate()) {
+      // await Future.delayed(Duration(seconds: 1));
+      final api = Api();
+      try {
+        await api.verifyForgotPasswordToken(
+          email: emailController.text,
+          token: tokenController.text,
+          password: passwordController.text,
+          confirmPassword: confirmPasswordController.text,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green[200],
+            content: Text(
+              "تم تأكيد الرمز الخاص بك، الآن يمكنك تسجيل الدخول برقمك السري الجديد",
+              style: TextStyle(color: Colors.green[900]),
+            )));
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/login", (Route route) => false);
+      } on DioError catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red[200],
+            content: Text(
+              e.response?.data["message"],
+              style: TextStyle(color: Colors.red[900]),
+            )));
+      }
+      // widget.changeStep(2);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,11 +247,20 @@ class _Step2State extends State<Step2> {
                 height: 20,
               ),
               CustomInput(
-                  controller: passwordController,
-                  prefixIcon: Icons.lock_outline,
-                  obsecureText: true,
-                  label: "الرقم السري الجديد",
-                  validator: (v) => null),
+                controller: passwordController,
+                prefixIcon: Icons.lock_outline,
+                obsecureText: true,
+                label: "الرقم السري الجديد",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال كلمة المرور';
+                  }
+                  if (value.length < 8) {
+                    return 'الرجاء ادخال كلمة مرور لا تقل عن ثمانية أحرف';
+                  }
+                  return null;
+                },
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -195,12 +269,20 @@ class _Step2State extends State<Step2> {
                   prefixIcon: Icons.lock_outline,
                   obsecureText: true,
                   label: "أعد كتابة الرقم السري",
-                  validator: (v) => null),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء ادخال كلمة المرور';
+                    }
+                    if (value.length < 8) {
+                      return 'الرجاء ادخال كلمة مرور لا تقل عن ثمانية أحرف';
+                    }
+                    return null;
+                  }),
               const SizedBox(
                 height: 20,
               ),
               CustomButton(
-                  onPressed: () => {widget.changeStep(2)}, text: "ادخل"),
+                  onPressed: () => {verifyToken()}, text: "غير كلمة المرور"),
             ],
           ),
         )

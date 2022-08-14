@@ -52,6 +52,40 @@ class Api {
     return user;
   }
 
+  Future createForgotPasswordToken({email}) async {
+    Map payload = {
+      "userEmail": email,
+    };
+    try {
+      Response res = await api.post(
+        "/api/auth/create-forgot-password-token",
+        data: payload,
+      );
+      return res;
+    } on DioError {
+      rethrow;
+    }
+  }
+
+  Future verifyForgotPasswordToken(
+      {email, token, password, confirmPassword}) async {
+    Map payload = {
+      "userEmail": email,
+      "token": token,
+      "password": password,
+      "confirmPassword": confirmPassword,
+    };
+    try {
+      Response res = await api.post(
+        "/api/auth/verify-forgot-password-token",
+        data: payload,
+      );
+      return res;
+    } on DioError {
+      rethrow;
+    }
+  }
+
   Future<UserModel?> deleteAuthUser() async {
     Response res = await api.post(
       "/api/users/delete-user",

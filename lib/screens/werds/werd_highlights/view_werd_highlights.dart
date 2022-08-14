@@ -30,6 +30,7 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
   late final List<Word> highlights;
   bool loading = true;
   bool appBarLoading = false;
+  bool hasReverts = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -50,7 +51,9 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
     if (res.isNotEmpty) {
       for (var i = 0; i < res.length; i++) {
         Word word = await db.getWordByID(id: res[i].wordID);
-        // console.log(word);
+        if (res[i].type == "revert") {
+          setHasReverts();
+        }
         data.add(Word(
           id: word.id,
           verseNumber: word.verseNumber,
@@ -59,7 +62,9 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
           pageID: word.pageID,
           color: res[i].type == "mistake"
               ? MistakesColors.mistake
-              : MistakesColors.warning,
+              : res[i].type == "warning"
+                  ? MistakesColors.warning
+                  : MistakesColors.revert,
         ));
       }
     }
@@ -107,6 +112,12 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
     });
   }
 
+  void setHasReverts() {
+    setState(() {
+      hasReverts = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (loading) {
@@ -125,68 +136,112 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
               backgroundColor: const Color(0xff059669),
             )
           : null,
-      body: Center(
-        child: highlights.isEmpty
-            ? const Text('لم تسجل أخطاء أو تنبيهات في هذا الورد')
-            : Directionality(
-                textDirection: TextDirection.rtl,
-                child: ListView.separated(
-                  itemCount: highlights.length,
-                  separatorBuilder: (context, index) => const Divider(
-                    thickness: 0.8,
-                    height: 1,
-                    color: Color(0xffe4e4e7),
-                  ),
-                  itemBuilder: (context, index) {
-                    return ListItem(
-                        index: index,
-                        title: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.8,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+          child: highlights.isEmpty
+              ? const Text('لم تسجل أخطاء أو تنبيهات في هذا الورد')
+              : Column(
+                  children: [
+                    if (hasReverts)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Flexible(
+                            child: Text(
+                              "وجود اللون الأسود بجانب تحديد، يعني أنه هنالك خطأ مسجل في مصحف المسمع تم تصحيحه",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
-                          child: Row(children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(int.parse(
-                                    highlights[index].color ==
-                                            MistakesColors.warning
-                                        ? MistakesColors.warning
-                                        : MistakesColors.mistake,
-                                  ))),
-                              height: 8,
-                              width: 8,
-                            ),
-                            const SizedBox(width: 8),
-                            Text("${highlights[index].text}",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily:
-                                        "p${highlights[index].pageID}")),
-                          ]),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(int.parse(MistakesColors.revert))),
+                            height: 8,
+                            width: 8,
+                          ),
+                        ],
+                      ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: ListView.separated(
+                          itemCount: highlights.length,
+                          separatorBuilder: (context, index) => const Divider(
+                            thickness: 0.8,
+                            height: 1,
+                            color: Color(0xffe4e4e7),
+                          ),
+                          itemBuilder: (context, index) {
+                            return ListItem(
+                                index: index,
+                                title: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                  ),
+                                  child: Row(children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(int.parse(
+                                            highlights[index].color ==
+                                                    MistakesColors.warning
+                                                ? MistakesColors.warning
+                                                : highlights[index].color ==
+                                                        MistakesColors.revert
+                                                    ? MistakesColors.revert
+                                                    : MistakesColors.mistake,
+                                          ))),
+                                      height: 8,
+                                      width: 8,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text("${highlights[index].text}",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily:
+                                                "p${highlights[index].pageID}")),
+                                  ]),
+                                ),
+                                subtitle: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.8,
+                                    ),
+                                    child: Row(children: [
+                                      Text(
+                                          "${highlights[index].chapterCode}surah",
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: "surahname")),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        "رقم الصفحة: ${highlights[index].pageID}",
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        "رقم الآية: ${highlights[index].verseNumber}",
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    ])));
+                          },
                         ),
-                        subtitle: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.8,
-                            ),
-                            child: Row(children: [
-                              Text("${highlights[index].chapterCode}surah",
-                                  style: const TextStyle(
-                                      fontSize: 18, fontFamily: "surahname")),
-                              const SizedBox(width: 8),
-                              Text(
-                                "رقم الصفحة: ${highlights[index].pageID}",
-                                style: const TextStyle(fontSize: 10),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "رقم الآية: ${highlights[index].verseNumber}",
-                                style: const TextStyle(fontSize: 10),
-                              ),
-                            ])));
-                  },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+        ),
       ),
     );
   }

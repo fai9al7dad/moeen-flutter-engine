@@ -121,6 +121,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.isEmpty) {
                             return 'الرجاء ادخال كلمة المرور';
                           }
+                          if (value.length < 8) {
+                            return 'الرجاء ادخال كلمة مرور لا تقل عن ثمانية أحرف';
+                          }
                           return null;
                         },
                       ),

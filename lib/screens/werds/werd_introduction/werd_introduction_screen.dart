@@ -26,6 +26,7 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
     return Scaffold(
       appBar: const CustomAppBar(
         title: "بداية الورد",
+        showBackButton: false,
       ),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: const Color(0xff059669),

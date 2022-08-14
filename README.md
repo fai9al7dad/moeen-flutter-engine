@@ -16,16 +16,15 @@
   - [ ] last where or null -> make query on backend ?
   - [ ] state on init not on builder
 - [ ] show animation on highlight -> [warning,mistake]
-- [ ] padding on view werd highlights list
+- [x] padding on view werd highlights list
 - [ ] start from last stopped page
 - [ ] surah list init index is which current chapter im in
 
 ## current iteration
 
-- [x] delete account
-- [x] send email
-- [x] better font for < 820 h
-- [x] show werd start tutorial
+- [x] finish forget password
+- [x] werd introduction remove going back
+- [x] fix revert showing as warning bug
 
 ## finished
 
@@ -46,10 +45,10 @@
     - [ ] type ... low pri
     - [x] verses count
     - [x] click go to first page
-- [ ] auth
+- [x] auth
   - [x] login
   - [x] register
-  - [ ] forgot password
+  - [x] forgot password
   - [x] local storage auth
 - [x] duos
   - [x] show need to login if not auth

@@ -24,7 +24,7 @@ void main() {
     ],
     child: DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => MyApp(), // Wrap your app
+      builder: (context) => const MyApp(), // Wrap your app
     ),
   ));
 }
