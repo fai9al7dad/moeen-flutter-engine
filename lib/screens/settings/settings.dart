@@ -46,7 +46,7 @@ class _SettingsState extends State<Settings> {
           color: colorFromType,
           wordID: word.id,
           pageNumber: word.pageID,
-          verseNumber: int.parse(word.verseNumber ?? ""),
+          verseNumber: int.parse(word.verseNumber ?? "0"),
           chapterCode: word.chapterCode);
       await wcm.insertWord(data);
     });

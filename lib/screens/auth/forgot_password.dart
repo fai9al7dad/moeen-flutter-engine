@@ -184,8 +184,7 @@ class _Step2State extends State<Step2> {
               "تم تأكيد الرمز الخاص بك، الآن يمكنك تسجيل الدخول برقمك السري الجديد",
               style: TextStyle(color: Colors.green[900]),
             )));
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/login", (Route route) => false);
+        Navigator.pop(context);
       } on DioError catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red[200],

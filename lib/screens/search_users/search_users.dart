@@ -42,6 +42,13 @@ class _SearchUsersState extends State<SearchUsers> {
     });
     try {
       await api.sendInvite(toUserID: toUserID);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green[200],
+          content: Text(
+            "تم إرسال الدعوة بنجاح",
+            style: TextStyle(color: Colors.green[900]),
+            textAlign: TextAlign.right,
+          )));
     } on DioError catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red[200],

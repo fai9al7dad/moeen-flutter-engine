@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +33,6 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
           ff?.mistakes == 0 || ff?.mistakes == null ? 0 : ff?.mistakes;
       var warnings =
           ff?.warnings == 0 || ff?.warnings == null ? 0 : ff?.warnings;
-
       return Row(
         children: [
           warnings! > 0

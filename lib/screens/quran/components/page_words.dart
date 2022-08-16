@@ -59,9 +59,10 @@ class PageWords extends StatelessWidget {
                       "assets/svg/surah_header_svg.svg",
                       width: fixedFontSizePercentage > 30
                           ? fixedFontSizePercentage * 20
-                          : Platform.isAndroid
-                              ? fixedFontSizePercentage * 15.5
-                              : fixedFontSizePercentage * 16,
+                          : fixedFontSizePercentage * 16,
+                      height: fixedFontSizePercentage > 30
+                          ? fixedFontSizePercentage * 1.789
+                          : fixedFontSizePercentage * 1.72,
                     ),
                     Text("${item["chapterCode"].padLeft(3, '0')}",
                         style: TextStyle(
@@ -91,7 +92,8 @@ class PageWords extends StatelessWidget {
               }
               if (item["charType"] == "end" && lineChanged) {
                 return TextSpan(
-                    text: page[index]['pageNumber'] == 1
+                    text: page[index]['pageNumber'] == 1 ||
+                            item["chapterCode"] == "114"
                         ? "${item["text"]}\n"
                         : "${item["text"]} ",
                     style: TextStyle(

@@ -167,10 +167,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           return;
                                         }
                                         // ignore: use_build_context_synchronously
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            "/duos",
-                                            (Route route) => false);
+                                        Navigator.pop(
+                                          context,
+                                        );
                                       } on Dio.DioError catch (e) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(

@@ -15,8 +15,10 @@ class PageHeader extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    double headerPadding = fixedFontSizePercentageForHeader >= 18 ? 110 : 10;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: EdgeInsets.only(left: headerPadding, right: headerPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

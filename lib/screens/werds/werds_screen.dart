@@ -9,6 +9,7 @@ import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
@@ -67,14 +68,13 @@ class _WerdsScreenState extends State<WerdsScreen> {
     var werd =
         await api.addWerd(duoID: widget.duoID, reciterID: widget.reciterID);
 
-    var highlightsRes =
-        await api.getHighlightsByUserID(userID: widget.reciterID);
-
     // this will not return pagenumber, chaptercode, but will return wordID
     // so we need to fetch word by id from local db, and append it
+    var highlightsRes =
+        await api.getHighlightsByUserID(userID: widget.reciterID);
+    await werdColorsMaps.deleteAllColors();
 
-    for (var i = 0; i < highlightsRes.length; i++) {
-      var item = highlightsRes[i];
+    await Future.forEach(highlightsRes, (HighlightsModel item) async {
       var word = await db.getWordByID(id: item.wordID);
 
       var color;
@@ -89,19 +89,18 @@ class _WerdsScreenState extends State<WerdsScreen> {
           color = MistakesColors.revert;
           break;
       }
-      // arr.push({color: color, wordID: item.wordID});
       // cause of null, mostly will not be null
       var vn = int.parse(word.verseNumber ?? "0");
       WordColorMapModel data = WordColorMapModel(
         color: color,
-        wordID: item.wordID,
+        wordID: word.id,
         pageNumber: word.pageID,
         chapterCode: word.chapterCode,
         verseNumber: vn,
       );
 
-      werdColorsMaps.insertWord(data);
-    }
+      await werdColorsMaps.insertWord(data);
+    });
     Provider.of<QuranProvider>(context, listen: false).startWerd(creds: {
       "duoID": widget.duoID,
       "username": widget.username,
@@ -109,7 +108,8 @@ class _WerdsScreenState extends State<WerdsScreen> {
       "reciterID": widget.reciterID,
     });
     if (showWerdTutorial != "false") {
-      Navigator.pushNamed(context, "/werd-introduction");
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/werd-introduction", (Route route) => false);
     } else {
       Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
     }

@@ -42,13 +42,13 @@ class GeneralHelpers {
       fixedLineHeightPercentage = height * 0.0021;
     } else if (height < 810) {
       // iphone 10
-      fixedFontSizePercentage = height * 0.029;
-      fixedLineHeightPercentage = height * 0.00195;
+      fixedFontSizePercentage = height * 0.0275;
+      fixedLineHeightPercentage = height * 0.0022;
     } else if (height < 820) {
       // iphone 10
       fixedFontSizePercentage = height * 0.0275;
       fixedLineHeightPercentage = height * 0.00215;
-    } else if (height < 850) {
+    } else if (height < 860) {
       // iphone 12
       fixedFontSizePercentage = height * 0.028;
       fixedLineHeightPercentage = height * 0.0021;
@@ -62,12 +62,12 @@ class GeneralHelpers {
       fixedLineHeightPercentage = height * 0.0022;
     } else if (height < 1100) {
       // sony z
-      fixedFontSizePercentage = height * 0.039;
-      fixedLineHeightPercentage = 1.3;
+      fixedFontSizePercentage = height * 0.034;
+      fixedLineHeightPercentage = 1.5;
     } else if (height < 1200) {
       // sony z
-      fixedFontSizePercentage = height * 0.039;
-      fixedLineHeightPercentage = 1.3;
+      fixedFontSizePercentage = height * 0.0335;
+      fixedLineHeightPercentage = 1.53;
     }
     return {
       "fixedFontSizePercentage": fixedFontSizePercentage,

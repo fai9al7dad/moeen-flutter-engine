@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "montserrat",
         scaffoldBackgroundColor: const Color(0xfffff8ed),
+        // scaffoldBackgroundColor: const Color(0xff1f2937),
         primarySwatch: Colors.green,
       ),
       // home: const RenderQuranList(),

@@ -13,7 +13,6 @@
 - [ ] update empty state -> invites
 - [ ] switch fab to custom button?
 - [ ] optimize page header
-  - [ ] last where or null -> make query on backend ?
   - [ ] state on init not on builder
 - [ ] show animation on highlight -> [warning,mistake]
 - [x] padding on view werd highlights list
@@ -22,19 +21,25 @@
 
 ## current iteration
 
-- [x] finish forget password
-- [x] werd introduction remove going back
-- [x] fix revert showing as warning bug
+- [x] fix ipad size and disable landscape
+- [x] changed app name to arabic ios
+- [x] show alert to users that update is available
+- [x] fix werd bug sometimes showing extra errors
+- [x] fix login after mushaf
+- [x] show succes snackbar after sending invite
 
 ## finished
 
 - [x] word highlight = black->warning->mistake->revert
-- [x] page header
+- [x] page head
+
   - [x] add juz number
   - [x] add hizb number
   - [x] page number
   - [x] show page mistakes and warnings
+
     - [x] click to open modal to go to page
+
   - [x] add page header
   - [x] surah name
     - [x] click to open surah list screen
@@ -45,6 +50,7 @@
     - [ ] type ... low pri
     - [x] verses count
     - [x] click go to first page
+
 - [x] auth
   - [x] login
   - [x] register
