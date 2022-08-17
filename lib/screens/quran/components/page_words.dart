@@ -48,8 +48,33 @@ class PageWords extends StatelessWidget {
                   (element) => element.wordID == item["wordID"]);
               if (item["isNewChapter"] == 1) {
                 if (item["isBismillah"] == 1 && item["pageNumber"] != 187) {
-                  return const TextSpan(
-                      text: "ﱁﱂﱃﱄ\n", style: TextStyle(fontFamily: "p1"));
+                  return WidgetSpan(
+                      child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("ﱄ",
+                          style: TextStyle(
+                            fontFamily: "p1",
+                            fontSize: fixedFontSizePercentage,
+                          )),
+                      Text("ﱃ",
+                          style: TextStyle(
+                            fontFamily: "p1",
+                            fontSize: fixedFontSizePercentage,
+                          )),
+                      Text("ﱂ",
+                          style: TextStyle(
+                            fontFamily: "p1",
+                            fontSize: fixedFontSizePercentage,
+                          )),
+                      Text("ﱁ",
+                          style: TextStyle(
+                            fontFamily: "p1",
+                            fontSize: fixedFontSizePercentage,
+                          )),
+                    ],
+                  ));
                 }
                 return WidgetSpan(
                     child: Stack(
@@ -92,7 +117,7 @@ class PageWords extends StatelessWidget {
               }
               if (item["charType"] == "end" && lineChanged) {
                 return TextSpan(
-                    text: page[index]['pageNumber'] == 1 ||
+                    text: page[index]['pageNumber'] < 3 ||
                             item["chapterCode"] == "114"
                         ? "${item["text"]}\n"
                         : "${item["text"]} ",
@@ -114,7 +139,7 @@ class PageWords extends StatelessWidget {
                       page[index]['pageNumber'] == 2) &&
                   lineChanged) {
                 return TextSpan(
-                  text: "${item["text"]}                       ",
+                  text: "${item["text"]}\n",
                   style: TextStyle(
                     color: found != null
                         ? Color(int.parse(found.color))
@@ -145,7 +170,11 @@ class PageWords extends StatelessWidget {
                     fontFamily: "p${page[index]['pageNumber']}",
                     fontSize: index == 0
                         ? fixedFontSizePercentage - 0.001
-                        : fixedFontSizePercentage,
+                        : index == 1
+                            ? fixedFontSizePercentage - 0.002
+                            : index == 2
+                                ? fixedFontSizePercentage - 0.003
+                                : fixedFontSizePercentage,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => {

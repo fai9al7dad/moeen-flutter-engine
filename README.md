@@ -15,18 +15,14 @@
 - [ ] optimize page header
   - [ ] state on init not on builder
 - [ ] show animation on highlight -> [warning,mistake]
-- [x] padding on view werd highlights list
 - [ ] start from last stopped page
 - [ ] surah list init index is which current chapter im in
 
 ## current iteration
 
-- [x] fix ipad size and disable landscape
-- [x] changed app name to arabic ios
-- [x] show alert to users that update is available
-- [x] fix werd bug sometimes showing extra errors
-- [x] fix login after mushaf
-- [x] show succes snackbar after sending invite
+- [x] fix ipad page 1 and 2 problem
+- [x] fix first word connected problem
+- [x] fix connected bisimiliiah
 
 ## finished
 
