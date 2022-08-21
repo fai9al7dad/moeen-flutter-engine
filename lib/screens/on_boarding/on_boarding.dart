@@ -37,9 +37,9 @@ class OnBoarding extends StatelessWidget {
       "img": "assets/images/onboarding/surahs.png",
     },
     {
-      "title": "تسميع عن بعد",
+      "title": "تصحيح عن بعد",
       "body":
-          "قم بالتسميع عن بعد وذلك بإرسال دعوة إلى صديقك ثم بدأ ورد جديد معه",
+          "قم بالتصحيح عن بعد وذلك بإرسال دعوة إلى صديقك ثم بدأ ورد جديد معه ",
       "img": "assets/images/onboarding/duos.png",
     },
     {
@@ -57,7 +57,7 @@ class OnBoarding extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0.5,
-          title: const Text("المقدمة",
+          title: const Text("الشرح",
               style: TextStyle(color: Colors.black, fontSize: 14)),
           centerTitle: true,
         ),
@@ -124,7 +124,8 @@ class Slide extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       final storage = const FlutterSecureStorage();
-                      storage.write(key: "finishedOnBoarding", value: "true");
+                      storage.write(
+                          key: "finishedOnBoarding", value: "finished");
                       updateOnBoarding();
                       // Navigator.pushNamed(context, "/");
                     },

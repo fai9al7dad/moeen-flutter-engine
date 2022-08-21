@@ -108,7 +108,7 @@ class _SettingsState extends State<Settings> {
                       isNavigation: true,
                     ),
                     CustomListTile(
-                      title: 'مقدمة التطبيق',
+                      title: 'شرح التطبيق',
                       icon: Icons.description_outlined,
                       onTap: () {
                         Navigator.push(

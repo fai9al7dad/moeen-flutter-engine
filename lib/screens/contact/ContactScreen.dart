@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -8,6 +9,7 @@ import 'package:moeen/components/CustomInput.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ContactScreen extends StatefulWidget {
   final String? authUserName;
@@ -43,22 +45,34 @@ class _ContactScreenState extends State<ContactScreen> {
     setState(() {
       isLoading = true;
     });
-    await api.sendEmail(
-      payload: payload,
-    );
-    setState(() {
-      isLoading = false;
-    });
-    nameController.clear();
-    emailController.clear();
-    titleController.clear();
-    subjectController.clear();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.green[200],
-        content: Text(
-          'تم ارسال الإيميل بنجاح',
-          style: TextStyle(color: Colors.green[900]),
-        )));
+    try {
+      await api.sendEmail(
+        payload: payload,
+      );
+      nameController.clear();
+      emailController.clear();
+      titleController.clear();
+      subjectController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green[200],
+          content: Text(
+            'تم ارسال الإيميل بنجاح',
+            style: TextStyle(color: Colors.green[900]),
+          )));
+      setState(() {
+        isLoading = false;
+      });
+    } on DioError catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red[200],
+          content: Text(
+            "${e.response?.data["message"][0]}: حصل خطأ ما",
+            style: TextStyle(color: Colors.red[900]),
+          )));
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -191,11 +205,17 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                             CustomButton(
                                 onPressed: () async {
+                                  PackageInfo packageInfo =
+                                      await PackageInfo.fromPlatform();
+
+                                  String version = packageInfo.version;
+
                                   Map payload = {
                                     "name": nameController.text,
                                     "email": emailController.text,
                                     "title": titleController.text,
-                                    "subject": subjectController.text,
+                                    "subject":
+                                        "\nالإصدار: $version\n  ${subjectController.text}",
                                   };
                                   if (_formKey.currentState!.validate() &&
                                       !isLoading) {

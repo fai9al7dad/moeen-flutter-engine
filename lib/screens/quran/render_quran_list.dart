@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomInput.dart';
@@ -26,7 +28,7 @@ class MainScaffold extends StatefulWidget {
 
 class _MainScaffoldState extends State<MainScaffold> {
   bool showOnBoarding = false;
-  bool showExtra = true;
+  bool showExtra = false;
 
   void setShowExtra(bool value) {
     setState(() {
@@ -50,7 +52,8 @@ class _MainScaffoldState extends State<MainScaffold> {
     const storage = FlutterSecureStorage();
 
     var finishedOnBoarding = await storage.read(key: "finishedOnBoarding");
-    if (finishedOnBoarding != "true") {
+    inspect(finishedOnBoarding);
+    if (finishedOnBoarding != "finished") {
       setState(() {
         showOnBoarding = true;
       });
