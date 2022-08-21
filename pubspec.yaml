@@ -44,6 +44,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  grouped_list: ^5.1.2
 
 flutter_icons:
   ios: true
@@ -76,6 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/databases/quran.db
+    - assets/databases/quran_simple.sqlite
     - assets/json/SURAHS.json
     - assets/svg/surah_header_svg.svg
     - assets/svg/warning.svg

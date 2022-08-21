@@ -12,6 +12,8 @@ class CustomInput extends StatelessWidget {
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
+  final bool? autoFocus;
+  final Function(String)? onChanged;
   const CustomInput(
       {Key? key,
       required this.prefixIcon,
@@ -24,6 +26,8 @@ class CustomInput extends StatelessWidget {
       this.maxLines,
       this.minLines,
       this.maxLength,
+      this.autoFocus,
+      this.onChanged,
       required this.validator})
       : super(key: key);
 
@@ -38,6 +42,8 @@ class CustomInput extends StatelessWidget {
         maxLines: maxLines ?? 1,
         maxLength: maxLength,
         validator: validator,
+        autofocus: autoFocus ?? false,
+        onChanged: onChanged,
         obscureText: obsecureText ?? false,
         onFieldSubmitted: onFieldSubmitted,
         textInputAction: textInputAction,

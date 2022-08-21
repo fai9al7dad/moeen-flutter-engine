@@ -13,6 +13,7 @@ import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/screens/contact/contactScreen.dart';
+import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -102,6 +103,20 @@ class _SettingsState extends State<Settings> {
                                       authUserName:
                                           authProvider.authUser?.username,
                                       authEmail: authProvider.authUser?.email,
+                                    )));
+                      },
+                      isNavigation: true,
+                    ),
+                    CustomListTile(
+                      title: 'مقدمة التطبيق',
+                      icon: Icons.description_outlined,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OnBoarding(
+                                      updateOnBoarding: () =>
+                                          {Navigator.pop(context)},
                                     )));
                       },
                       isNavigation: true,

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:moeen/components/CustomInput.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
+import 'package:moeen/screens/quran/components/show_extras.dart';
 import 'package:provider/provider.dart';
 
 class RenderQuranList extends StatelessWidget {
@@ -24,6 +26,14 @@ class MainScaffold extends StatefulWidget {
 
 class _MainScaffoldState extends State<MainScaffold> {
   bool showOnBoarding = false;
+  bool showExtra = true;
+
+  void setShowExtra(bool value) {
+    setState(() {
+      showExtra = value;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,32 +85,50 @@ class _MainScaffoldState extends State<MainScaffold> {
                   color: Colors.green[700],
                 )),
               )
-            : (PageView.builder(
-                controller: quranProvider.pageController,
-                allowImplicitScrolling: true,
+            : GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  int sensitivity = 8;
+                  if (details.delta.dy > sensitivity) {
+                    // Down Swipe
+                    setShowExtra(true);
+                  } else if (details.delta.dy < -sensitivity) {
+                    // Up Swipe
+                    setShowExtra(false);
+                  }
+                },
+                child: Stack(children: [
+                  PageView.builder(
+                    controller: quranProvider.pageController,
+                    allowImplicitScrolling: true,
 
-                reverse: true,
-                // physics: const AlwaysScrollableScrollPhysics(),
-                // scrollDirection: Axis.horizontal,
-                clipBehavior: Clip.none,
-                itemCount: quranProvider.quran.length,
-                onPageChanged: (p) {
-                  quranProvider.refreshData(pageNumber: p + 1);
-                },
-                itemBuilder: (context, index) {
-                  return RenderPage(
-                      page: quranProvider.quran[index],
-                      fixedFontSizePercentageForHeader:
-                          fixedFontSizePercentageForHeader,
-                      fixedFontSizePercentage: fixedFontSizePercentage,
-                      fixedLineHeightPercentage: fixedLineHeightPercentage);
-                  // return const Text("sdf");
-                  // return const Text("sdf");
-                },
-                // itemBuilder: (context, index) {
-                //   return RenderPage(lines: _items[index]["lines"]);
-                // }
-              )),
+                    reverse: true,
+                    // physics: const AlwaysScrollableScrollPhysics(),
+                    // scrollDirection: Axis.horizontal,
+                    clipBehavior: Clip.none,
+                    itemCount: quranProvider.quran.length,
+                    onPageChanged: (p) {
+                      quranProvider.refreshData(pageNumber: p + 1);
+                    },
+                    itemBuilder: (context, index) {
+                      return RenderPage(
+                          page: quranProvider.quran[index],
+                          fixedFontSizePercentageForHeader:
+                              fixedFontSizePercentageForHeader,
+                          fixedFontSizePercentage: fixedFontSizePercentage,
+                          fixedLineHeightPercentage: fixedLineHeightPercentage);
+                      // return const Text("sdf");
+                      // return const Text("sdf");
+                    },
+                    // itemBuilder: (context, index) {
+                    //   return RenderPage(lines: _items[index]["lines"]);
+                    // }
+                  ),
+                  if (showExtra)
+                    ShowExtras(
+                      setShowExtra: setShowExtra,
+                    ),
+                ]),
+              ),
       ),
     );
   }

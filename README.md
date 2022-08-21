@@ -20,9 +20,8 @@
 
 ## current iteration
 
-- [x] fix ipad page 1 and 2 problem
-- [x] fix first word connected problem
-- [x] fix connected bisimiliiah
+- [x] add onboarding screen on settings page
+- [x] search by word, verse,surah
 
 ## finished
 

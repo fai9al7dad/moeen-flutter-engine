@@ -151,7 +151,7 @@ class _SurahNameState extends State<SurahName> {
             style: TextStyle(
                 color: const Color(0xffae8f74),
                 fontFamily: "surahname",
-                fontSize: widget.fixedFontSizePercentageForHeader + 6),
+                fontSize: widget.fixedFontSizePercentageForHeader + 7),
           ),
         ],
       ),

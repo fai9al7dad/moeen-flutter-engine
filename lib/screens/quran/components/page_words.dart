@@ -56,22 +56,22 @@ class PageWords extends StatelessWidget {
                       Text("ﱄ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage,
+                            fontSize: fixedFontSizePercentage + 5,
                           )),
                       Text("ﱃ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage,
+                            fontSize: fixedFontSizePercentage + 5,
                           )),
                       Text("ﱂ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage,
+                            fontSize: fixedFontSizePercentage + 5,
                           )),
                       Text("ﱁ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage,
+                            fontSize: fixedFontSizePercentage + 5,
                           )),
                     ],
                   ));
@@ -89,10 +89,12 @@ class PageWords extends StatelessWidget {
                           ? fixedFontSizePercentage * 1.789
                           : fixedFontSizePercentage * 1.72,
                     ),
-                    Text("${item["chapterCode"].padLeft(3, '0')}",
+                    Text("${item["chapterCode"].padLeft(3, '0')}surah",
                         style: TextStyle(
-                            fontFamily: "surahname",
-                            fontSize: fixedFontSizePercentage))
+                          fontFamily: "surahname",
+                          letterSpacing: -3,
+                          fontSize: fixedFontSizePercentage + 5,
+                        ))
                   ],
                 ));
 

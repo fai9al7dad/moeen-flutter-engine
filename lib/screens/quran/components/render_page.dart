@@ -20,12 +20,11 @@ class RenderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
-
     return
         // Text(mistakes[0]['id'].toString()),
         Column(
       children: [
-        const SizedBox(height: 50),
+        SizedBox(height: fixedFontSizePercentageForHeader < 13 ? 10 : 50),
 
         PageHeader(
           page: page[0],
