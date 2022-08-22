@@ -85,7 +85,8 @@ class QuranSimpleDatabaseHelper {
   Future<List<QuranSimpleModel>> searchBySurahName({query}) async {
     var dbClient = await db;
     var res = await dbClient!.query("hafs_smart_v8",
-        where: "sura_name_ar LIKE ? limit 1", whereArgs: ['%$query%']);
+        where: "sura_name_ar LIKE ? group by sura_name_ar",
+        whereArgs: ['%$query%']);
     // List<Map> word = await dbClient!.rawQuery(
     //     "select * from line join word on word.lineID = line.id where word.id = $id");
     List<QuranSimpleModel> list = [];

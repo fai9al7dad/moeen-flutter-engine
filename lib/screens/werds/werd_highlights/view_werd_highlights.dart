@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
@@ -11,6 +13,9 @@ import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
+
+GlobalKey _one = GlobalKey();
 
 class ViewWerdHighlights extends StatefulWidget {
   final int? werdID;
@@ -36,6 +41,21 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
     // TODO: implement initState
     super.initState();
     fetchHighlights();
+    checkIfFirstTime();
+  }
+
+  void checkIfFirstTime() async {
+    const storage = FlutterSecureStorage();
+    String? firstTime =
+        await storage.read(key: "seenViewWerdHighlightsShowcase");
+    if (firstTime == null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Future.delayed(const Duration(milliseconds: 400), () {
+          return ShowCaseWidget.of(context).startShowCase([_one]);
+        });
+      });
+      await storage.write(key: "seenViewWerdHighlightsShowcase", value: "true");
+    }
   }
 
   // call function api to get highlights by werdID
@@ -129,11 +149,19 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
         showLoading: appBarLoading,
       ),
       floatingActionButton: widget.type == "asReciter"
-          ? FloatingActionButton.extended(
-              onPressed: () => acceptHighlights(),
-              label:
-                  Text(acceptedState == true ? "تم القبول 👍" : 'قبول الورد'),
-              backgroundColor: const Color(0xff059669),
+          ? CustomShowCase(
+              overlayPadding: const EdgeInsets.all(10),
+              shapeBorder: const CircleBorder(),
+              caseKey: _one,
+              title: "قبول الورد",
+              description:
+                  "قم بقبول الورد لحفظ الأخطاء والتنبيهات المسجلة في هذا الورد في مصحفك",
+              child: FloatingActionButton.extended(
+                onPressed: () => acceptHighlights(),
+                label:
+                    Text(acceptedState == true ? "تم القبول 👍" : 'قبول الورد'),
+                backgroundColor: const Color(0xff059669),
+              ),
             )
           : null,
       body: Padding(

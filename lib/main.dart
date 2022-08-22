@@ -37,20 +37,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      routes: CustomRouter.routes,
-      title: 'تطبيق معين',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "montserrat",
-        scaffoldBackgroundColor: const Color(0xfffff8ed),
-        // scaffoldBackgroundColor: const Color(0xff1f2937),
-        primarySwatch: Colors.green,
+    return ShowCaseWidget(
+        builder: Builder(
+      builder: (context) => MaterialApp(
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        routes: CustomRouter.routes,
+        title: 'تطبيق معين',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "montserrat",
+          scaffoldBackgroundColor: const Color(0xfffff8ed),
+          // scaffoldBackgroundColor: const Color(0xff1f2937),
+          primarySwatch: Colors.green,
+        ),
       ),
-    );
+    ));
   }
 }
 

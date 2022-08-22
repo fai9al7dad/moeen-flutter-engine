@@ -25,6 +25,12 @@ class OnBoarding extends StatelessWidget {
       "img": "assets/images/onboarding/mistake.png",
     },
     {
+      "title": "تصفح مصفحك",
+      "body":
+          "هنا يمكنك مراجعة حفظك وستظهر الأخطاء والتنبيهات الخاصة بك، يمكنك تعديلها بالنقر عليها",
+      "img": "assets/images/onboarding/quran.png",
+    },
+    {
       "title": "المتابعة بالصفحة",
       "body":
           "يمكنك رؤية مجمل الأخطاء و التنبيهات في الصفحة عن طريق النظر الى الشريط العلوي",

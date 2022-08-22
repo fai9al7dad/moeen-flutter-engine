@@ -58,22 +58,22 @@ class PageWords extends StatelessWidget {
                       Text("ﱄ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 5,
+                            fontSize: fixedFontSizePercentage + 3,
                           )),
                       Text("ﱃ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 5,
+                            fontSize: fixedFontSizePercentage + 3,
                           )),
                       Text("ﱂ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 5,
+                            fontSize: fixedFontSizePercentage + 3,
                           )),
                       Text("ﱁ",
                           style: TextStyle(
                             fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 5,
+                            fontSize: fixedFontSizePercentage + 3,
                           )),
                     ],
                   ));

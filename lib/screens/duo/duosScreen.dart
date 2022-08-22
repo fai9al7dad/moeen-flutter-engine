@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
@@ -9,9 +11,37 @@ import 'package:moeen/screens/duo/components/not_auth_alert.dart';
 import 'package:moeen/screens/duo/components/select_duo.dart';
 import 'package:moeen/screens/duo/components/view_duos_invites.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class DuosScreen extends StatelessWidget {
+GlobalKey _one = GlobalKey();
+GlobalKey _two = GlobalKey();
+GlobalKey _three = GlobalKey();
+
+class DuosScreen extends StatefulWidget {
   const DuosScreen({Key? key}) : super(key: key);
+
+  @override
+  State<DuosScreen> createState() => _DuosScreenState();
+}
+
+class _DuosScreenState extends State<DuosScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkIfFirstTime();
+  }
+
+  void checkIfFirstTime() async {
+    const storage = FlutterSecureStorage();
+    String? firstTime = await storage.read(key: "seenDuoShowcase");
+    if (firstTime == null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        return ShowCaseWidget.of(context).startShowCase([_one]);
+      });
+      await storage.write(key: "seenDuoShowcase", value: "true");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +56,22 @@ class DuosScreen extends StatelessWidget {
           child: Scaffold(
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.startFloat,
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {
-                // Add your onPressed code here!
-                Navigator.pushNamed(context, "/search-users");
-              },
-              label: const Text('ارسال دعوة'),
-              // icon: const Icon(Icons.send),
+            floatingActionButton: CustomShowCase(
+              overlayPadding: const EdgeInsets.all(10),
+              shapeBorder: const CircleBorder(),
+              caseKey: _one,
+              title: "الثنائيات",
+              description: "قم بإضافة صديقك لتتمكن من تصحيح مصحفه عن بعد",
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  // Add your onPressed code here!
+                  Navigator.pushNamed(context, "/search-users");
+                },
+                label: const Text('ارسال دعوة'),
+                // icon: const Icon(Icons.send),
 
-              backgroundColor: const Color(0xff059669),
+                backgroundColor: const Color(0xff059669),
+              ),
             ),
             appBar: AppBar(
               elevation: 0.8,

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
@@ -15,6 +16,9 @@ import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
+
+GlobalKey _one = GlobalKey();
 
 class WerdsScreen extends StatefulWidget {
   final int? duoID;
@@ -36,6 +40,20 @@ class _WerdsScreenState extends State<WerdsScreen> {
   void initState() {
     super.initState();
     getWerds();
+    checkIfFirstTime();
+  }
+
+  void checkIfFirstTime() async {
+    const storage = FlutterSecureStorage();
+    String? firstTime = await storage.read(key: "seenWerdsScreenShowcase");
+    if (firstTime == null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Future.delayed(const Duration(milliseconds: 400), () {
+          return ShowCaseWidget.of(context).startShowCase([_one]);
+        });
+      });
+      await storage.write(key: "seenWerdsScreenShowcase", value: "true");
+    }
   }
 
   Api api = Api();
@@ -121,10 +139,17 @@ class _WerdsScreenState extends State<WerdsScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
-      floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: const Color(0xff059669),
-          onPressed: () => startWerd(),
-          label: const Text("إضافة ورد")),
+      floatingActionButton: CustomShowCase(
+        overlayPadding: const EdgeInsets.all(10),
+        shapeBorder: const CircleBorder(),
+        caseKey: _one,
+        title: "الأوراد",
+        description: "قم بإضافة ورد لتتمكن من رؤية مصحف صديقك والتصحيح له",
+        child: FloatingActionButton.extended(
+            backgroundColor: const Color(0xff059669),
+            onPressed: () => startWerd(),
+            label: const Text("إضافة ورد")),
+      ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : Directionality(
@@ -163,6 +188,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
                                                 type: type))),
                                 title: Text(
                                     "${parseDate(date: werds![index].createdAt)}"),
+                                trailingIcon: Icons.chevron_right,
                                 subtitle:
                                     Text("رقم المعرف: ${werds![index].id}"));
                           })
