@@ -56,7 +56,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
     var finishedOnBoarding = await storage.read(key: "finishedOnBoarding");
     inspect(finishedOnBoarding);
-    if (finishedOnBoarding != "finished") {
+    if (finishedOnBoarding != "finished" || finishedOnBoarding == null) {
       setState(() {
         showOnBoarding = true;
       });

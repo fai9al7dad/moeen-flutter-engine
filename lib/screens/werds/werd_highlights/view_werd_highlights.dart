@@ -48,9 +48,9 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
     const storage = FlutterSecureStorage();
     String? firstTime =
         await storage.read(key: "seenViewWerdHighlightsShowcase");
-    if (firstTime == null) {
+    if (firstTime == null || firstTime != "true") {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Future.delayed(const Duration(milliseconds: 3000), () {
+        Future.delayed(const Duration(milliseconds: 2000), () {
           return ShowCaseWidget.of(context).startShowCase([_one]);
         });
       });

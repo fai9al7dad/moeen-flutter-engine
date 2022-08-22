@@ -47,7 +47,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
   void checkIfFirstTime() async {
     const storage = FlutterSecureStorage();
     String? firstTime = await storage.read(key: "seenWerdsScreenShowcase");
-    if (firstTime != null) {
+    if (firstTime == null || firstTime != "true") {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Future.delayed(const Duration(milliseconds: 400), () {
           return ShowCaseWidget.of(context).startShowCase([_one, _two]);

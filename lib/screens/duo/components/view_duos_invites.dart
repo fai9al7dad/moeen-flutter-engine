@@ -28,7 +28,7 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
   void checkIfFirstTime() async {
     const storage = FlutterSecureStorage();
     String? firstTime = await storage.read(key: "seenDuoInvitesShowcase");
-    if (firstTime == null) {
+    if (firstTime == null || firstTime != "true") {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         return ShowCaseWidget.of(context).startShowCase([_one]);
       });

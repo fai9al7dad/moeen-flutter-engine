@@ -35,7 +35,7 @@ class _DuosScreenState extends State<DuosScreen> {
   void checkIfFirstTime() async {
     const storage = FlutterSecureStorage();
     String? firstTime = await storage.read(key: "seenDuoShowcase");
-    if (firstTime == null) {
+    if (firstTime == null || firstTime != "true") {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         return ShowCaseWidget.of(context).startShowCase([_one]);
       });
