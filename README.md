@@ -23,7 +23,6 @@
 - [x] add onboarding screen on settings page
 - [x] search by word, verse,surah
 - [x] show version in contact message
-- [ ] add showcase tutorial
 
 ## finished
 
