@@ -37,6 +37,12 @@ class OnBoarding extends StatelessWidget {
       "img": "assets/images/onboarding/surahs.png",
     },
     {
+      "title": "البحث",
+      "body":
+          "في صفحة المصحف، قم بسحب الشاشة للأسفل للبحث عن الأية، السورة، أو الصفحة التي تريدها",
+      "img": "assets/images/onboarding/search.png",
+    },
+    {
       "title": "تصحيح عن بعد",
       "body":
           "قم بالتصحيح عن بعد وذلك بإرسال دعوة إلى صديقك ثم بدأ ورد جديد معه ",

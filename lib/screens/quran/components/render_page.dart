@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:moeen/screens/quran/components/page_header.dart';
 import 'package:moeen/screens/quran/components/page_words.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class RenderPage extends StatelessWidget {
+class RenderPage extends StatefulWidget {
   final List page;
   final double fixedFontSizePercentage;
   final double fixedLineHeightPercentage;
@@ -17,6 +18,17 @@ class RenderPage extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<RenderPage> createState() => _RenderPageState();
+}
+
+class _RenderPageState extends State<RenderPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
@@ -24,26 +36,28 @@ class RenderPage extends StatelessWidget {
         // Text(mistakes[0]['id'].toString()),
         Column(
       children: [
-        SizedBox(height: fixedFontSizePercentageForHeader < 13 ? 10 : 50),
+        SizedBox(
+            height: widget.fixedFontSizePercentageForHeader < 13 ? 10 : 50),
 
         PageHeader(
-          page: page[0],
-          fixedFontSizePercentageForHeader: fixedFontSizePercentageForHeader,
+          page: widget.page[0],
+          fixedFontSizePercentageForHeader:
+              widget.fixedFontSizePercentageForHeader,
         ),
         const SizedBox(height: 10),
-        page[0]["pageNumber"] == 1 || page[0]["pageNumber"] == 2
+        widget.page[0]["pageNumber"] == 1 || widget.page[0]["pageNumber"] == 2
             ? Expanded(
                 child: Center(
                 child: PageWords(
-                  page: page,
-                  fixedFontSizePercentage: fixedFontSizePercentage,
-                  fixedLineHeightPercentage: fixedLineHeightPercentage,
+                  page: widget.page,
+                  fixedFontSizePercentage: widget.fixedFontSizePercentage,
+                  fixedLineHeightPercentage: widget.fixedLineHeightPercentage,
                 ),
               ))
             : PageWords(
-                page: page,
-                fixedFontSizePercentage: fixedFontSizePercentage,
-                fixedLineHeightPercentage: fixedLineHeightPercentage,
+                page: widget.page,
+                fixedFontSizePercentage: widget.fixedFontSizePercentage,
+                fixedLineHeightPercentage: widget.fixedLineHeightPercentage,
               ),
         // PageWords(page: page),
       ],

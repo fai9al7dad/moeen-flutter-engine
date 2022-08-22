@@ -5,9 +5,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class PageWords extends StatelessWidget {
   final List page;
@@ -121,7 +123,7 @@ class PageWords extends StatelessWidget {
                 return TextSpan(
                     text: page[index]['pageNumber'] < 3 ||
                             item["chapterCode"] == "114"
-                        ? "${item["text"]}\n"
+                        ? "${item["text"]}                                      "
                         : "${item["text"]} ",
                     style: TextStyle(
                       color: const Color(0xffae8f74),
@@ -136,12 +138,14 @@ class PageWords extends StatelessWidget {
                       // ],
                     ));
               }
+
               // for fatihah
               if ((page[index]['pageNumber'] == 1 ||
                       page[index]['pageNumber'] == 2) &&
                   lineChanged) {
                 return TextSpan(
-                  text: "${item["text"]}\n",
+                  text:
+                      "${item["text"]}                                        ",
                   style: TextStyle(
                     color: found != null
                         ? Color(int.parse(found.color))

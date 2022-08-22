@@ -3,13 +3,16 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
+import 'package:moeen/screens/quran/components/show_case_page.dart';
 import 'package:moeen/screens/quran/components/show_extras.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class RenderQuranList extends StatelessWidget {
   const RenderQuranList({Key? key}) : super(key: key);
@@ -39,12 +42,12 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   void initState() {
     super.initState();
+    checkOnBoarding();
     Provider.of<QuranProvider>(context, listen: false).getData();
 
     // Provider.of<QuranProvider>(context, listen: false).refreshData();
     Provider.of<AuthProvider>(context, listen: false).tryToken();
 
-    checkOnBoarding();
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
   }
 

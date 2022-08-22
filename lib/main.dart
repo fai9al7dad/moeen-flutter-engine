@@ -5,8 +5,10 @@ import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
+import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:provider/provider.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -48,7 +50,6 @@ class MyApp extends StatelessWidget {
         // scaffoldBackgroundColor: const Color(0xff1f2937),
         primarySwatch: Colors.green,
       ),
-      // home: const RenderQuranList(),
     );
   }
 }

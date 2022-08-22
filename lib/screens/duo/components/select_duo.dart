@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
+import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/dio/API.dart';
+import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
 import 'package:moeen/screens/werds/werds_screen.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class SelectDuo extends StatefulWidget {
   const SelectDuo({Key? key}) : super(key: key);
@@ -44,9 +47,7 @@ class _SelectDuoState extends State<SelectDuo> {
       );
     }
     if (duos.isEmpty) {
-      return const Center(
-        child: Text("لا يوجد لديك ثنائيات"),
-      );
+      return const Center(child: Text("لا يوجد لديك ثنائيات"));
     }
     return Container(
       padding: const EdgeInsets.all(20),
