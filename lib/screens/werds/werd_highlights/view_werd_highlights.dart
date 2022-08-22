@@ -50,7 +50,7 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
         await storage.read(key: "seenViewWerdHighlightsShowcase");
     if (firstTime == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Future.delayed(const Duration(milliseconds: 400), () {
+        Future.delayed(const Duration(milliseconds: 1000), () {
           return ShowCaseWidget.of(context).startShowCase([_one]);
         });
       });
