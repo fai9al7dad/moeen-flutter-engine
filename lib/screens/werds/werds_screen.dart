@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 GlobalKey _one = GlobalKey();
+GlobalKey _two = GlobalKey();
 
 class WerdsScreen extends StatefulWidget {
   final int? duoID;
@@ -46,10 +47,10 @@ class _WerdsScreenState extends State<WerdsScreen> {
   void checkIfFirstTime() async {
     const storage = FlutterSecureStorage();
     String? firstTime = await storage.read(key: "seenWerdsScreenShowcase");
-    if (firstTime == null) {
+    if (firstTime != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Future.delayed(const Duration(milliseconds: 400), () {
-          return ShowCaseWidget.of(context).startShowCase([_one]);
+          return ShowCaseWidget.of(context).startShowCase([_one, _two]);
         });
       });
       await storage.write(key: "seenWerdsScreenShowcase", value: "true");
@@ -174,6 +175,30 @@ class _WerdsScreenState extends State<WerdsScreen> {
                               type = "asReciter";
                             } else {
                               type = "asCorrector";
+                            }
+                            if (index == 0) {
+                              return CustomShowCase(
+                                caseKey: _two,
+                                title: "تفاصيل الورد",
+                                description:
+                                    "قم بالضغط على الورد لتتمكن من رؤية الأخطاء والتنبيهات المسجلة فيه",
+                                child: ListItem(
+                                    index: index,
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ViewWerdHighlights(
+                                                    werdID: werds![index].id,
+                                                    isAccepted: werds![index]
+                                                        .isAccepted,
+                                                    type: type))),
+                                    title: Text(
+                                        "${parseDate(date: werds![index].createdAt)}"),
+                                    trailingIcon: Icons.chevron_right,
+                                    subtitle: Text(
+                                        "رقم المعرف: ${werds![index].id}")),
+                              );
                             }
                             return ListItem(
                                 index: index,
