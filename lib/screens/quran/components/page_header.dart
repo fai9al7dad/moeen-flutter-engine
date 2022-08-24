@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/page_header_mistakes_and_warnings.dart';
@@ -210,8 +211,11 @@ class PageNumber extends StatelessWidget {
                   if (_formKey.currentState!.validate()) {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
+                    String convertedString = GeneralHelpers()
+                        .replaceFarsiNumber(pageNumberController.text);
+
                     quranProvider.pageController
-                        .jumpToPage(int.parse(pageNumberController.text) - 1);
+                        .jumpToPage(int.parse(convertedString) - 1);
                     Navigator.pop(context, 'ok');
                   }
                 },
@@ -271,10 +275,13 @@ class _PageNumberFormState extends State<PageNumberForm> {
         child: TextFormField(
           controller: pageNumberController,
           validator: (value) {
+            String convertedString =
+                GeneralHelpers().replaceFarsiNumber(value ?? "");
             if (value == null || value.isEmpty) {
-              return 'Please enter some text';
+              return 'الرجاء عدم ترك الخانة فارغة';
             }
-            if (int.parse(value) > 604 || int.parse(value) < 1) {
+            if (int.parse(convertedString) > 604 ||
+                int.parse(convertedString) < 1) {
               return 'الرجاء ادخل رقم بين 1-604';
             }
             return null;

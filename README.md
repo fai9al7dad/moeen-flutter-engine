@@ -20,22 +20,20 @@
 
 ## current iteration
 
-- [x] add onboarding screen on settings page
-- [x] search by word, verse,surah
-- [x] show version in contact message
+- [x] changed scroll animation
+- [x] num convert to en
+- [ ] add stats
+- [ ] add seperators
 
 ## finished
 
 - [x] word highlight = black->warning->mistake->revert
 - [x] page head
-
   - [x] add juz number
   - [x] add hizb number
   - [x] page number
   - [x] show page mistakes and warnings
-
     - [x] click to open modal to go to page
-
   - [x] add page header
   - [x] surah name
     - [x] click to open surah list screen
@@ -46,7 +44,6 @@
     - [ ] type ... low pri
     - [x] verses count
     - [x] click go to first page
-
 - [x] auth
   - [x] login
   - [x] register

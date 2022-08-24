@@ -1,12 +1,9 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/CustomInput.dart';
 import 'package:moeen/helpers/database/quran_simple/quran_simple_database.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +56,9 @@ class _SearchQuranState extends State<SearchQuran>
   }
 
   void searchQuran(text) async {
-    List<QuranSimpleModel> res = await quranSimpleDataBase.search(query: text);
+    String convertedString = GeneralHelpers().replaceFarsiNumber(text);
+    List<QuranSimpleModel> res =
+        await quranSimpleDataBase.search(query: convertedString);
     setState(() {
       searchResult = res;
     });
@@ -67,6 +66,7 @@ class _SearchQuranState extends State<SearchQuran>
 
   void navigateToQuranPage({required String page}) {
     widget.setShowExtra(false);
+
     Provider.of<QuranProvider>(context, listen: false)
         .pageController
         .jumpToPage(int.parse(page) - 1);

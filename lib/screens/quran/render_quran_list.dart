@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomInput.dart';
 import 'package:moeen/components/CustomShowCase.dart';
@@ -106,7 +107,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                   PageView.builder(
                     controller: quranProvider.pageController,
                     allowImplicitScrolling: true,
-
+                    physics: const CustomPageViewScrollPhysics(),
                     reverse: true,
                     // physics: const AlwaysScrollableScrollPhysics(),
                     // scrollDirection: Axis.horizontal,
@@ -138,4 +139,21 @@ class _MainScaffoldState extends State<MainScaffold> {
       ),
     );
   }
+}
+
+class CustomPageViewScrollPhysics extends ScrollPhysics {
+  const CustomPageViewScrollPhysics({ScrollPhysics? parent})
+      : super(parent: parent);
+
+  @override
+  CustomPageViewScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return CustomPageViewScrollPhysics(parent: buildParent(ancestor)!);
+  }
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 50,
+        stiffness: 100,
+        damping: 0.8,
+      );
 }

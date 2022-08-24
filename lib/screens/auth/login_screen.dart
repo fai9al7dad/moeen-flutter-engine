@@ -285,9 +285,9 @@ class SyncDialog extends StatelessWidget {
         ],
       ),
       actions: <Widget>[
-        ElevatedButton(child: Text("مزامنة"), onPressed: () => onSync()),
+        ElevatedButton(child: const Text("مزامنة"), onPressed: () => onSync()),
         TextButton(
-          child: Text("تجاهل"),
+          child: const Text("تجاهل"),
           onPressed: () async {
             final temp = TempWordColorMap();
             await temp.deleteAllColors();
