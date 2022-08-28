@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.3+3
+version: 1.5.1+1
 
 environment:
   sdk: ">=2.17.5 <3.0.0"
@@ -41,6 +41,7 @@ dependencies:
   flutter_email_sender: ^5.1.0
   flutter_launcher_icons: "^0.10.0"
   new_version: ^0.3.1
+  fl_chart: ^0.55.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -79,6 +80,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/databases/quran.db
+    - assets/databases/quran-v2.db
     - assets/databases/quran_simple.sqlite
     - assets/json/SURAHS.json
     - assets/svg/surah_header_svg.svg

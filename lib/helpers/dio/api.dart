@@ -131,6 +131,35 @@ class Api {
     }
   }
 
+  Future<List<DuoInviteModel>> getPendingDuoInvites() async {
+    try {
+      Response res = await api.get(
+        "/api/duo/view-pending-invites",
+      );
+      List data = res.data;
+      List<DuoInviteModel> list = [];
+
+      for (var i = 0; i < data.length; i++) {
+        DuoInviteModel duo = DuoInviteModel.fromJson(res.data[i]);
+        list.add(duo);
+      }
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future deletePendingDuoInvite({toUserID}) async {
+    Map payload = {"toUserID": toUserID};
+    try {
+      Response res =
+          await api.post("/api/duo/delete-pending-invite", data: payload);
+      return res;
+    } on DioError {
+      rethrow;
+    }
+  }
+
   Future acceptOrRejectInvite({fromUserID, type}) async {
     Map payload = {"fromUserID": fromUserID};
     try {

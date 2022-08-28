@@ -174,6 +174,8 @@ class PageWords extends StatelessWidget {
                         ? Color(int.parse(found.color))
                         : Colors.black,
                     fontFamily: "p${page[index]['pageNumber']}",
+                    letterSpacing:
+                        index == 0 ? fixedFontSizePercentage - 18.5 : 0,
                     fontSize: index == 0
                         ? fixedFontSizePercentage - 0.001
                         : index == 1

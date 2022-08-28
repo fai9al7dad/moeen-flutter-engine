@@ -67,9 +67,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     // set default to shut up null errors
     final gh = GeneralHelpers();
-    var flMap = gh.getResponsiveFontAndLineHeightPercentage(height: height);
+    var flMap = gh.getResponsiveFontAndLineHeightPercentage(
+        height: height, width: width);
     var fixedFontSizePercentageForHeader =
         gh.getResponsiveFontAndLineHeightPercentageForHeader(height: height);
     // final pageController = PageController();

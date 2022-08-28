@@ -7,11 +7,13 @@ import 'package:moeen/screens/auth/register_screen.dart';
 import 'package:moeen/screens/contact/contactScreen.dart';
 import 'package:moeen/screens/delete_user/delete_user_screen.dart';
 import 'package:moeen/screens/duo/duosScreen.dart';
+import 'package:moeen/screens/extra_screen_container/extra_screens_container.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:moeen/screens/search_users/search_users.dart';
 import 'package:moeen/screens/settings/settings.dart';
 import 'package:moeen/screens/surahList/surah_list.dart';
+import 'package:moeen/screens/surahList/surahs_tabs_wrapper.dart';
 import 'package:moeen/screens/werds/finish_werd.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
 import 'package:moeen/screens/werds/werd_introduction/werd_introduction_screen.dart';
@@ -26,7 +28,7 @@ class MistakesColors {
 class CustomRouter {
   static var routes = {
     '/': (context) => const RenderQuranList(),
-    '/surah-list': (context) => const SurahList(),
+    '/surah-list': (context) => const SurahTabsWrapper(),
     '/login': (context) => const LoginScreen(),
     '/duos': (context) => const DuosScreen(),
     '/register': (context) => const RegisterScreen(),
@@ -40,6 +42,7 @@ class CustomRouter {
     '/about-app': (context) => const AboutApp(),
     '/contact-us': (context) => const ContactScreen(),
     '/werd-introduction': (context) => const WerdIntroductionScreen(),
+    '/extra-screens-container': (context) => const ExtraScreensContainer(),
   };
 }
 

@@ -126,9 +126,6 @@ class _SearchQuranState extends State<SearchQuran>
                         child: searchResult.isNotEmpty
                             ? GroupedListView<dynamic, String>(
                                 elements: searchResult,
-                                // separatorBuilder: (context, index) => const Divider(
-                                //       thickness: 0.8,
-                                //     ),
                                 groupBy: (element) {
                                   return element.type;
                                 },

@@ -23,13 +23,19 @@ class DuosModel {
 class DuoInviteModel {
   int? id;
   FirstUser? firstUser;
+  FirstUser? secondUser;
 
-  DuoInviteModel({this.id, this.firstUser});
+  String? type;
+
+  DuoInviteModel({this.id, this.firstUser, this.type, this.secondUser});
 
   DuoInviteModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstUser = json['firstUser'] != null
         ? FirstUser.fromJson(json['firstUser'])
+        : null;
+    secondUser = json['secondUser'] != null
+        ? FirstUser.fromJson(json['secondUser'])
         : null;
   }
 
@@ -39,6 +45,7 @@ class DuoInviteModel {
     if (firstUser != null) {
       data['firstUser'] = firstUser!.toJson();
     }
+
     return data;
   }
 }

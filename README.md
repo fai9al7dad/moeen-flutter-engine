@@ -17,12 +17,16 @@
 - [ ] show animation on highlight -> [warning,mistake]
 - [ ] start from last stopped page
 - [ ] surah list init index is which current chapter im in
+- [ ] add count to surah filter
 
 ## current iteration
 
 - [x] changed scroll animation
 - [x] num convert to en
-- [ ] add stats
+- [x] view pending duo invites
+- [x] more font size support
+- [x] fixed surah raad bug
+- [x] group mistakes by surah
 - [ ] add seperators
 
 ## finished

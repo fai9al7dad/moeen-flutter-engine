@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
+import 'package:moeen/screens/settings/settings.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 GlobalKey _one = GlobalKey();
@@ -16,6 +20,8 @@ class ViewDuoInvites extends StatefulWidget {
 }
 
 class _ViewDuoInvitesState extends State<ViewDuoInvites> {
+  final Api api = Api();
+
   late List<DuoInviteModel> invites;
   bool loading = true;
   @override
@@ -38,11 +44,21 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
 
   void fetchInvites() async {
     try {
-      final Api api = Api();
-      var response = await api.getDuosInvites();
+      var recievedInvites = await api.getDuosInvites();
+      var pendingInvites = await api.getPendingDuoInvites();
+      List<DuoInviteModel> _invites = [];
+
+      for (DuoInviteModel invite in recievedInvites) {
+        _invites.add(DuoInviteModel(
+            firstUser: invite.firstUser, id: invite.id, type: "recieved"));
+      }
+      for (DuoInviteModel invite in pendingInvites) {
+        _invites.add(DuoInviteModel(
+            firstUser: invite.secondUser, id: invite.id, type: "pending"));
+      }
       if (mounted) {
         setState(() {
-          invites = response;
+          invites = _invites;
           loading = false;
         });
       }
@@ -65,33 +81,72 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
     }
     return Container(
       padding: const EdgeInsets.all(20),
-      child: ListView.separated(
-          itemCount: invites.length,
-          separatorBuilder: (context, index) => const Divider(
-                thickness: 0.8,
-                height: 1,
-                color: Color(0xffe4e4e7),
+      child: GroupedListView<dynamic, String>(
+          elements: invites,
+          // separatorBuilder: (context, index) => const Divider(
+          //       thickness: 0.8,
+          //     ),
+          groupBy: (element) {
+            return element.type;
+          },
+          groupSeparatorBuilder: (value) => SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    value == "recieved" ? "طلبات إضافة" : "دعوات أرسلتها",
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-          itemBuilder: (context, index) {
-            int num = index + 1;
-            if (index == 0) {
-              return CustomShowCase(
-                  caseKey: _one,
-                  title: "لديك طلب إضافة",
-                  description: "بعد قبول الطلب، يمكنكم تصحيح مصاحفكم عن بعد ",
-                  child: AcceptOrRejectInvite(
-                      num: num,
-                      index: index,
-                      id: invites[index].firstUser?.id,
-                      fetchInvites: fetchInvites,
-                      username: invites[index].firstUser?.username));
+          separator: const Divider(
+            height: 0,
+            thickness: 0.8,
+          ),
+          order: GroupedListOrder.DESC,
+          indexedItemBuilder: (context, element, index) {
+            int num = 2 + 1;
+
+            if (element.type == "recieved") {
+              if (index == 0) {
+                return CustomShowCase(
+                    caseKey: _one,
+                    title: "لديك طلب إضافة",
+                    description: "بعد قبول الطلب، يمكنكم تصحيح مصاحفكم عن بعد ",
+                    child: AcceptOrRejectInvite(
+                        num: num,
+                        index: 1,
+                        id: element.firstUser?.id,
+                        fetchInvites: fetchInvites,
+                        username: element.firstUser?.username));
+              }
+              return AcceptOrRejectInvite(
+                  num: num,
+                  index: 1,
+                  id: element.firstUser?.id,
+                  fetchInvites: fetchInvites,
+                  username: element.firstUser?.username);
+            } else {
+              return ListTile(
+                tileColor: Colors.white,
+                title: Text("${element.firstUser?.username}"),
+                subtitle: const Text("بإنتظار القبول"),
+                trailing: TextButton(
+                  child:
+                      const Text("إلغاء", style: TextStyle(color: Colors.grey)),
+                  onPressed: () async {
+                    try {
+                      await api.deletePendingDuoInvite(
+                          toUserID: element.firstUser?.id);
+                      fetchInvites();
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                ),
+              );
             }
-            return AcceptOrRejectInvite(
-                num: num,
-                index: index,
-                id: invites[index].firstUser?.id,
-                fetchInvites: fetchInvites,
-                username: invites[index].firstUser?.username);
           }),
     );
   }
@@ -139,19 +194,6 @@ class AcceptOrRejectInvite extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         tileColor: Colors.white,
-        leading: Container(
-          height: 30,
-          width: 30,
-          decoration: BoxDecoration(
-              color: const Color(0xffecfdf5),
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: const Color(0xffd1fae5))),
-          child: Center(
-              child: Text(
-            num.toString(),
-            style: const TextStyle(color: Color(0xff047857), fontSize: 12),
-          )),
-        ),
         title: Text("${username}"),
         subtitle: Text("رقم المعرف: ${id}"),
         trailing: ConstrainedBox(

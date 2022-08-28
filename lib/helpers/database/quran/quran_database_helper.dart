@@ -16,11 +16,11 @@ class DatabaseHelper {
 
   initDB() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "quran.db");
+    String path = join(documentsDirectory.path, "quran-v2.db");
     bool dbExists = await io.File(path).exists();
     if (!dbExists) {
       ByteData data =
-          await rootBundle.load(join("assets/databases", "quran.db"));
+          await rootBundle.load(join("assets/databases", "quran-v2.db"));
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
@@ -78,8 +78,13 @@ class DatabaseHelper {
     var dbClient = await db;
     // List list = await dbClient!.rawQuery(
     //     "select * from (select * from page limit 10) page inner join line on line.pageID = page.id inner join word on word.lineID = line.id order by pageNumber,lineNumber");
-    List list = await dbClient!.rawQuery(
-        "select page.id as pageID, page.pageNumber, page.rubNumber, page.hizbNumber, page.juzNumber,word.text,word.lineNumber, word.transliteration,word.isBismillah,word.isNewChapter,word.color,word.chapterCode,word.id as wordID,word.charType, word.verseNumber  from  page inner join line  on line.pageID = page.id inner join word on word.lineID = line.id order by word.lineNumber ");
+    String query =
+        "select page.id as pageID, page.pageNumber, page.rubNumber, page.hizbNumber, page.juzNumber,word.text,word.lineNumber, word.transliteration,word.isBismillah,word.isNewChapter,word.color,word.chapterCode,word.id as wordID,word.charType, word.verseNumber  from  page inner join line  on line.pageID = page.id inner join word on word.lineID = line.id order by word.lineNumber";
+    var batch = dbClient!.batch()
+      ..execute("CREATE VIEW IF NOT EXISTS joined_quran_view AS $query");
+    await batch.commit();
+
+    List list = await dbClient.rawQuery("select * from joined_quran_view");
 
     // List<JoinedQuran> quran = [];
     List<List> pages = initializePagesArray();
