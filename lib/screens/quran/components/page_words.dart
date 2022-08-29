@@ -41,7 +41,7 @@ class PageWords extends StatelessWidget {
               shadows: const [
                 Shadow(
                   offset: Offset(0.0, 0.0),
-                  blurRadius: 0.2,
+                  blurRadius: 0.1,
                   color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ],
@@ -55,8 +55,10 @@ class PageWords extends StatelessWidget {
               bool lineChanged = curLineNum != aftLineNum;
 
               var hasSeperator = quranProvider.seperators.firstWhereOrNull(
-                  (element) =>
-                      element.verseNumber.toString() == item["verseNumber"]);
+                (element) =>
+                    element.verseNumber.toString() == item["verseNumber"] &&
+                    element.pageNumber == item["pageNumber"],
+              );
 
               var found;
               found = quranProvider.mistakes.firstWhereOrNull(
@@ -120,8 +122,8 @@ class PageWords extends StatelessWidget {
               if (item["charType"] == "end" && !lineChanged) {
                 return TextSpan(
                     text: item["text"],
-                    recognizer: LongPressGestureRecognizer()
-                      ..onLongPress = () => {
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => {
                             showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
@@ -129,11 +131,11 @@ class PageWords extends StatelessWidget {
                                 })
                           },
                     style: TextStyle(
-                      backgroundColor: hasSeperator != null
-                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                          : null,
+                      // backgroundColor: hasSeperator != null
+                      //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
+                      //     : null,
                       color: hasSeperator != null
-                          ? Colors.white
+                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
                           : const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
                     ));
@@ -144,8 +146,8 @@ class PageWords extends StatelessWidget {
                             item["chapterCode"] == "114"
                         ? "${item["text"]}                                      "
                         : "${item["text"]} ",
-                    recognizer: LongPressGestureRecognizer()
-                      ..onLongPress = () => {
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => {
                             showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
@@ -153,11 +155,11 @@ class PageWords extends StatelessWidget {
                                 })
                           },
                     style: TextStyle(
-                      backgroundColor: hasSeperator != null
-                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                          : null,
+                      // backgroundColor: hasSeperator != null
+                      //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
+                      //     : null,
                       color: hasSeperator != null
-                          ? Colors.white
+                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
                           : const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
 
@@ -200,18 +202,12 @@ class PageWords extends StatelessWidget {
                       ? page[index]['text'] + " "
                       : page[index]['text'],
                   style: TextStyle(
-                    color: found != null ? Color(int.parse(found.color)) : null,
-                    fontFamily: "p${page[index]['pageNumber']}",
-                    letterSpacing:
-                        index == 0 ? fixedFontSizePercentage - 18.5 : 0,
-                    fontSize: index == 0
-                        ? fixedFontSizePercentage - 0.001
-                        : index == 1
-                            ? fixedFontSizePercentage - 0.002
-                            : index == 2
-                                ? fixedFontSizePercentage - 0.003
-                                : fixedFontSizePercentage,
-                  ),
+                      color:
+                          found != null ? Color(int.parse(found.color)) : null,
+                      fontFamily: "p${page[index]['pageNumber']}",
+                      letterSpacing:
+                          index == 0 ? fixedFontSizePercentage - 18.5 : 0,
+                      fontSize: fixedFontSizePercentage),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => {
                           // setMW(),
@@ -268,16 +264,27 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
     }
   }
 
-  void addSeperator(context, id, color, name) {
+  void addSeperator(context, id, color, name, pageNumber, verseNumber) {
     Navigator.of(context).pop();
-
-    Provider.of<QuranProvider>(context, listen: false).updateSeperator(
-        id: id,
-        pageNumber: widget.item["pageNumber"],
-        verseNumber: widget.item["verseNumber"],
-        color: color,
-        surah: widget.item["chapterCode"],
-        name: name);
+    // if new seperator same as exisiting delete it
+    if (pageNumber == widget.item["pageNumber"] &&
+        verseNumber.toString() == widget.item["verseNumber"]) {
+      Provider.of<QuranProvider>(context, listen: false).clearSeperator(
+          id: id,
+          pageNumber: widget.item["pageNumber"],
+          verseNumber: widget.item["verseNumber"],
+          color: color,
+          surah: widget.item["chapterCode"],
+          name: name);
+    } else {
+      Provider.of<QuranProvider>(context, listen: false).updateSeperator(
+          id: id,
+          pageNumber: widget.item["pageNumber"],
+          verseNumber: widget.item["verseNumber"],
+          color: color,
+          surah: widget.item["chapterCode"],
+          name: name);
+    }
   }
 
   void navigateToQuranPage({required int page}) {
@@ -344,6 +351,8 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
                                 seperators[index].id,
                                 seperators[index].color,
                                 seperators[index].name,
+                                seperators[index].pageNumber,
+                                seperators[index].verseNumber,
                               ),
                           title: Text(
                             "${seperators[index].name}",

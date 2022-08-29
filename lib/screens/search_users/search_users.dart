@@ -36,7 +36,6 @@ class _SearchUsersState extends State<SearchUsers> {
   }
 
   void sendInvite({toUserID}) async {
-    print(toUserID);
     setState(() {
       loading = true;
     });

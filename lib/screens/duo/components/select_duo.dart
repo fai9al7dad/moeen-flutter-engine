@@ -16,7 +16,7 @@ class SelectDuo extends StatefulWidget {
 }
 
 class _SelectDuoState extends State<SelectDuo> {
-  late final List<DuosModel> duos;
+  List<DuosModel> duos = [];
   bool loading = true;
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _SelectDuoState extends State<SelectDuo> {
     fetchDuos();
   }
 
-  void fetchDuos() async {
+  Future<void> fetchDuos() async {
     try {
       final Api api = Api();
       var response = await api.getDuos();
@@ -51,28 +51,31 @@ class _SelectDuoState extends State<SelectDuo> {
     }
     return Container(
       padding: const EdgeInsets.all(20),
-      child: ListView.separated(
-          itemCount: duos.length,
-          separatorBuilder: (context, index) => const Divider(
-                thickness: 0.8,
-                height: 1,
-                color: Color(0xffe4e4e7),
-              ),
-          itemBuilder: (context, index) {
-            return ListItem(
-                index: index,
-                title: Text("${duos[index].username}"),
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WerdsScreen(
-                          duoID: duos[index].duoID,
-                          username: duos[index].username,
-                          reciterID: duos[index].id),
-                    )),
-                subtitle: Text("رقم المعرف: ${duos[index].id}"),
-                trailingIcon: Icons.chevron_right);
-          }),
+      child: RefreshIndicator(
+        onRefresh: fetchDuos,
+        child: ListView.separated(
+            itemCount: duos.length,
+            separatorBuilder: (context, index) => const Divider(
+                  thickness: 0.8,
+                  height: 1,
+                  color: Color(0xffe4e4e7),
+                ),
+            itemBuilder: (context, index) {
+              return ListItem(
+                  index: index,
+                  title: Text("${duos[index].username}"),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WerdsScreen(
+                            duoID: duos[index].duoID,
+                            username: duos[index].username,
+                            reciterID: duos[index].id),
+                      )),
+                  subtitle: Text("رقم المعرف: ${duos[index].id}"),
+                  trailingIcon: Icons.chevron_right);
+            }),
+      ),
     );
   }
 }

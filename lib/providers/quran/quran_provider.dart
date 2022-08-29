@@ -117,7 +117,8 @@ class QuranProvider with ChangeNotifier {
   void updateSeperator(
       {id, name, color, pageNumber, surah, verseNumber}) async {
     var databaseHelper = SeperatorsDB();
-    databaseHelper.updateSeperator(SeperatorModel(
+
+    await databaseHelper.updateSeperator(SeperatorModel(
         id: id,
         color: color,
         pageNumber: pageNumber,
@@ -125,6 +126,21 @@ class QuranProvider with ChangeNotifier {
         name: name,
         verseNumber: int.parse(verseNumber)));
 
+    refreshSeperotrs();
+  }
+
+  // clear seperator
+  void clearSeperator({id, name, color, pageNumber, surah, verseNumber}) async {
+    var databaseHelper = SeperatorsDB();
+    databaseHelper.clearSeperator(
+      SeperatorModel(
+          id: id,
+          color: color,
+          pageNumber: pageNumber,
+          surah: surah,
+          name: name,
+          verseNumber: int.parse(verseNumber)),
+    );
     refreshSeperotrs();
   }
 

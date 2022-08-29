@@ -54,6 +54,19 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
     fetchSeperators();
   }
 
+  void clearSeperator(index) {
+    final seperatorsDB = SeperatorsDB();
+    seperatorsDB.clearSeperator(SeperatorModel(
+      color: seperators[index].color,
+      name: nameController.text,
+      id: seperators[index].id,
+      verseNumber: seperators[index].verseNumber,
+      pageNumber: seperators[index].pageNumber,
+      surah: seperators[index].surah,
+    ));
+    fetchSeperators();
+  }
+
   void navigateToQuranPage({required int page}) {
     Navigator.of(context).pop();
 
@@ -64,6 +77,8 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // get height of screen
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: const CustomAppBar(title: "الفواصل"),
       body: loading
@@ -75,7 +90,7 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("اضفط مطولا على رقم الأية لإضافة فاصل",
+                  const Text("اضفط على رقم الأية لإضافة فاصل",
                       style: TextStyle(
                         fontFamily: "montserrat",
                         color: Colors.grey,
@@ -101,6 +116,7 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
                               trailing: IconButton(
                                 onPressed: () => {
                                   showModalBottomSheet(
+                                      isScrollControlled: true,
                                       context: context,
                                       builder: (context) {
                                         return Directionality(
@@ -108,7 +124,7 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: SizedBox(
-                                              height: 400,
+                                              height: height * 0.8,
                                               child: Column(children: [
                                                 const Text(
                                                   "تعديل الفاصل",
@@ -172,7 +188,11 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
                               iconColor: Color(int.parse(
                                   seperators[index].color ?? "0xffae8f74")),
                               leading: seperators[index].verseNumber != null
-                                  ? const Icon(Icons.bookmark)
+                                  ? IconButton(
+                                      constraints: const BoxConstraints(),
+                                      padding: EdgeInsets.zero,
+                                      icon: const Icon(Icons.bookmark),
+                                      onPressed: () => clearSeperator(index))
                                   : const Icon(Icons.bookmark_outline),
                               title: Text(
                                 "${seperators[index].name}",
