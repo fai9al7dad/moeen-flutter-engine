@@ -5,6 +5,7 @@ import 'package:moeen/screens/about/about_app.dart';
 import 'package:moeen/screens/analytics/analytics.dart';
 import 'package:moeen/screens/contact/ContactScreen.dart';
 import 'package:moeen/screens/duo/duosScreen.dart';
+import 'package:moeen/screens/seperators/seperators_screen.dart';
 import 'package:moeen/screens/settings/settings.dart';
 
 class ExtraScreensContainer extends StatefulWidget {
@@ -18,7 +19,7 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
   List<Widget> tabs = [
     const DuosScreen(),
     // const Analytics(),
-    const ContactScreen(),
+    const SeperatorsScreen(),
     const Settings(),
   ];
   int currentTab = 0;

@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moeen/components/CustomShowCase.dart';
+import 'package:moeen/helpers/database/quran/quran_models.dart';
+import 'package:moeen/helpers/database/seperators/seperators_database.dart';
+import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
@@ -35,6 +38,13 @@ class PageWords extends StatelessWidget {
               color: Colors.black,
               height: fixedLineHeightPercentage,
               fontSize: fixedFontSizePercentage,
+              shadows: const [
+                Shadow(
+                  offset: Offset(0.0, 0.0),
+                  blurRadius: 0.2,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ],
             ),
             children: List.generate(page.length, (index) {
               var item = page[index];
@@ -44,8 +54,11 @@ class PageWords extends StatelessWidget {
                   index != page.length - 1 ? page[index + 1]["lineNumber"] : 15;
               bool lineChanged = curLineNum != aftLineNum;
 
-              var found;
+              var hasSeperator = quranProvider.seperators.firstWhereOrNull(
+                  (element) =>
+                      element.verseNumber.toString() == item["verseNumber"]);
 
+              var found;
               found = quranProvider.mistakes.firstWhereOrNull(
                   (element) => element.wordID == item["wordID"]);
               if (item["isNewChapter"] == 1) {
@@ -107,16 +120,22 @@ class PageWords extends StatelessWidget {
               if (item["charType"] == "end" && !lineChanged) {
                 return TextSpan(
                     text: item["text"],
+                    recognizer: LongPressGestureRecognizer()
+                      ..onLongPress = () => {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return VerseOptionsBottomSheet(item: item);
+                                })
+                          },
                     style: TextStyle(
-                      color: const Color(0xffae8f74),
+                      backgroundColor: hasSeperator != null
+                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
+                          : null,
+                      color: hasSeperator != null
+                          ? Colors.white
+                          : const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
-                      // shadows: const [
-                      //   Shadow(
-                      //     offset: Offset(0.0, 0.0),
-                      //     blurRadius: 0.2,
-                      //     color: Color.fromARGB(255, 0, 0, 0),
-                      //   ),
-                      // ],
                     ));
               }
               if (item["charType"] == "end" && lineChanged) {
@@ -125,8 +144,21 @@ class PageWords extends StatelessWidget {
                             item["chapterCode"] == "114"
                         ? "${item["text"]}                                      "
                         : "${item["text"]} ",
+                    recognizer: LongPressGestureRecognizer()
+                      ..onLongPress = () => {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return VerseOptionsBottomSheet(item: item);
+                                })
+                          },
                     style: TextStyle(
-                      color: const Color(0xffae8f74),
+                      backgroundColor: hasSeperator != null
+                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
+                          : null,
+                      color: hasSeperator != null
+                          ? Colors.white
+                          : const Color(0xffae8f74),
                       fontFamily: "p${page[index]['pageNumber']}",
 
                       // shadows: const [
@@ -147,9 +179,7 @@ class PageWords extends StatelessWidget {
                   text:
                       "${item["text"]}                                        ",
                   style: TextStyle(
-                    color: found != null
-                        ? Color(int.parse(found.color))
-                        : Colors.black,
+                    color: found != null ? Color(int.parse(found.color)) : null,
                     fontFamily: "p${page[index]['pageNumber']}",
                   ),
                   recognizer: TapGestureRecognizer()
@@ -170,9 +200,7 @@ class PageWords extends StatelessWidget {
                       ? page[index]['text'] + " "
                       : page[index]['text'],
                   style: TextStyle(
-                    color: found != null
-                        ? Color(int.parse(found.color))
-                        : Colors.black,
+                    color: found != null ? Color(int.parse(found.color)) : null,
                     fontFamily: "p${page[index]['pageNumber']}",
                     letterSpacing:
                         index == 0 ? fixedFontSizePercentage - 18.5 : 0,
@@ -187,6 +215,10 @@ class PageWords extends StatelessWidget {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => {
                           // setMW(),
+                          // quranProvider.addSeperator(
+                          //     pageNumber: item["pageNumber"],
+                          //     verseNumber: item["verseNumber"],
+                          //     color: found?.color),
                           quranProvider.addMistake(
                               id: item["wordID"],
                               pageNumber: item["pageNumber"],
@@ -197,6 +229,146 @@ class PageWords extends StatelessWidget {
                         });
             })),
         textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+class VerseOptionsBottomSheet extends StatefulWidget {
+  const VerseOptionsBottomSheet({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+
+  final Map<String, dynamic> item;
+
+  @override
+  State<VerseOptionsBottomSheet> createState() =>
+      _VerseOptionsBottomSheetState();
+}
+
+class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
+  List<SeperatorModel> seperators = [];
+  bool loading = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchSeperators();
+  }
+
+  void fetchSeperators() async {
+    final seperatorsDB = SeperatorsDB();
+    var _seperators = await seperatorsDB.getAllSeperators();
+    if (mounted) {
+      setState(() {
+        seperators = _seperators;
+        loading = false;
+      });
+    }
+  }
+
+  void addSeperator(context, id, color, name) {
+    Navigator.of(context).pop();
+
+    Provider.of<QuranProvider>(context, listen: false).updateSeperator(
+        id: id,
+        pageNumber: widget.item["pageNumber"],
+        verseNumber: widget.item["verseNumber"],
+        color: color,
+        surah: widget.item["chapterCode"],
+        name: name);
+  }
+
+  void navigateToQuranPage({required int page}) {
+    Navigator.of(context).pop();
+
+    Provider.of<QuranProvider>(context, listen: false)
+        .pageController
+        .jumpToPage(page - 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return const SizedBox(
+        height: 180,
+      );
+    }
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        color: const Color(0xfffff8ed),
+        height: 400,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("وضع فاصل",
+                  style: TextStyle(
+                    fontFamily: "montserrat-bold",
+                    fontSize: 20,
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text("اضفط مطولا للإنتقال إلى الموضع",
+                  style: TextStyle(
+                    fontFamily: "montserrat",
+                    color: Colors.grey,
+                    fontSize: 14,
+                  )),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: seperators.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                          iconColor: Color(int.parse(
+                              seperators[index].color ?? "0xffae8f74")),
+                          leading: seperators[index].verseNumber != null
+                              ? const Icon(Icons.bookmark)
+                              : const Icon(Icons.bookmark_add_outlined),
+                          trailing: seperators[index].verseNumber != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.chevron_right),
+                                  onPressed: () => navigateToQuranPage(
+                                      page: seperators[index].pageNumber!))
+                              : null,
+                          onLongPress: seperators[index].pageNumber != null
+                              ? () => navigateToQuranPage(
+                                  page: seperators[index].pageNumber!)
+                              : null,
+                          onTap: () => addSeperator(
+                                context,
+                                seperators[index].id,
+                                seperators[index].color,
+                                seperators[index].name,
+                              ),
+                          title: Text(
+                            "${seperators[index].name}",
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          subtitle: seperators[index].surah != null
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text("${seperators[index].surah}surah",
+                                        style: const TextStyle(
+                                            fontSize: 26,
+                                            letterSpacing: -3,
+                                            fontFamily: "surahname")),
+                                    Text(
+                                        "أية ${seperators[index].verseNumber} صفحة ${seperators[index].pageNumber}",
+                                        style: const TextStyle(fontSize: 14)),
+                                  ],
+                                )
+                              : const Text(""));
+                    }),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

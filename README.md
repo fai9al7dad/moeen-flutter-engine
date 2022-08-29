@@ -18,6 +18,7 @@
 - [ ] start from last stopped page
 - [ ] surah list init index is which current chapter im in
 - [ ] add count to surah filter
+- [ ] quick highlight of searched verse
 
 ## current iteration
 
@@ -27,7 +28,7 @@
 - [x] more font size support
 - [x] fixed surah raad bug
 - [x] group mistakes by surah
-- [ ] add seperators
+- [x] add seperators
 
 ## finished
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -88,10 +90,11 @@ class _SurahFiltersState extends State<SurahFilters> {
                     ),
                   ),
                 ),
+            itemComparator: (item1, item2) =>
+                item1.verseNumber.compareTo(item2.verseNumber),
             indexedItemBuilder: (context, element, index) {
               return ListItem(
                   trailingIcon: Icons.chevron_right,
-                  index: index,
                   onTap: () {
                     Navigator.pop(context, element.pageID - 1);
                   },
