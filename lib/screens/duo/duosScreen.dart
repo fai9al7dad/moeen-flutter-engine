@@ -77,16 +77,6 @@ class _DuosScreenState extends State<DuosScreen> {
               elevation: 0.8,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               foregroundColor: Tertiary().s800,
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.settings,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/settings");
-                  },
-                ),
-              ],
               title: const Text(
                 "اختر الثنائي",
                 style: TextStyle(fontFamily: "montserrat", fontSize: 14),

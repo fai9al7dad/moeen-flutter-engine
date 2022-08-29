@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
+import 'package:moeen/helpers/database/seperators/seperators_database.dart';
 import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
@@ -19,6 +20,7 @@ class QuranProvider with ChangeNotifier {
   List _quran = [];
   List<WordColorMapModel> _mistakes = [];
   bool _loadingGetData = false;
+  List<SeperatorModel> _seperators = [];
 
   // ignore: prefer_final_fields
   Map _werd = {
@@ -35,6 +37,10 @@ class QuranProvider with ChangeNotifier {
   // late JoinedQuran _currentPage;
   List<WordColorMapModel> get mistakes {
     return _mistakes;
+  }
+
+  List<SeperatorModel> get seperators {
+    return _seperators;
   }
 
   bool get loadingGetData {
@@ -100,6 +106,26 @@ class QuranProvider with ChangeNotifier {
     _mistakes = m;
     // disabling notify listeners here might mean that first two renderd pages will not show colors
     notifyListeners();
+  }
+
+  void refreshSeperotrs() async {
+    var databaseHelper = SeperatorsDB();
+    _seperators = await databaseHelper.getAllSeperators();
+    notifyListeners();
+  }
+
+  void updateSeperator(
+      {id, name, color, pageNumber, surah, verseNumber}) async {
+    var databaseHelper = SeperatorsDB();
+    databaseHelper.updateSeperator(SeperatorModel(
+        id: id,
+        color: color,
+        pageNumber: pageNumber,
+        surah: surah,
+        name: name,
+        verseNumber: int.parse(verseNumber)));
+
+    refreshSeperotrs();
   }
 
   void addMistake(

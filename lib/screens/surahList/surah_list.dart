@@ -13,12 +13,8 @@ class SurahList extends StatelessWidget {
   const SurahList({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("السور"),
-        centerTitle: true,
-      ),
-      body: const RenderList(),
+    return const Scaffold(
+      body: RenderList(),
     );
   }
 }
@@ -56,47 +52,52 @@ class _RenderListState extends State<RenderList> {
     if (_loading == true) {
       return const Center(child: CircularProgressIndicator());
     }
-    return ListView.separated(
-      separatorBuilder: (context, index) => const Divider(
-        thickness: 0.8,
-        endIndent: 70,
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+          thickness: 0.8,
+          height: 0,
+        ),
+        itemCount: surahs.length,
+        itemBuilder: (context, index) {
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: ListTile(
+              tileColor: Colors.white,
+              onTap: () {
+                Navigator.pop(context, surahs[index]["pages"][0] - 1);
+              },
+              leading: Text(surahs[index]["id"].toString()),
+              title: Text(
+                surahs[index]["id"].toString().padLeft(3, '0'),
+                style: const TextStyle(fontFamily: "surahname", fontSize: 29),
+              ),
+              subtitle: Text(
+                "عدد صفحاتها ${surahs[index]["pages"][1] - surahs[index]["pages"][0] + 1}، عدد أياتها ${surahs[index]['verses_count']}",
+                style: const TextStyle(fontSize: 10, fontFamily: "montserrat"),
+              ),
+              trailing: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "${surahs[index]["pages"][0]} - ${surahs[index]["pages"][1]}",
+                    style:
+                        const TextStyle(fontSize: 10, fontFamily: "montserrat"),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SurahMistakesAndWarnings(
+                      chapterCode:
+                          surahs[index]["id"].toString().padLeft(3, '0'))
+                ],
+              ),
+            ),
+          );
+        },
       ),
-      itemCount: surahs.length,
-      itemBuilder: (context, index) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: ListTile(
-            onTap: () {
-              Navigator.pop(context, surahs[index]["pages"][0] - 1);
-            },
-            leading: Text(surahs[index]["id"].toString()),
-            title: Text(
-              surahs[index]["id"].toString().padLeft(3, '0'),
-              style: const TextStyle(fontFamily: "surahname", fontSize: 29),
-            ),
-            subtitle: Text(
-              "عدد صفحاتها ${surahs[index]["pages"][1] - surahs[index]["pages"][0] + 1}، عدد أياتها ${surahs[index]['verses_count']}",
-              style: const TextStyle(fontSize: 10, fontFamily: "montserrat"),
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  "${surahs[index]["pages"][0]} - ${surahs[index]["pages"][1]}",
-                  style:
-                      const TextStyle(fontSize: 10, fontFamily: "montserrat"),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                SurahMistakesAndWarnings(
-                    chapterCode: surahs[index]["id"].toString().padLeft(3, '0'))
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

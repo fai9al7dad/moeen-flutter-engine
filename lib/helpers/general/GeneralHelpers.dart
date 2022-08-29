@@ -33,10 +33,20 @@ class GeneralHelpers {
     return color;
   }
 
-  Map<String, double> getResponsiveFontAndLineHeightPercentage({height}) {
+  Map<String, double> getResponsiveFontAndLineHeightPercentage(
+      {height, width}) {
     double fixedFontSizePercentage = height * 0.035;
     double fixedLineHeightPercentage = height * 0.0022;
-    if (height < 700) {
+    if ((width > 400 && width < 600) && height < 750) {
+      fixedFontSizePercentage = width * 0.06;
+      fixedLineHeightPercentage = width * 0.0035;
+    } else if ((width > 400 && width < 600) && height < 900) {
+      fixedFontSizePercentage = width * 0.06;
+      fixedLineHeightPercentage = width * 0.0031;
+    } else if (height < 660) {
+      fixedFontSizePercentage = height * 0.0345;
+      fixedLineHeightPercentage = height * 0.00234;
+    } else if (height < 700) {
       // iphone se
       fixedFontSizePercentage = height * 0.0345;
       fixedLineHeightPercentage = height * 0.0021;
@@ -65,9 +75,12 @@ class GeneralHelpers {
       fixedFontSizePercentage = height * 0.034;
       fixedLineHeightPercentage = 1.5;
     } else if (height < 1200) {
-      // sony z
       fixedFontSizePercentage = height * 0.0335;
       fixedLineHeightPercentage = 1.53;
+    } else if (height < 2000 && width < 1300) {
+      // square tablets
+      fixedFontSizePercentage = height * 0.035;
+      fixedLineHeightPercentage = 1.5;
     }
     return {
       "fixedFontSizePercentage": fixedFontSizePercentage,

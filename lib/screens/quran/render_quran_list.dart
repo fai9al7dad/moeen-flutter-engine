@@ -5,6 +5,7 @@ import 'package:flutter/physics.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomInput.dart';
 import 'package:moeen/components/CustomShowCase.dart';
+import 'package:moeen/helpers/database/seperators/seperators_database.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
@@ -44,12 +45,18 @@ class _MainScaffoldState extends State<MainScaffold> {
   void initState() {
     super.initState();
     checkOnBoarding();
+    initSeperators();
     Provider.of<QuranProvider>(context, listen: false).getData();
 
     // Provider.of<QuranProvider>(context, listen: false).refreshData();
     Provider.of<AuthProvider>(context, listen: false).tryToken();
 
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
+  }
+
+  void initSeperators() async {
+    final seperatorsDB = SeperatorsDB();
+    await seperatorsDB.fillTable();
   }
 
   void checkOnBoarding() async {
@@ -67,15 +74,18 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     // set default to shut up null errors
     final gh = GeneralHelpers();
-    var flMap = gh.getResponsiveFontAndLineHeightPercentage(height: height);
+    var flMap = gh.getResponsiveFontAndLineHeightPercentage(
+        height: height, width: width);
     var fixedFontSizePercentageForHeader =
         gh.getResponsiveFontAndLineHeightPercentageForHeader(height: height);
     // final pageController = PageController();
     double fixedFontSizePercentage = flMap["fixedFontSizePercentage"] ?? 25.928;
     double fixedLineHeightPercentage =
         flMap["fixedLineHeightPercentage"] ?? 1.852;
+
     if (showOnBoarding) {
       return OnBoarding(updateOnBoarding: () {
         setState(() {

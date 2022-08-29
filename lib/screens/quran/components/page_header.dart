@@ -95,7 +95,7 @@ class DuosOrWerd extends StatelessWidget {
           ? CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
               backgroundColor: Colors.red,
-              radius: fixedFontSizePercentageForHeader - 4,
+              radius: fixedFontSizePercentageForHeader - 2,
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
@@ -103,7 +103,7 @@ class DuosOrWerd extends StatelessWidget {
                       {Navigator.pushNamed(context, "/finish-werd")},
                   icon: Icon(
                     Icons.group,
-                    size: fixedFontSizePercentageForHeader,
+                    size: fixedFontSizePercentageForHeader - 1,
                     color: Colors.white,
                   )),
             )
@@ -114,10 +114,12 @@ class DuosOrWerd extends StatelessWidget {
               child: IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
-                  onPressed: () => {Navigator.pushNamed(context, "/duos")},
+                  onPressed: () => {
+                        Navigator.pushNamed(context, "/extra-screens-container")
+                      },
                   icon: Icon(
-                    Icons.group,
-                    size: fixedFontSizePercentageForHeader - 1,
+                    Icons.segment,
+                    size: fixedFontSizePercentageForHeader + 2,
                   )),
             ),
     );
