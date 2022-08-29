@@ -58,7 +58,18 @@ class SeperatorsDB {
           'create table $seperatorsDB (id INTEGER PRIMARY KEY NOT NULL,verseNumber INTEGER ,color TEXT NOT NULL,pageNumber INTEGER ,name TEXT NOT NULL,surah TEXT)',
         );
       },
-      version: 1,
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {
+        var batch = db.batch()
+          ..execute("update $seperatorsDB  set color = 0xff76ff03 where id =1")
+          ..execute("update $seperatorsDB  set color = 0xff00e5ff where id =2")
+          ..execute("update $seperatorsDB  set color = 0xffd500f9 where id =3")
+          ..execute("update $seperatorsDB  set color = 0xfff50057 where id =4")
+          ..execute(
+              "update $seperatorsDB  set name = 'الفاصل الوردي' where id =4");
+        await batch.commit();
+        return;
+      },
+      version: 3,
     );
 
     _db = await database;
@@ -69,15 +80,14 @@ class SeperatorsDB {
     var dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient!.query(seperatorsDB);
     if (maps.isEmpty) {
-      print("ran");
       await insertSeperator(const SeperatorModel(
-          id: 1, color: "0xff047857", name: "الفاصل الأخضر"));
+          id: 1, color: "0xff76ff03", name: "الفاصل الأخضر"));
       await insertSeperator(const SeperatorModel(
-          id: 2, color: "0xFF0097A7", name: "الفاصل الأزرق"));
+          id: 2, color: "0xff00e5ff", name: "الفاصل الأزرق"));
       await insertSeperator(const SeperatorModel(
           id: 3, color: "0xFF7B1FA2", name: "الفاصل البنفسجي"));
       await insertSeperator(const SeperatorModel(
-          id: 4, color: "0xFF5D4037", name: "الفاصل البني"));
+          id: 4, color: "0xFF5D4037", name: "الفاصل الوردي"));
     }
     return;
   }
@@ -100,16 +110,29 @@ class SeperatorsDB {
   }
 
   Future<int> insertSeperator(SeperatorModel seperator) async {
-    final db = await this.db;
+    var dbClient = await db;
 
-    return await db!.insert(seperatorsDB, seperator.toMap());
+    return await dbClient!.insert(seperatorsDB, seperator.toMap());
   }
 
-  Future<int> updateSeperator(SeperatorModel seperator) async {
-    final db = await this.db;
-    // await clearSeperator(SeperatorModel(id: seperator.id));
-    return await db!.update(seperatorsDB, seperator.toMap(),
-        where: "id = ?", whereArgs: [seperator.id]);
+  Future<void> updateSeperator(SeperatorModel seperator) async {
+    var dbClient = await db;
+    // if seperator with same verse number and page number exists, clear old and update new
+    final List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
+        "select * from $seperatorsDB where verseNumber = ${seperator.verseNumber} and pageNumber = ${seperator.pageNumber}");
+    if (maps.isNotEmpty) {
+      await dbClient.update(
+          seperatorsDB,
+          {
+            'surah': null,
+            'verseNumber': null,
+          },
+          where: "verseNumber = ? and pageNumber = ?",
+          whereArgs: [seperator.verseNumber, seperator.pageNumber]);
+    }
+    // print(seperator.toMap());
+    await dbClient.update(seperatorsDB, seperator.toMap(),
+        where: "id= ?", whereArgs: [seperator.id]);
   }
 
   // clear sepertaor surah and versenumber
@@ -125,29 +148,20 @@ class SeperatorsDB {
         whereArgs: [seperator.id]);
   }
 
-  // get seperator by name
-  Future<SeperatorModel?> getSeperatorByName(String name) async {
-    var dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient!
-        .query(seperatorsDB, where: "name = ?", whereArgs: [name]);
+  // get seperator by id
+  Future<SeperatorModel?> getSeperator(int id) async {
+    final db = await this.db;
+    final List<Map<String, dynamic>> maps =
+        await db!.query(seperatorsDB, where: "id = ?", whereArgs: [id]);
     if (maps.isEmpty) return null;
     return SeperatorModel(
-      id: maps[0]['id'],
-      color: maps[0]['color'],
-      pageNumber: maps[0]['pageNumber'],
-      verseNumber: maps[0]['verseNumber'],
-      name: maps[0]['name'],
+      id: maps.first['id'],
+      color: maps.first['color'],
+      pageNumber: maps.first['pageNumber'],
+      verseNumber: maps.first['verseNumber'],
+      name: maps.first['name'],
+      surah: maps.first['surah'],
     );
-  }
-
-  Future<int> deleteSeperator(int id) async {
-    final db = await this.db;
-    return await db!.delete(seperatorsDB, where: "id = ?", whereArgs: [id]);
-  }
-
-  Future<int> deleteAllSeperators() async {
-    final db = await this.db;
-    return await db!.delete(seperatorsDB);
   }
 
   Future<int?> getCount() async {

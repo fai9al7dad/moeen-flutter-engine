@@ -46,10 +46,11 @@ class _MainScaffoldState extends State<MainScaffold> {
     super.initState();
     checkOnBoarding();
     initSeperators();
+    Provider.of<AuthProvider>(context, listen: false).tryToken();
     Provider.of<QuranProvider>(context, listen: false).getData();
+    Provider.of<QuranProvider>(context, listen: false).refreshSeperotrs();
 
     // Provider.of<QuranProvider>(context, listen: false).refreshData();
-    Provider.of<AuthProvider>(context, listen: false).tryToken();
 
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
   }
@@ -63,7 +64,6 @@ class _MainScaffoldState extends State<MainScaffold> {
     const storage = FlutterSecureStorage();
 
     var finishedOnBoarding = await storage.read(key: "finishedOnBoarding");
-    inspect(finishedOnBoarding);
     if (finishedOnBoarding != "finished" || finishedOnBoarding == null) {
       setState(() {
         showOnBoarding = true;
