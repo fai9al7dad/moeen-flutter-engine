@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moeen/providers/quran/quran_provider.dart';
 
 import 'package:moeen/screens/quran/components/page_header.dart';
 import 'package:moeen/screens/quran/components/page_words.dart';
@@ -45,20 +46,11 @@ class _RenderPageState extends State<RenderPage> {
               widget.fixedFontSizePercentageForHeader,
         ),
         const SizedBox(height: 10),
-        widget.page[0]["pageNumber"] == 1 || widget.page[0]["pageNumber"] == 2
-            ? Expanded(
-                child: Center(
-                child: PageWords(
-                  page: widget.page,
-                  fixedFontSizePercentage: widget.fixedFontSizePercentage,
-                  fixedLineHeightPercentage: widget.fixedLineHeightPercentage,
-                ),
-              ))
-            : PageWords(
-                page: widget.page,
-                fixedFontSizePercentage: widget.fixedFontSizePercentage,
-                fixedLineHeightPercentage: widget.fixedLineHeightPercentage,
-              ),
+        PageWords(
+          page: widget.page,
+          fixedFontSizePercentage: widget.fixedFontSizePercentage,
+          fixedLineHeightPercentage: widget.fixedLineHeightPercentage,
+        ),
         // PageWords(page: page),
       ],
     );

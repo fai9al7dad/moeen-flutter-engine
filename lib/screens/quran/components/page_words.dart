@@ -8,8 +8,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
 import 'package:moeen/helpers/database/seperators/seperators_database.dart';
+import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:moeen/screens/quran/components/verse_options_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -30,8 +32,8 @@ class PageWords extends StatelessWidget {
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => RichText(
         strutStyle: StrutStyle(
-          fontSize: fixedFontSizePercentage,
           height: fixedLineHeightPercentage,
+          fontSize: fixedFontSizePercentage,
         ),
         text: TextSpan(
             style: TextStyle(
@@ -114,10 +116,6 @@ class PageWords extends StatelessWidget {
                         ))
                   ],
                 ));
-
-                // TextSpan(
-                //     text: "${item["chapterCode"]}\n",
-                //     style: const TextStyle(fontFamily: "surahname"));
               }
               if (item["charType"] == "end" && !lineChanged) {
                 return TextSpan(
@@ -158,6 +156,7 @@ class PageWords extends StatelessWidget {
                       // backgroundColor: hasSeperator != null
                       //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
                       //     : null,
+
                       color: hasSeperator != null
                           ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
                           : const Color(0xffae8f74),
@@ -197,6 +196,30 @@ class PageWords extends StatelessWidget {
                         },
                 );
               }
+              if (index == 0 ||
+                  (item['audioUrl'] != null &&
+                      item['audioUrl'].substring(8, 15) == "001_001")) {
+                return TextSpan(
+                  text: item["text"] + " ",
+                  style: TextStyle(
+                    // backgroundColor: Colors.red,
+                    letterSpacing: -4,
+                    color: found != null ? Color(int.parse(found.color)) : null,
+                    fontFamily: "p${page[index]['pageNumber']}",
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => {
+                          // setMW(),
+                          quranProvider.addMistake(
+                              id: item["wordID"],
+                              pageNumber: item["pageNumber"],
+                              verseNumber: item["verseNumber"],
+                              chapterCode: item["chapterCode"],
+                              color: found?.color),
+                          HapticFeedback.lightImpact(),
+                        },
+                );
+              }
               return TextSpan(
                   text: lineChanged
                       ? page[index]['text'] + " "
@@ -206,15 +229,10 @@ class PageWords extends StatelessWidget {
                           found != null ? Color(int.parse(found.color)) : null,
                       fontFamily: "p${page[index]['pageNumber']}",
                       letterSpacing:
-                          index == 0 ? fixedFontSizePercentage - 18.5 : 0,
+                          index == 0 ? fixedFontSizePercentage - 18.5 : null,
                       fontSize: fixedFontSizePercentage),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => {
-                          // setMW(),
-                          // quranProvider.addSeperator(
-                          //     pageNumber: item["pageNumber"],
-                          //     verseNumber: item["verseNumber"],
-                          //     color: found?.color),
                           quranProvider.addMistake(
                               id: item["wordID"],
                               pageNumber: item["pageNumber"],
@@ -230,155 +248,244 @@ class PageWords extends StatelessWidget {
   }
 }
 
-class VerseOptionsBottomSheet extends StatefulWidget {
-  const VerseOptionsBottomSheet({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
 
-  final Map<String, dynamic> item;
 
-  @override
-  State<VerseOptionsBottomSheet> createState() =>
-      _VerseOptionsBottomSheetState();
-}
+// class PageWords extends StatefulWidget {
+//   final List page;
+//   final double fixedFontSizePercentage;
+//   final double fixedLineHeightPercentage;
 
-class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
-  List<SeperatorModel> seperators = [];
-  bool loading = true;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchSeperators();
-  }
+//   const PageWords(
+//       {Key? key,
+//       required this.page,
+//       required this.fixedFontSizePercentage,
+//       required this.fixedLineHeightPercentage})
+//       : super(key: key);
 
-  void fetchSeperators() async {
-    final seperatorsDB = SeperatorsDB();
-    var _seperators = await seperatorsDB.getAllSeperators();
-    if (mounted) {
-      setState(() {
-        seperators = _seperators;
-        loading = false;
-      });
-    }
-  }
+//   @override
+//   State<PageWords> createState() => _PageWordsState();
+// }
 
-  void addSeperator(context, id, color, name, pageNumber, verseNumber) {
-    Navigator.of(context).pop();
-    // if new seperator same as exisiting delete it
-    if (pageNumber == widget.item["pageNumber"] &&
-        verseNumber.toString() == widget.item["verseNumber"]) {
-      Provider.of<QuranProvider>(context, listen: false).clearSeperator(
-          id: id,
-          pageNumber: widget.item["pageNumber"],
-          verseNumber: widget.item["verseNumber"],
-          color: color,
-          surah: widget.item["chapterCode"],
-          name: name);
-    } else {
-      Provider.of<QuranProvider>(context, listen: false).updateSeperator(
-          id: id,
-          pageNumber: widget.item["pageNumber"],
-          verseNumber: widget.item["verseNumber"],
-          color: color,
-          surah: widget.item["chapterCode"],
-          name: name);
-    }
-  }
+// class _PageWordsState extends State<PageWords> {
+//   List<List<Widget>> rows = [];
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     fillRows();
+//   }
 
-  void navigateToQuranPage({required int page}) {
-    Navigator.of(context).pop();
+//   void fillRows() {
+//     // List mistakes = Provider.of<QuranProvider>(context, listen: false).mistakes;
+//     List<List<Widget>> rows = [];
+//     for (int i = 0; i < 15; i++) {
+//       rows.add([]);
+//     }
+//     int curRow = 0;
 
-    Provider.of<QuranProvider>(context, listen: false)
-        .pageController
-        .jumpToPage(page - 1);
-  }
+//     for (int i = 0; i < widget.page.length; i++) {
+//       var item = widget.page[i];
 
-  @override
-  Widget build(BuildContext context) {
-    if (loading) {
-      return const SizedBox(
-        height: 180,
-      );
-    }
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Container(
-        color: const Color(0xfffff8ed),
-        height: 400,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("وضع فاصل",
-                  style: TextStyle(
-                    fontFamily: "montserrat-bold",
-                    fontSize: 20,
-                  )),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text("اضفط مطولا للإنتقال إلى الموضع",
-                  style: TextStyle(
-                    fontFamily: "montserrat",
-                    color: Colors.grey,
-                    fontSize: 14,
-                  )),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: seperators.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                          iconColor: Color(int.parse(
-                              seperators[index].color ?? "0xffae8f74")),
-                          leading: seperators[index].verseNumber != null
-                              ? const Icon(Icons.bookmark)
-                              : const Icon(Icons.bookmark_add_outlined),
-                          trailing: seperators[index].verseNumber != null
-                              ? IconButton(
-                                  icon: const Icon(Icons.chevron_right),
-                                  onPressed: () => navigateToQuranPage(
-                                      page: seperators[index].pageNumber!))
-                              : null,
-                          onLongPress: seperators[index].pageNumber != null
-                              ? () => navigateToQuranPage(
-                                  page: seperators[index].pageNumber!)
-                              : null,
-                          onTap: () => addSeperator(
-                                context,
-                                seperators[index].id,
-                                seperators[index].color,
-                                seperators[index].name,
-                                seperators[index].pageNumber,
-                                seperators[index].verseNumber,
-                              ),
-                          title: Text(
-                            "${seperators[index].name}",
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                          subtitle: seperators[index].surah != null
-                              ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text("${seperators[index].surah}surah",
-                                        style: const TextStyle(
-                                            fontSize: 26,
-                                            letterSpacing: -3,
-                                            fontFamily: "surahname")),
-                                    Text(
-                                        "أية ${seperators[index].verseNumber} صفحة ${seperators[index].pageNumber}",
-                                        style: const TextStyle(fontSize: 14)),
-                                  ],
-                                )
-                              : const Text(""));
-                    }),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+//       final row = Row(
+//         children: [
+//           if (item["isNewChapter"] == 1 &&
+//               item["isBismillah"] == 1 &&
+//               item["pageNumber"] != 187)
+//             Bismillah(
+//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
+//             ),
+//           if (item["isNewChapter"] == 1 && item["isBismillah"] != 1)
+//             SurahHeader(
+//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
+//               chapterCode: item["chapterCode"],
+//             ),
+//           if (item["isNewChapter"] == 1 && item["pageNumber"] == 187)
+//             SurahHeader(
+//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
+//               chapterCode: item["chapterCode"],
+//             ),
+//           if (item["charType"] == "end")
+//             VerseNumber(
+//               context: context,
+//               item: item,
+//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
+//             ),
+//           if (item["charType"] == "word")
+//             Word(
+//               color: null,
+//               item: item,
+//               index: i,
+//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
+//             ),
+//         ],
+//       );
+//       int curLineNum = item["lineNumber"];
+//       // if last item this will return undefined
+//       int aftLineNum =
+//           i != widget.page.length - 1 ? widget.page[i + 1]["lineNumber"] : 15;
+//       bool lineChanged = curLineNum != aftLineNum;
+
+//       rows[curRow].add(row);
+//       if (lineChanged) {
+//         curRow++;
+//       }
+//     }
+//     if (mounted) {
+//       setState(() {
+//         this.rows = rows;
+//       });
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//         children: List.generate(rows.length, (row) {
+//       return SizedBox(
+//         height: widget.fixedLineHeightPercentage *
+//             MediaQuery.of(context).size.height *
+//             0.0315,
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: rows[row],
+//         ),
+//       );
+//     }));
+//   }
+// }
+
+// class SurahHeader extends StatelessWidget {
+//   final double fixedFontSizePercentage;
+//   final String chapterCode;
+//   const SurahHeader({
+//     Key? key,
+//     required this.fixedFontSizePercentage,
+//     required this.chapterCode,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       alignment: AlignmentDirectional.center,
+//       children: [
+//         SvgPicture.asset(
+//           "assets/svg/surah_header_svg.svg",
+//           width: fixedFontSizePercentage > 30
+//               ? fixedFontSizePercentage * 20
+//               : fixedFontSizePercentage * 16,
+//           height: fixedFontSizePercentage > 30
+//               ? fixedFontSizePercentage * 1.789
+//               : fixedFontSizePercentage * 1.72,
+//         ),
+//         Text("${chapterCode.padLeft(3, '0')}surah",
+//             style: TextStyle(
+//               fontFamily: "surahname",
+//               letterSpacing: -3,
+//               fontSize: fixedFontSizePercentage + 5,
+//             ))
+//       ],
+//     );
+//   }
+// }
+
+// class Bismillah extends StatelessWidget {
+//   const Bismillah({
+//     Key? key,
+//     required this.fixedFontSizePercentage,
+//   }) : super(key: key);
+
+//   final double fixedFontSizePercentage;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Text(
+//       "ﱁﱂﱃﱄ",
+//       style: TextStyle(fontFamily: "p1", fontSize: fixedFontSizePercentage),
+//     );
+//   }
+// }
+
+// class VerseNumber extends StatelessWidget {
+//   const VerseNumber({
+//     Key? key,
+//     required this.context,
+//     required this.item,
+//     required this.fixedFontSizePercentage,
+//   }) : super(key: key);
+
+//   final double fixedFontSizePercentage;
+//   final BuildContext context;
+//   final item;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // var hasSeperator = quranProvider.seperators.firstWhereOrNull(
+//     //   (element) =>
+//     //       element.verseNumber.toString() == item["verseNumber"] &&
+//     //       element.pageNumber == item["pageNumber"],
+//     // );
+//     return GestureDetector(
+//       onTap: () => {
+//         showModalBottomSheet(
+//             context: context,
+//             builder: (context) {
+//               return VerseOptionsBottomSheet(item: item);
+//             })
+//       },
+//       child: Text(item["text"],
+//           style: TextStyle(
+//             color: const Color(0xffae8f74),
+//             fontSize: fixedFontSizePercentage,
+//             fontFamily: "p${item['pageNumber']}",
+//           )),
+//     );
+//   }
+// }
+
+// class Word extends StatelessWidget {
+//   const Word({
+//     Key? key,
+//     required this.color,
+//     required this.item,
+//     required this.fixedFontSizePercentage,
+//     required this.index,
+//   }) : super(key: key);
+
+//   final double fixedFontSizePercentage;
+//   final item;
+//   final color;
+//   final int index;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // var found = quranProvider.mistakes
+//     //     .firstWhereOrNull((element) => element.wordID == item["wordID"]);
+//     return GestureDetector(
+//       onTap: () => {
+//         // quranProvider.addMistake(
+//         //     id: item["wordID"],
+//         //     pageNumber: item["pageNumber"],
+//         //     verseNumber: item["verseNumber"],
+//         //     chapterCode: item["chapterCode"],
+//         //     color: found?.color),
+//         // HapticFeedback.lightImpact(),
+//       },
+//       child: Text(
+//         "${item["text"]}",
+//         style: TextStyle(
+//           fontSize: fixedFontSizePercentage,
+//           fontFamily: "p${item["pageNumber"]}",
+//           color: color,
+//           letterSpacing: index == 0 ? 4 : 0,
+//           shadows: const [
+//             Shadow(
+//               offset: Offset(0.0, 0.0),
+//               blurRadius: 0.1,
+//               color: Color.fromARGB(255, 0, 0, 0),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

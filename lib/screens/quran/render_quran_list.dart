@@ -11,7 +11,6 @@ import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
-import 'package:moeen/screens/quran/components/show_case_page.dart';
 import 'package:moeen/screens/quran/components/show_extras.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -117,11 +116,13 @@ class _MainScaffoldState extends State<MainScaffold> {
                   PageView.builder(
                     controller: quranProvider.pageController,
                     allowImplicitScrolling: true,
+
                     physics: const CustomPageViewScrollPhysics(),
                     reverse: true,
                     // physics: const AlwaysScrollableScrollPhysics(),
                     // scrollDirection: Axis.horizontal,
                     clipBehavior: Clip.none,
+
                     itemCount: quranProvider.quran.length,
                     onPageChanged: (p) {
                       quranProvider.refreshData(pageNumber: p + 1);
@@ -164,6 +165,6 @@ class CustomPageViewScrollPhysics extends ScrollPhysics {
   SpringDescription get spring => const SpringDescription(
         mass: 50,
         stiffness: 100,
-        damping: 0.8,
+        damping: 1,
       );
 }
