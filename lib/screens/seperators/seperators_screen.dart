@@ -40,10 +40,10 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
     }
   }
 
-  void updateSeperator(context, index) {
+  void updateSeperator(context, index) async {
     Navigator.of(context).pop();
     final seperatorsDB = SeperatorsDB();
-    seperatorsDB.updateSeperator(SeperatorModel(
+    await seperatorsDB.updateSeperator(SeperatorModel(
       color: seperators[index].color,
       name: nameController.text,
       id: seperators[index].id,
@@ -54,9 +54,9 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
     fetchSeperators();
   }
 
-  void clearSeperator(index) {
+  void clearSeperator(index) async {
     final seperatorsDB = SeperatorsDB();
-    seperatorsDB.clearSeperator(SeperatorModel(
+    await seperatorsDB.clearSeperator(SeperatorModel(
       color: seperators[index].color,
       name: nameController.text,
       id: seperators[index].id,

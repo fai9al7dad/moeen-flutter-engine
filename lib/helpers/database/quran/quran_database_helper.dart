@@ -79,12 +79,12 @@ class DatabaseHelper {
     // List list = await dbClient!.rawQuery(
     //     "select * from (select * from page limit 10) page inner join line on line.pageID = page.id inner join word on word.lineID = line.id order by pageNumber,lineNumber");
     String query =
-        "select page.id as pageID, page.pageNumber, page.rubNumber, page.hizbNumber, page.juzNumber,word.text,word.lineNumber, word.transliteration,word.isBismillah,word.isNewChapter,word.color,word.chapterCode,word.id as wordID,word.charType, word.verseNumber  from  page inner join line  on line.pageID = page.id inner join word on word.lineID = line.id order by word.lineNumber";
-    var batch = dbClient!.batch()
-      ..execute("CREATE VIEW IF NOT EXISTS joined_quran_view AS $query");
-    await batch.commit();
+        "select page.id as pageID, page.pageNumber, page.rubNumber, page.hizbNumber, page.juzNumber,word.text,word.lineNumber, word.transliteration,word.audioUrl,word.isBismillah,word.isNewChapter,word.color,word.chapterCode,word.id as wordID,word.charType, word.verseNumber  from  page inner join line  on line.pageID = page.id inner join word on word.lineID = line.id order by word.lineNumber";
+    // var batch = dbClient!.batch()
+    //   ..execute("CREATE VIEW IF NOT EXISTS joined_quran_view AS $query");
+    // await batch.commit();
 
-    List list = await dbClient.rawQuery("select * from joined_quran_view");
+    List list = await dbClient!.rawQuery(query);
 
     // List<JoinedQuran> quran = [];
     List<List> pages = initializePagesArray();

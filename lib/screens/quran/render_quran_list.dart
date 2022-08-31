@@ -11,7 +11,6 @@ import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
-import 'package:moeen/screens/quran/components/show_case_page.dart';
 import 'package:moeen/screens/quran/components/show_extras.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -93,59 +92,65 @@ class _MainScaffoldState extends State<MainScaffold> {
         });
       });
     }
-    return Consumer<QuranProvider>(
-      builder: (context, quranProvider, child) => Scaffold(
-        body: quranProvider.loadingGetData
-            ? Center(
-                child: (CircularProgressIndicator(
-                  strokeWidth: 7,
-                  color: Colors.green[700],
-                )),
-              )
-            : GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  int sensitivity = 8;
-                  if (details.delta.dy > sensitivity) {
-                    // Down Swipe
-                    setShowExtra(true);
-                  } else if (details.delta.dy < -sensitivity) {
-                    // Up Swipe
-                    setShowExtra(false);
-                  }
-                },
-                child: Stack(children: [
-                  PageView.builder(
-                    controller: quranProvider.pageController,
-                    allowImplicitScrolling: true,
-                    physics: const CustomPageViewScrollPhysics(),
-                    reverse: true,
-                    // physics: const AlwaysScrollableScrollPhysics(),
-                    // scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
-                    itemCount: quranProvider.quran.length,
-                    onPageChanged: (p) {
-                      quranProvider.refreshData(pageNumber: p + 1);
-                    },
-                    itemBuilder: (context, index) {
-                      return RenderPage(
-                          page: quranProvider.quran[index],
-                          fixedFontSizePercentageForHeader:
-                              fixedFontSizePercentageForHeader,
-                          fixedFontSizePercentage: fixedFontSizePercentage,
-                          fixedLineHeightPercentage: fixedLineHeightPercentage);
-                      // return const Text("sdf");
-                      // return const Text("sdf");
-                    },
-                    // itemBuilder: (context, index) {
-                    //   return RenderPage(lines: _items[index]["lines"]);
-                    // }
-                  ),
-                  if (showExtra)
-                    ShowExtras(
-                      setShowExtra: setShowExtra,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Consumer<QuranProvider>(
+        builder: (context, quranProvider, child) => Scaffold(
+          body: quranProvider.loadingGetData
+              ? Center(
+                  child: (CircularProgressIndicator(
+                    strokeWidth: 7,
+                    color: Colors.green[700],
+                  )),
+                )
+              : GestureDetector(
+                  onVerticalDragUpdate: (details) {
+                    int sensitivity = 8;
+                    if (details.delta.dy > sensitivity) {
+                      // Down Swipe
+                      setShowExtra(true);
+                    } else if (details.delta.dy < -sensitivity) {
+                      // Up Swipe
+                      setShowExtra(false);
+                    }
+                  },
+                  child: Stack(children: [
+                    PageView.builder(
+                      controller: quranProvider.pageController,
+                      allowImplicitScrolling: true,
+
+                      physics: const CustomPageViewScrollPhysics(),
+                      // reverse: true,
+                      // physics: const AlwaysScrollableScrollPhysics(),
+                      // scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+
+                      itemCount: quranProvider.quran.length,
+                      onPageChanged: (p) {
+                        quranProvider.refreshData(pageNumber: p + 1);
+                      },
+                      itemBuilder: (context, index) {
+                        return RenderPage(
+                            page: quranProvider.quran[index],
+                            fixedFontSizePercentageForHeader:
+                                fixedFontSizePercentageForHeader,
+                            fixedFontSizePercentage: fixedFontSizePercentage,
+                            fixedLineHeightPercentage:
+                                fixedLineHeightPercentage);
+                        // return const Text("sdf");
+                        // return const Text("sdf");
+                      },
+                      // itemBuilder: (context, index) {
+                      //   return RenderPage(lines: _items[index]["lines"]);
+                      // }
                     ),
-                ]),
-              ),
+                    if (showExtra)
+                      ShowExtras(
+                        setShowExtra: setShowExtra,
+                      ),
+                  ]),
+                ),
+        ),
       ),
     );
   }
@@ -164,6 +169,6 @@ class CustomPageViewScrollPhysics extends ScrollPhysics {
   SpringDescription get spring => const SpringDescription(
         mass: 50,
         stiffness: 100,
-        damping: 0.8,
+        damping: 1,
       );
 }

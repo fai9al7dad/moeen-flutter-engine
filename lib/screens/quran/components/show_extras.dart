@@ -56,7 +56,7 @@ class _SearchQuranState extends State<SearchQuran>
   }
 
   void searchQuran(text) async {
-    String convertedString = GeneralHelpers().replaceFarsiNumber(text);
+    String convertedString = GeneralHelpers().replaceArabicNumber(text);
     List<QuranSimpleModel> res =
         await quranSimpleDataBase.search(query: convertedString);
     setState(() {

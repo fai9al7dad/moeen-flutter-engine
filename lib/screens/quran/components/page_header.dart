@@ -214,7 +214,7 @@ class PageNumber extends StatelessWidget {
                     // If the form is valid, display a snackbar. In the real world,
                     // you'd often call a server or save the information in a database.
                     String convertedString = GeneralHelpers()
-                        .replaceFarsiNumber(pageNumberController.text);
+                        .replaceArabicNumber(pageNumberController.text);
 
                     quranProvider.pageController
                         .jumpToPage(int.parse(convertedString) - 1);
@@ -278,7 +278,7 @@ class _PageNumberFormState extends State<PageNumberForm> {
           controller: pageNumberController,
           validator: (value) {
             String convertedString =
-                GeneralHelpers().replaceFarsiNumber(value ?? "");
+                GeneralHelpers().replaceArabicNumber(value ?? "");
             if (value == null || value.isEmpty) {
               return 'الرجاء عدم ترك الخانة فارغة';
             }

@@ -15,7 +15,7 @@ import 'package:collection/collection.dart';
 class QuranProvider with ChangeNotifier {
   final wordsColorsMap = WordColorMap();
   final werdColorsMaps = WerdsColorsMap();
-  final _pageController = PageController(initialPage: 0);
+  final _pageController = PageController(initialPage: 254);
   final Api api = Api();
   List _quran = [];
   List<WordColorMapModel> _mistakes = [];

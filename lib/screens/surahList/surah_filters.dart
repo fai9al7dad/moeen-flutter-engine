@@ -90,8 +90,6 @@ class _SurahFiltersState extends State<SurahFilters> {
                     ),
                   ),
                 ),
-            itemComparator: (item1, item2) =>
-                item1.verseNumber.compareTo(item2.verseNumber),
             indexedItemBuilder: (context, element, index) {
               return ListItem(
                   trailingIcon: Icons.chevron_right,
@@ -107,9 +105,9 @@ class _SurahFiltersState extends State<SurahFilters> {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Color(int.parse(
-                              data[index].color == MistakesColors.warning
+                              element.color == MistakesColors.warning
                                   ? MistakesColors.warning
-                                  : data[index].color == MistakesColors.revert
+                                  : element.color == MistakesColors.revert
                                       ? MistakesColors.revert
                                       : MistakesColors.mistake,
                             ))),
@@ -117,10 +115,9 @@ class _SurahFiltersState extends State<SurahFilters> {
                         width: 8,
                       ),
                       const SizedBox(width: 8),
-                      Text("${data[index].text}",
+                      Text("${element.text}",
                           style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: "p${data[index].pageID}")),
+                              fontSize: 18, fontFamily: "p${element.pageID}")),
                     ]),
                   ),
                   subtitle: ConstrainedBox(
@@ -128,17 +125,17 @@ class _SurahFiltersState extends State<SurahFilters> {
                         maxWidth: MediaQuery.of(context).size.width * 0.8,
                       ),
                       child: Row(children: [
-                        Text("${data[index].chapterCode}surah",
+                        Text("${element.chapterCode}surah",
                             style: const TextStyle(
                                 fontSize: 18, fontFamily: "surahname")),
                         const SizedBox(width: 8),
                         Text(
-                          "رقم الصفحة: ${data[index].pageID}",
+                          "رقم الصفحة: ${element.pageID}",
                           style: const TextStyle(fontSize: 10),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          "رقم الآية: ${data[index].verseNumber}",
+                          "رقم الآية: ${element.verseNumber}",
                           style: const TextStyle(fontSize: 10),
                         ),
                       ])));
