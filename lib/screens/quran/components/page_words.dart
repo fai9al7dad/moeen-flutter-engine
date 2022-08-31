@@ -196,14 +196,16 @@ class PageWords extends StatelessWidget {
                         },
                 );
               }
+
               if (index == 0 ||
                   (item['audioUrl'] != null &&
                       item['audioUrl'].substring(8, 15) == "001_001")) {
                 return TextSpan(
-                  text: item["text"] + " ",
+                  text:
+                      item["text"] == "ﱁﱂ" ? item["text"] : item["text"] + " ",
                   style: TextStyle(
                     // backgroundColor: Colors.red,
-                    letterSpacing: -4,
+                    letterSpacing: item["text"] == "ﱁﱂ" ? 4 : -5,
                     color: found != null ? Color(int.parse(found.color)) : null,
                     fontFamily: "p${page[index]['pageNumber']}",
                   ),
@@ -220,6 +222,7 @@ class PageWords extends StatelessWidget {
                         },
                 );
               }
+
               return TextSpan(
                   text: lineChanged
                       ? page[index]['text'] + " "
