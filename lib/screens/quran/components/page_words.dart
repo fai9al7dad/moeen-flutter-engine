@@ -58,8 +58,8 @@ class PageWords extends StatelessWidget {
 
               var hasSeperator = quranProvider.seperators.firstWhereOrNull(
                 (element) =>
-                    element.verseNumber.toString() == item["verseNumber"] &&
-                    element.pageNumber == item["pageNumber"],
+                    element.surah == item["chapterCode"] &&
+                    element.verseNumber.toString() == item["verseNumber"],
               );
 
               var found;
@@ -113,7 +113,7 @@ class PageWords extends StatelessWidget {
                           fontFamily: "surahname",
                           letterSpacing: -3,
                           fontSize: fixedFontSizePercentage + 5,
-                        ))
+                        )),
                   ],
                 ));
               }

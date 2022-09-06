@@ -119,7 +119,7 @@ class SeperatorsDB {
     var dbClient = await db;
     // if seperator with same verse number and page number exists, clear old and update new
     final List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
-        "select * from $seperatorsDB where verseNumber = ${seperator.verseNumber} and pageNumber = ${seperator.pageNumber}");
+        "select * from $seperatorsDB where verseNumber = ${seperator.verseNumber} and surah = ${seperator.surah}");
     if (maps.isNotEmpty) {
       await dbClient.update(
           seperatorsDB,
