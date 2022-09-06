@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/dio/API.dart';

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/components/list_item.dart';

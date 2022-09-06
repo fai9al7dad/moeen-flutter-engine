@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/screens/about/about_app.dart';
 import 'package:moeen/screens/auth/forgot_password.dart';
 import 'package:moeen/screens/auth/login_screen.dart';

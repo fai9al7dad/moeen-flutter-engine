@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/dio/api.dart';

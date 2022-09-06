@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
