@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moeen/components/CustomAppBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 PageController controller = PageController();
 
@@ -72,6 +73,14 @@ class OnBoarding extends StatelessWidget {
           title: const Text("الشرح",
               style: TextStyle(color: Colors.black, fontSize: 14)),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.close, color: Colors.black),
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              prefs.setBool("finishedOnBoarding", true);
+              updateOnBoarding();
+            },
+          ),
         ),
         body: PageView.builder(
             controller: controller,
@@ -134,10 +143,9 @@ class Slide extends StatelessWidget {
                     child: const Text("التالي")),
               if (index == len - 1)
                 ElevatedButton(
-                    onPressed: () {
-                      final storage = const FlutterSecureStorage();
-                      storage.write(
-                          key: "finishedOnBoarding", value: "finished");
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setBool("finishedOnBoarding", true);
                       updateOnBoarding();
                       // Navigator.pushNamed(context, "/");
                     },

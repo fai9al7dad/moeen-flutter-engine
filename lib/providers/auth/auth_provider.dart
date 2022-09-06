@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/dio/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
   bool _isAuth = false;
-  final storage = const FlutterSecureStorage();
+
+  bool _checkingAuth = false;
   late UserModel? _authUser;
   bool get isAuth {
     return _isAuth;
@@ -17,33 +20,56 @@ class AuthProvider with ChangeNotifier {
     return _authUser;
   }
 
+  bool get checkingAuth {
+    return _checkingAuth;
+  }
+
   void login({required creds}) async {
+    final prefs = await SharedPreferences.getInstance();
+
     _isAuth = true;
     UserModel user = UserModel.fromJson(creds);
     _authUser = user;
-    await storage.write(key: "accessToken", value: user.accessToken);
+    prefs.setString("accessToken", user.accessToken ?? "");
     notifyListeners();
   }
 
   void tryToken() async {
     try {
+      _checkingAuth = true;
       Api api = Api();
-      var user = await api.getAuthUser();
-      if (user == null) return;
-      _isAuth = true;
-      _authUser = user;
+      try {
+        var user = await api.getAuthUser();
+        if (user == null) {
+          _checkingAuth = false;
+          return;
+        }
+        _isAuth = true;
+        _authUser = user;
+        _checkingAuth = false;
+
+        notifyListeners();
+      } on DioError catch (e) {
+        if (e.response?.data["statusCode"] == 401) {
+          print("logged out");
+          logout();
+        }
+        _checkingAuth = false;
+      }
 
       notifyListeners();
     } catch (e) {
-      logout();
+      _checkingAuth = false;
     }
     // dio().options.headers["Authorization"] = user.accessToken;
   }
 
   void logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
     _isAuth = false;
     _authUser = null;
-    await storage.delete(key: "accessToken");
+    prefs.remove("accessToken");
     // dio().options.headers["Authorization"] = "";
     notifyListeners();
   }

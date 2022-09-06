@@ -11,6 +11,7 @@ import 'package:moeen/screens/duo/components/not_auth_alert.dart';
 import 'package:moeen/screens/duo/components/select_duo.dart';
 import 'package:moeen/screens/duo/components/view_duos_invites.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 GlobalKey _one = GlobalKey();
@@ -33,19 +34,24 @@ class _DuosScreenState extends State<DuosScreen> {
   }
 
   void checkIfFirstTime() async {
-    const storage = FlutterSecureStorage();
-    String? firstTime = await storage.read(key: "seenDuoShowcase");
-    if (firstTime == null || firstTime != "true") {
+    final prefs = await SharedPreferences.getInstance();
+    bool? firstTime = prefs.getBool("seenDuoShowcase");
+    if (firstTime == null || firstTime != true) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         return ShowCaseWidget.of(context).startShowCase([_one]);
       });
-      await storage.write(key: "seenDuoShowcase", value: "true");
+      await prefs.setBool("seenDuoShowcase", true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthProvider>(builder: (context, authProvider, child) {
+      if (authProvider.checkingAuth) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
       if (!authProvider.isAuth) {
         return const NotAuthAlert();
       }

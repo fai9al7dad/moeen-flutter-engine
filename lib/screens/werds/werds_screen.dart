@@ -16,6 +16,7 @@ import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 GlobalKey _one = GlobalKey();
@@ -45,15 +46,16 @@ class _WerdsScreenState extends State<WerdsScreen> {
   }
 
   void checkIfFirstTime() async {
-    const storage = FlutterSecureStorage();
-    String? firstTime = await storage.read(key: "seenWerdsScreenShowcase");
-    if (firstTime == null || firstTime != "true") {
+    final prefs = await SharedPreferences.getInstance();
+
+    bool? firstTime = prefs.getBool("seenWerdsScreenShowcase");
+    if (firstTime == null || firstTime != true) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Future.delayed(const Duration(milliseconds: 400), () {
           return ShowCaseWidget.of(context).startShowCase([_one, _two]);
         });
       });
-      await storage.write(key: "seenWerdsScreenShowcase", value: "true");
+      await prefs.setBool("seenWerdsScreenShowcase", true);
     }
   }
 
@@ -77,8 +79,9 @@ class _WerdsScreenState extends State<WerdsScreen> {
   }
 
   void startWerd() async {
-    const storage = FlutterSecureStorage();
-    String? showWerdTutorial = await storage.read(key: "showWerdTutorial");
+    final prefs = await SharedPreferences.getInstance();
+
+    bool? showWerdTutorial = prefs.getBool("showWerdTutorial");
     setState(() {
       appBarLoading = true;
     });
@@ -126,7 +129,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
       "werdID": werd["id"],
       "reciterID": widget.reciterID,
     });
-    if (showWerdTutorial != "false") {
+    if (showWerdTutorial != false) {
       Navigator.pushNamedAndRemoveUntil(
           context, "/werd-introduction", (Route route) => false);
     } else {

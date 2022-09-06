@@ -69,7 +69,7 @@ class SeperatorsDB {
         await batch.commit();
         return;
       },
-      version: 3,
+      version: 4,
     );
 
     _db = await database;
@@ -85,9 +85,9 @@ class SeperatorsDB {
       await insertSeperator(const SeperatorModel(
           id: 2, color: "0xff00e5ff", name: "الفاصل الأزرق"));
       await insertSeperator(const SeperatorModel(
-          id: 3, color: "0xFF7B1FA2", name: "الفاصل البنفسجي"));
+          id: 3, color: "0xffd500f9", name: "الفاصل البنفسجي"));
       await insertSeperator(const SeperatorModel(
-          id: 4, color: "0xFF5D4037", name: "الفاصل الوردي"));
+          id: 4, color: "0xFFF50057", name: "الفاصل الوردي"));
     }
     return;
   }

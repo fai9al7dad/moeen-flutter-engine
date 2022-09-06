@@ -111,7 +111,6 @@ class QuranProvider with ChangeNotifier {
   void refreshSeperotrs() async {
     var databaseHelper = SeperatorsDB();
     _seperators = await databaseHelper.getAllSeperators();
-    inspect(_seperators);
     notifyListeners();
   }
 

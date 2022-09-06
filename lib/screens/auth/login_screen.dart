@@ -23,15 +23,20 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
-  bool showSyncDialog = false;
-  Future<String> checkTemp() async {
+
+  Future<String> checkTemp(context) async {
     final tempWordsColorsMap = TempWordColorMap();
     var color = await tempWordsColorsMap.getAllColors();
     if (color.isNotEmpty) {
       // TempWordsColorsMap.addTempWords();
-      setState(() {
-        showSyncDialog = true;
-      });
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return const SyncDialog();
+          });
+      // setState(() {
+      //   showSyncDialog = true;
+      // });
       return "stop";
     }
     return "continue";
@@ -161,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 listen: false)
                                             .login(creds: res.data);
                                         String stopOrContinue =
-                                            await checkTemp();
+                                            await checkTemp(context);
 
                                         if (stopOrContinue == "stop") {
                                           return;
@@ -176,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 backgroundColor:
                                                     Colors.red[200],
                                                 content: Text(
-                                                  e.response?.data["message"],
+                                                  e.response?.data['message'],
                                                   style: TextStyle(
                                                       color: Colors.red[900]),
                                                 )));
@@ -219,7 +224,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              if (showSyncDialog) const SyncDialog(),
             ],
           ),
         ),
@@ -255,46 +259,131 @@ class SyncDialog extends StatelessWidget {
       Navigator.of(context).pop();
     }
 
-    return AlertDialog(
-      title: Text(
-        "لديك أخطاء وتنبيهات لم يتم مزامنتها",
-        style: TextStyle(color: Tertiary().s500),
-      ),
-      content: Column(
-        children: [
-          Text(
-            "توجد أخطاء وتنبيهات مسجلة فقط في هذا الجهاز، وليست مربوطة بحسابك. وذلك يمكن أن يحصل لعدة أسباب منها",
-            style: TextStyle(color: Colors.blueGrey[400], fontSize: 14),
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+          color: const Color(0xfffff8ed),
+          height: 400,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "لديك أخطاء وتنبيهات لم يتم مزامنتها",
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Tertiary().s500,
+                  fontFamily: "montserrat-bold",
+                ),
+                textAlign: TextAlign.right,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "توجد أخطاء وتنبيهات مسجلة فقط في هذا الجهاز، وليست مربوطة بحسابك. وذلك يمكن أن يحصل لعدة أسباب منها",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blueGrey[400],
+                ),
+                textAlign: TextAlign.right,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text("\u2022 أضفت تنبيهات وأخطاء ولست مسجل الدخول",
+                  style: TextStyle(color: Colors.blueGrey[400], fontSize: 14)),
+              const SizedBox(
+                height: 5,
+              ),
+              Text("\u2022 أضفت تنبيهات وأخطاء ولست متصل بالإنترنت",
+                  style: TextStyle(color: Colors.blueGrey[400], fontSize: 14)),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                  "ملاحظة في حال الموافقة جميع الأخطاء والتنبيهات ستضاف الى هذا الحساب",
+                  style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all(TextStyle(
+                              color: Colors.grey[900],
+                              fontFamily: "montserrat")),
+                          backgroundColor:
+                              MaterialStateProperty.all(Tertiary().s500)),
+                      onPressed: () {
+                        onSync();
+                      },
+                      child: const Text("مزامنة"),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: TextButton(
+                    child: const Text("تجاهل"),
+                    onPressed: () async {
+                      final temp = TempWordColorMap();
+                      await temp.deleteAllColors();
+                      Navigator.of(context).pop();
+                    },
+                  )),
+                ],
+              )
+            ]),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text("\u2022 أضفت تنبيهات وأخطاء ولست مسجل الدخول",
-              style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
-          const SizedBox(
-            height: 5,
-          ),
-          Text("\u2022 أضفت تنبيهات وأخطاء ولست متصل بالإنترنت",
-              style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-              "ملاحظة في حال الموافقة جميع الأخطاء والتنبيهات ستضاف الى هذا الحساب",
-              style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
-        ],
-      ),
-      actions: <Widget>[
-        ElevatedButton(child: const Text("مزامنة"), onPressed: () => onSync()),
-        TextButton(
-          child: const Text("تجاهل"),
-          onPressed: () async {
-            final temp = TempWordColorMap();
-            await temp.deleteAllColors();
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
+        ));
   }
 }
+//  AlertDialog(
+//       title: Text(
+//         "لديك أخطاء وتنبيهات لم يتم مزامنتها",
+//         style: TextStyle(color: Tertiary().s500),
+//       ),
+//       content: Column(
+//         children: [
+//           Text(
+//             "توجد أخطاء وتنبيهات مسجلة فقط في هذا الجهاز، وليست مربوطة بحسابك. وذلك يمكن أن يحصل لعدة أسباب منها",
+//             style: TextStyle(color: Colors.blueGrey[400], fontSize: 14),
+//           ),
+//           const SizedBox(
+//             height: 10,
+//           ),
+//           Text("\u2022 أضفت تنبيهات وأخطاء ولست مسجل الدخول",
+//               style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
+//           const SizedBox(
+//             height: 5,
+//           ),
+//           Text("\u2022 أضفت تنبيهات وأخطاء ولست متصل بالإنترنت",
+//               style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
+//           const SizedBox(
+//             height: 20,
+//           ),
+//           Text(
+//               "ملاحظة في حال الموافقة جميع الأخطاء والتنبيهات ستضاف الى هذا الحساب",
+//               style: TextStyle(color: Colors.blueGrey[400], fontSize: 12)),
+//         ],
+//       ),
+//       actions: <Widget>[
+//         ElevatedButton(child: const Text("مزامنة"), onPressed: () => onSync()),
+//         TextButton(
+//           child: const Text("تجاهل"),
+//           onPressed: () async {
+//             final temp = TempWordColorMap();
+//             await temp.deleteAllColors();
+//             Navigator.of(context).pop();
+//           },
+//         ),
+//       ],
+//     );

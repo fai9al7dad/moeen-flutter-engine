@@ -6,10 +6,10 @@ import 'package:moeen/helpers/models/duos_model.dart';
 import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
   static Dio api = Dio();
-  final storage = const FlutterSecureStorage();
 
   Api() {
     api.interceptors
@@ -17,7 +17,8 @@ class Api {
       options.baseUrl = "http://moeen-api.herokuapp.com";
       options.headers["Accept"] = "application/json";
       options.headers["Content-Type"] = "application/json";
-      var token = await storage.read(key: "accessToken");
+      final prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString("accessToken");
 
       options.headers["Authorization"] = "Bearer $token";
       options.extra['withCredentials'] = true;
@@ -45,11 +46,15 @@ class Api {
   }
 
   Future<UserModel?> getAuthUser() async {
-    Response res = await api.get(
-      "/api/users/me",
-    );
-    UserModel user = UserModel.fromJson(res.data);
-    return user;
+    try {
+      Response res = await api.get(
+        "/api/users/me",
+      );
+      UserModel user = UserModel.fromJson(res.data);
+      return user;
+    } on DioError {
+      rethrow;
+    }
   }
 
   Future createForgotPasswordToken({email}) async {

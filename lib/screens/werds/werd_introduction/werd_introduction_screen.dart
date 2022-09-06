@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WerdIntroductionScreen extends StatefulWidget {
   const WerdIntroductionScreen({Key? key}) : super(key: key);
@@ -14,9 +15,9 @@ class WerdIntroductionScreen extends StatefulWidget {
 class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
   bool isChecked = false;
   void startWerd(BuildContext context) async {
-    const storage = FlutterSecureStorage();
+    final prefs = await SharedPreferences.getInstance();
     if (isChecked) {
-      await storage.write(key: "showWerdTutorial", value: "false");
+      await prefs.setBool("showWerdTutorial", false);
     }
     Navigator.pushNamedAndRemoveUntil(context, "/", (Route route) => false);
   }

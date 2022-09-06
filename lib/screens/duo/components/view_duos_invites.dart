@@ -8,6 +8,7 @@ import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
 import 'package:moeen/screens/settings/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 GlobalKey _one = GlobalKey();
@@ -32,13 +33,13 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
   }
 
   void checkIfFirstTime() async {
-    const storage = FlutterSecureStorage();
-    String? firstTime = await storage.read(key: "seenDuoInvitesShowcase");
-    if (firstTime == null || firstTime != "true") {
+    final prefs = await SharedPreferences.getInstance();
+    bool? firstTime = prefs.getBool("seenDuoInvitesShowcase");
+    if (firstTime == null || firstTime != true) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         return ShowCaseWidget.of(context).startShowCase([_one]);
       });
-      await storage.write(key: "seenDuoInvitesShowcase", value: "true");
+      await prefs.setBool("seenDuoInvitesShowcase", true);
     }
   }
 

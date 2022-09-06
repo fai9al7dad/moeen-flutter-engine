@@ -13,6 +13,7 @@ import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 GlobalKey _one = GlobalKey();
@@ -45,16 +46,16 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
   }
 
   void checkIfFirstTime() async {
-    const storage = FlutterSecureStorage();
-    String? firstTime =
-        await storage.read(key: "seenViewWerdHighlightsShowcase");
-    if (firstTime == null || firstTime != "true") {
+    final prefs = await SharedPreferences.getInstance();
+
+    bool? firstTime = prefs.getBool("seenViewWerdHighlightsShowcase");
+    if (firstTime == null || firstTime != true) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Future.delayed(const Duration(milliseconds: 2000), () {
           return ShowCaseWidget.of(context).startShowCase([_one]);
         });
       });
-      await storage.write(key: "seenViewWerdHighlightsShowcase", value: "true");
+      await prefs.setBool("seenViewWerdHighlightsShowcase", true);
     }
   }
 

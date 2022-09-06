@@ -12,6 +12,7 @@ import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/components/render_page.dart';
 import 'package:moeen/screens/quran/components/show_extras.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 
 class RenderQuranList extends StatelessWidget {
@@ -33,6 +34,7 @@ class MainScaffold extends StatefulWidget {
 class _MainScaffoldState extends State<MainScaffold> {
   bool showOnBoarding = false;
   bool showExtra = false;
+  bool loading = true;
 
   void setShowExtra(bool value) {
     setState(() {
@@ -48,7 +50,11 @@ class _MainScaffoldState extends State<MainScaffold> {
     Provider.of<AuthProvider>(context, listen: false).tryToken();
     Provider.of<QuranProvider>(context, listen: false).getData();
     Provider.of<QuranProvider>(context, listen: false).refreshSeperotrs();
-
+    Provider.of<QuranProvider>(context, listen: false)
+        .refreshData(pageNumber: 1);
+    setState(() {
+      loading = false;
+    });
     // Provider.of<QuranProvider>(context, listen: false).refreshData();
 
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
@@ -60,10 +66,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 
   void checkOnBoarding() async {
-    const storage = FlutterSecureStorage();
+    final prefs = await SharedPreferences.getInstance();
 
-    var finishedOnBoarding = await storage.read(key: "finishedOnBoarding");
-    if (finishedOnBoarding != "finished" || finishedOnBoarding == null) {
+    bool? finishedOnBoarding = prefs.getBool("finishedOnBoarding");
+
+    if (finishedOnBoarding != true || finishedOnBoarding == null) {
       setState(() {
         showOnBoarding = true;
       });
@@ -92,61 +99,63 @@ class _MainScaffoldState extends State<MainScaffold> {
         });
       });
     }
+
+    if (loading) {
+      return Center(
+        child: (CircularProgressIndicator(
+          strokeWidth: 7,
+          color: Colors.green[700],
+        )),
+      );
+    }
     return Consumer<QuranProvider>(
       builder: (context, quranProvider, child) => Scaffold(
-        body: quranProvider.loadingGetData
-            ? Center(
-                child: (CircularProgressIndicator(
-                  strokeWidth: 7,
-                  color: Colors.green[700],
-                )),
-              )
-            : GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  int sensitivity = 8;
-                  if (details.delta.dy > sensitivity) {
-                    // Down Swipe
-                    setShowExtra(true);
-                  } else if (details.delta.dy < -sensitivity) {
-                    // Up Swipe
-                    setShowExtra(false);
-                  }
-                },
-                child: Stack(children: [
-                  PageView.builder(
-                    controller: quranProvider.pageController,
-                    allowImplicitScrolling: true,
+        body: GestureDetector(
+          onVerticalDragUpdate: (details) {
+            int sensitivity = 8;
+            if (details.delta.dy > sensitivity) {
+              // Down Swipe
+              setShowExtra(true);
+            } else if (details.delta.dy < -sensitivity) {
+              // Up Swipe
+              setShowExtra(false);
+            }
+          },
+          child: Stack(children: [
+            PageView.builder(
+              controller: quranProvider.pageController,
+              allowImplicitScrolling: true,
 
-                    physics: const CustomPageViewScrollPhysics(),
-                    reverse: true,
-                    // physics: const AlwaysScrollableScrollPhysics(),
-                    // scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
+              physics: const CustomPageViewScrollPhysics(),
+              reverse: true,
+              // physics: const AlwaysScrollableScrollPhysics(),
+              // scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
 
-                    itemCount: quranProvider.quran.length,
-                    onPageChanged: (p) {
-                      quranProvider.refreshData(pageNumber: p + 1);
-                    },
-                    itemBuilder: (context, index) {
-                      return RenderPage(
-                          page: quranProvider.quran[index],
-                          fixedFontSizePercentageForHeader:
-                              fixedFontSizePercentageForHeader,
-                          fixedFontSizePercentage: fixedFontSizePercentage,
-                          fixedLineHeightPercentage: fixedLineHeightPercentage);
-                      // return const Text("sdf");
-                      // return const Text("sdf");
-                    },
-                    // itemBuilder: (context, index) {
-                    //   return RenderPage(lines: _items[index]["lines"]);
-                    // }
-                  ),
-                  if (showExtra)
-                    ShowExtras(
-                      setShowExtra: setShowExtra,
-                    ),
-                ]),
+              itemCount: quranProvider.quran.length,
+              onPageChanged: (p) {
+                quranProvider.refreshData(pageNumber: p + 1);
+              },
+              itemBuilder: (context, index) {
+                return RenderPage(
+                    page: quranProvider.quran[index],
+                    fixedFontSizePercentageForHeader:
+                        fixedFontSizePercentageForHeader,
+                    fixedFontSizePercentage: fixedFontSizePercentage,
+                    fixedLineHeightPercentage: fixedLineHeightPercentage);
+                // return const Text("sdf");
+                // return const Text("sdf");
+              },
+              // itemBuilder: (context, index) {
+              //   return RenderPage(lines: _items[index]["lines"]);
+              // }
+            ),
+            if (showExtra)
+              ShowExtras(
+                setShowExtra: setShowExtra,
               ),
+          ]),
+        ),
       ),
     );
   }
@@ -163,8 +172,8 @@ class CustomPageViewScrollPhysics extends ScrollPhysics {
 
   @override
   SpringDescription get spring => const SpringDescription(
-        mass: 50,
+        mass: 80,
         stiffness: 100,
-        damping: 1,
+        damping: 0.8,
       );
 }
