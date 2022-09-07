@@ -10,12 +10,14 @@ class SeperatorModel {
   final int? id;
   final int? pageNumber;
   final int? verseNumber;
+  final int? wordID;
   final String? color;
   final String? name;
   final String? surah;
 
   const SeperatorModel(
       {this.id,
+      this.wordID,
       this.color,
       this.pageNumber,
       this.verseNumber,
@@ -28,6 +30,7 @@ class SeperatorModel {
       'pageNumber': pageNumber,
       'color': color,
       'verseNumber': verseNumber,
+      'wordID': wordID,
       'name': name,
       'surah': surah,
     };
@@ -55,7 +58,7 @@ class SeperatorsDB {
       onCreate: (db, version) async {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
-          'create table $seperatorsDB (id INTEGER PRIMARY KEY NOT NULL,verseNumber INTEGER ,color TEXT NOT NULL,pageNumber INTEGER ,name TEXT NOT NULL,surah TEXT)',
+          'create table $seperatorsDB (id INTEGER PRIMARY KEY NOT NULL,verseNumber INTEGER ,color TEXT NOT NULL,pageNumber INTEGER ,name TEXT NOT NULL,surah TEXT,wordID INTEGER )',
         );
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
@@ -64,12 +67,13 @@ class SeperatorsDB {
           ..execute("update $seperatorsDB  set color = 0xff00e5ff where id =2")
           ..execute("update $seperatorsDB  set color = 0xffd500f9 where id =3")
           ..execute("update $seperatorsDB  set color = 0xfff50057 where id =4")
+          ..execute("ALTER TABLE $seperatorsDB  ADD COLUMN wordID INTEGER")
           ..execute(
               "update $seperatorsDB  set name = 'الفاصل الوردي' where id =4");
         await batch.commit();
         return;
       },
-      version: 4,
+      version: 5,
     );
 
     _db = await database;
@@ -104,6 +108,7 @@ class SeperatorsDB {
         verseNumber: item['verseNumber'],
         name: item['name'],
         surah: item['surah'],
+        wordID: item['wordID'],
       ));
     }
     return val;
@@ -119,16 +124,18 @@ class SeperatorsDB {
     var dbClient = await db;
     // if seperator with same verse number and page number exists, clear old and update new
     final List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
-        "select * from $seperatorsDB where verseNumber = ${seperator.verseNumber} and surah = ${seperator.surah}");
+        "select * from $seperatorsDB where wordID = ${seperator.wordID} ");
     if (maps.isNotEmpty) {
+      inspect("exists");
       await dbClient.update(
           seperatorsDB,
           {
             'surah': null,
             'verseNumber': null,
+            'wordID': null,
           },
-          where: "verseNumber = ? and pageNumber = ?",
-          whereArgs: [seperator.verseNumber, seperator.pageNumber]);
+          where: "wordID = ?",
+          whereArgs: [seperator.wordID]);
     }
     // print(seperator.toMap());
     await dbClient.update(seperatorsDB, seperator.toMap(),
@@ -137,12 +144,13 @@ class SeperatorsDB {
 
   // clear sepertaor surah and versenumber
   Future<int> clearSeperator(SeperatorModel seperator) async {
-    final db = await this.db;
-    return await db!.update(
+    var dbClient = await db;
+    return await dbClient!.update(
         seperatorsDB,
         {
           'surah': null,
           'verseNumber': null,
+          'wordID': null,
         },
         where: "id = ?",
         whereArgs: [seperator.id]);

@@ -57,13 +57,10 @@ class PageWords extends StatelessWidget {
               bool lineChanged = curLineNum != aftLineNum;
 
               var hasSeperator = quranProvider.seperators.firstWhereOrNull(
-                (element) =>
-                    element.surah == item["chapterCode"] &&
-                    element.verseNumber.toString() == item["verseNumber"],
+                (element) => element.wordID == item["wordID"],
               );
 
-              var found;
-              found = quranProvider.mistakes.firstWhereOrNull(
+              var found = quranProvider.mistakes.firstWhereOrNull(
                   (element) => element.wordID == item["wordID"]);
               if (item["isNewChapter"] == 1) {
                 if (item["isBismillah"] == 1 && item["pageNumber"] != 187) {
@@ -180,7 +177,9 @@ class PageWords extends StatelessWidget {
                   text:
                       "${item["text"]}                                        ",
                   style: TextStyle(
-                    color: found != null ? Color(int.parse(found.color)) : null,
+                    color: found != null
+                        ? Color(int.parse(found.color ?? "0xff000000"))
+                        : null,
                     fontFamily: "p${page[index]['pageNumber']}",
                   ),
                   recognizer: TapGestureRecognizer()
@@ -206,7 +205,9 @@ class PageWords extends StatelessWidget {
                   style: TextStyle(
                     // backgroundColor: Colors.red,
                     letterSpacing: item["text"] == "ﱁﱂ" ? 4 : -5,
-                    color: found != null ? Color(int.parse(found.color)) : null,
+                    color: found != null
+                        ? Color(int.parse(found.color ?? "0xff000000"))
+                        : null,
                     fontFamily: "p${page[index]['pageNumber']}",
                   ),
                   recognizer: TapGestureRecognizer()
@@ -228,8 +229,9 @@ class PageWords extends StatelessWidget {
                       ? page[index]['text'] + " "
                       : page[index]['text'],
                   style: TextStyle(
-                      color:
-                          found != null ? Color(int.parse(found.color)) : null,
+                      color: found != null
+                          ? Color(int.parse(found.color ?? "0xff000000"))
+                          : null,
                       fontFamily: "p${page[index]['pageNumber']}",
                       letterSpacing:
                           index == 0 ? fixedFontSizePercentage - 18.5 : null,

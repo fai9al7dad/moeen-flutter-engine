@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moeen/helpers/database/seperators/seperators_database.dart';
@@ -38,8 +40,9 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
     }
   }
 
-  void addSeperator(context, id, color, name, pageNumber, verseNumber) {
+  void addSeperator(context, id, color, name, pageNumber, verseNumber, wordID) {
     Navigator.of(context).pop();
+
     // if new seperator same as exisiting delete it
     if (pageNumber == widget.item["pageNumber"] &&
         verseNumber.toString() == widget.item["verseNumber"]) {
@@ -49,6 +52,7 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
           verseNumber: widget.item["verseNumber"],
           color: color,
           surah: widget.item["chapterCode"],
+          wordID: widget.item["wordID"],
           name: name);
     } else {
       Provider.of<QuranProvider>(context, listen: false).updateSeperator(
@@ -56,6 +60,7 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
           pageNumber: widget.item["pageNumber"],
           verseNumber: widget.item["verseNumber"],
           color: color,
+          wordID: widget.item["wordID"],
           surah: widget.item["chapterCode"],
           name: name);
     }
@@ -127,6 +132,7 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
                                 seperators[index].name,
                                 seperators[index].pageNumber,
                                 seperators[index].verseNumber,
+                                seperators[index].wordID,
                               ),
                           title: Text(
                             "${seperators[index].name}",

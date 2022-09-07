@@ -50,20 +50,22 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
       verseNumber: seperators[index].verseNumber,
       pageNumber: seperators[index].pageNumber,
       surah: seperators[index].surah,
+      wordID: seperators[index].wordID,
     ));
     fetchSeperators();
   }
 
   void clearSeperator(index) async {
     final seperatorsDB = SeperatorsDB();
-    await seperatorsDB.clearSeperator(SeperatorModel(
+    Provider.of<QuranProvider>(context, listen: false).clearSeperator(
       color: seperators[index].color,
       name: nameController.text,
       id: seperators[index].id,
-      verseNumber: seperators[index].verseNumber,
+      verseNumber: seperators[index].verseNumber.toString(),
       pageNumber: seperators[index].pageNumber,
       surah: seperators[index].surah,
-    ));
+      wordID: seperators[index].wordID,
+    );
     fetchSeperators();
   }
 
