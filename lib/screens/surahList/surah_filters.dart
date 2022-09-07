@@ -8,8 +8,11 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
+import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:provider/provider.dart';
 
 class SurahFilters extends StatefulWidget {
   const SurahFilters({Key? key}) : super(key: key);
@@ -21,6 +24,7 @@ class SurahFilters extends StatefulWidget {
 class _SurahFiltersState extends State<SurahFilters> {
   final wcm = WordColorMap();
   final DatabaseHelper db = DatabaseHelper();
+  final werdsColorsMap = WerdsColorsMap();
 
   List<Word> data = [];
   bool loading = true;
@@ -32,7 +36,13 @@ class _SurahFiltersState extends State<SurahFilters> {
   }
 
   void fetchData() async {
-    List<WordColorMapModel> colors = await wcm.getAllColors();
+    var isWerd = Provider.of<QuranProvider>(context, listen: false).isWerd;
+    List<WordColorMapModel> colors = [];
+    if (isWerd) {
+      colors = await werdsColorsMap.getAllColors();
+    } else {
+      colors = await wcm.getAllColors();
+    }
     List<Word> _data = [];
     for (var item in colors) {
       Word word = await db.getWordByID(id: item.wordID);
