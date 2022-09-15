@@ -15,7 +15,7 @@ import 'package:collection/collection.dart';
 class QuranProvider with ChangeNotifier {
   final wordsColorsMap = WordColorMap();
   final werdColorsMaps = WerdsColorsMap();
-  final _pageController = PageController(initialPage: 0);
+  final _pageController = PageController(initialPage: 0, viewportFraction: 1.1);
   final Api api = Api();
   List _quran = [];
   List<WordColorMapModel> _mistakes = [];
@@ -87,7 +87,7 @@ class QuranProvider with ChangeNotifier {
   }
 
   void getData() async {
-    _loadingGetData = true;
+    _loadingGetData = false;
     var databaseHelper = DatabaseHelper();
     List q = await databaseHelper.getJoinedQuran();
     _quran = q;

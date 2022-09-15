@@ -33,7 +33,6 @@ class MainScaffold extends StatefulWidget {
 class _MainScaffoldState extends State<MainScaffold> {
   bool showOnBoarding = false;
   bool showExtra = false;
-  bool loading = true;
 
   void setShowExtra(bool value) {
     setState(() {
@@ -51,9 +50,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     Provider.of<QuranProvider>(context, listen: false).refreshSeperotrs();
     Provider.of<QuranProvider>(context, listen: false)
         .refreshData(pageNumber: 1);
-    setState(() {
-      loading = false;
-    });
+
     // Provider.of<QuranProvider>(context, listen: false).refreshData();
 
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
@@ -123,8 +120,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                   PageView.builder(
                     controller: quranProvider.pageController,
                     allowImplicitScrolling: true,
-
-                    physics: const CustomPageViewScrollPhysics(),
+                    // physics: const PageScrollPhysics(),
                     reverse: true,
                     // physics: const AlwaysScrollableScrollPhysics(),
                     // scrollDirection: Axis.horizontal,
@@ -135,12 +131,16 @@ class _MainScaffoldState extends State<MainScaffold> {
                       quranProvider.refreshData(pageNumber: p + 1);
                     },
                     itemBuilder: (context, index) {
-                      return RenderPage(
-                          page: quranProvider.quran[index],
-                          fixedFontSizePercentageForHeader:
-                              fixedFontSizePercentageForHeader,
-                          fixedFontSizePercentage: fixedFontSizePercentage,
-                          fixedLineHeightPercentage: fixedLineHeightPercentage);
+                      return FractionallySizedBox(
+                        widthFactor: 1 / 1.1,
+                        child: RenderPage(
+                            page: quranProvider.quran[index],
+                            fixedFontSizePercentageForHeader:
+                                fixedFontSizePercentageForHeader,
+                            fixedFontSizePercentage: fixedFontSizePercentage,
+                            fixedLineHeightPercentage:
+                                fixedLineHeightPercentage),
+                      );
                       // return const Text("sdf");
                       // return const Text("sdf");
                     },
