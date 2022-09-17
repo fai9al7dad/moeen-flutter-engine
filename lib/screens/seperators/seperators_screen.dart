@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/seperators/seperators_database.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +35,7 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
   void fetchSeperators() async {
     final seperatorsDB = SeperatorsDB();
     var _seperators = await seperatorsDB.getAllSeperators();
+    inspect(_seperators);
     if (mounted) {
       setState(() {
         seperators = _seperators;
@@ -102,15 +106,10 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
                     height: 15,
                   ),
                   Expanded(
-                    child: ListView.separated(
-                        separatorBuilder: (context, index) => const Divider(
-                              thickness: 0.8,
-                              height: 0,
-                            ),
+                    child: ListView.builder(
                         itemCount: seperators.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                              tileColor: Colors.white,
+                          return ListItem(
                               onTap: seperators[index].pageNumber != null
                                   ? () => navigateToQuranPage(
                                       page: seperators[index].pageNumber!)

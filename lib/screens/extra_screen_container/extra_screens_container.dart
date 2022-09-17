@@ -35,8 +35,8 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.group_outlined),
-              label: 'الثنائيات',
-              backgroundColor: Color(0xfffff8ed),
+              label: '',
+              // label: 'الثنائيات',
             ),
             // BottomNavigationBarItem(
             //   icon: Icon(Icons.bar_chart_outlined),
@@ -45,13 +45,15 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
             // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bookmarks_outlined),
-              backgroundColor: Color(0xfffff8ed),
-              label: 'الفواصل',
+              // backgroundColor: Color(0xfffff8ed),
+              label: '',
+              // label: 'الفواصل',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined),
-              backgroundColor: Color(0xfffff8ed),
-              label: 'الإعدادات',
+              // backgroundColor: Color(0xfffff8ed),
+              label: '',
+              // label: 'الإعدادات',
             ),
           ],
           currentIndex: currentTab,
@@ -62,7 +64,7 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
             });
           },
           // onTap: _onItemTapped,
-          backgroundColor: const Color(0xfffff8ed),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         ),
         body: tabs[currentTab],
       )),

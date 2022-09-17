@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
@@ -20,6 +21,7 @@ void main() {
   ]);
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
       ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
       ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
       ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return ShowCaseWidget(
         builder: Builder(
       builder: (context) => MaterialApp(
@@ -46,17 +49,22 @@ class MyApp extends StatelessWidget {
         routes: CustomRouter.routes,
         title: 'تطبيق معين',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "montserrat",
-          scaffoldBackgroundColor: const Color(0xfffff8ed),
-          // scaffoldBackgroundColor: const Color(0xff1f2937),
-          primarySwatch: Colors.green,
-        ),
+        themeMode: themeProvider.themeMode,
+        theme: MyTheme.lightTheme,
+        darkTheme: MyTheme.darkTheme,
       ),
     ));
   }
 }
 
+
+// ThemeData(
+          
+//           fontFamily: "montserrat",
+//           scaffoldBackgroundColor: const Color(0xfffff8ed),
+//           // scaffoldBackgroundColor: const Color(0xff1f2937),
+//           primarySwatch: Colors.green,
+//         ),
 // class Word extends StatefulWidget {
 //   var word;
 //   var pageID;

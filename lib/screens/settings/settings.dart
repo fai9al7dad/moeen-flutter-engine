@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
 import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
@@ -12,6 +13,7 @@ import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/screens/contact/contactScreen.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:provider/provider.dart';
@@ -84,17 +86,22 @@ class _SettingsState extends State<Settings> {
                           username: authProvider.authUser?.username,
                           userID: authProvider.authUser?.id),
                     const SizedBox(height: 20),
-                    CustomListTile(
-                      title: 'عن التطبيق',
-                      icon: Icons.info_outline_rounded,
+                    ListItem(
+                      title: const Text('عن التطبيق'),
+                      leading: const Icon(Icons.info_outline_rounded),
+                      trailing: Icon(Icons.chevron_right,
+                          color: Theme.of(context).colorScheme.primary),
                       onTap: () {
                         Navigator.pushNamed(context, "/about-app");
                       },
-                      isNavigation: true,
                     ),
-                    CustomListTile(
-                      title: 'تواصل معنا',
-                      icon: Icons.chat_outlined,
+                    ListItem(
+                      title: const Text('تواصل معنا'),
+                      leading: const Icon(Icons.chat_outlined),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       onTap: () {
                         Navigator.push(
                             context,
@@ -105,11 +112,14 @@ class _SettingsState extends State<Settings> {
                                       authEmail: authProvider.authUser?.email,
                                     )));
                       },
-                      isNavigation: true,
                     ),
-                    CustomListTile(
-                      title: 'شرح التطبيق',
-                      icon: Icons.description_outlined,
+                    ListItem(
+                      title: const Text('شرح التطبيق'),
+                      leading: const Icon(Icons.description_outlined),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       onTap: () {
                         Navigator.push(
                             context,
@@ -119,35 +129,44 @@ class _SettingsState extends State<Settings> {
                                           {Navigator.pop(context)},
                                     )));
                       },
-                      isNavigation: true,
+                    ),
+                    ListItem(
+                      title: const Text('المظهر الليلي'),
+                      leading: const Icon(Icons.mode_night_outlined),
+                      trailing: Switch.adaptive(
+                        value:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .isDarkMode,
+                        activeColor: Theme.of(context).colorScheme.primary,
+                        onChanged: (bool value) => {
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .toggleTheme(value)
+                        },
+                      ),
                     ),
                     const SizedBox(height: 20),
                     if (authProvider.isAuth)
-                      CustomListTile(
-                          title: 'مزامنة البيانات على هذا الجهاز',
-                          icon: Icons.sync,
-                          onTap: () {
-                            setState(() {
-                              showSyncDialog = true;
-                            });
-                          },
-                          isNavigation: false,
-                          order: "last"),
+                      ListItem(
+                        title: const Text('مزامنة البيانات على هذا الجهاز'),
+                        leading: const Icon(Icons.sync),
+                        onTap: () {
+                          setState(() {
+                            showSyncDialog = true;
+                          });
+                        },
+                      ),
                     const SizedBox(height: 20),
                     if (authProvider.isAuth)
-                      StyledContainer(
+                      ListItem(
                           onTap: () => setState(() {
                                 showAlertDialog = true;
                               }),
-                          child: const Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Center(
-                              child: Text("تسجيل الخروج",
-                                  style: TextStyle(
-                                      fontFamily: "montserrat-bold",
-                                      fontSize: 14,
-                                      color: Colors.red)),
-                            ),
+                          title: const Center(
+                            child: Text("تسجيل الخروج",
+                                style: TextStyle(
+                                    fontFamily: "montserrat-bold",
+                                    fontSize: 14,
+                                    color: Colors.red)),
                           ))
                   ],
                 ),
@@ -233,40 +252,30 @@ class AuthUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StyledContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              "اسم المستخدم: $username",
-              style: const TextStyle(fontFamily: "montserrat-bold"),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListItem(
+          title: Text(
+            "اسم المستخدم: $username",
+            style: const TextStyle(fontFamily: "montserrat"),
           ),
-          Divider(
-            color: Colors.grey.shade200,
-            thickness: 1,
+        ),
+        ListItem(
+          title: Text(
+            "رقم المستخدم: $userID ",
+            style: const TextStyle(fontFamily: "montserrat"),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              "رقم المستخدم: $userID ",
-              style: const TextStyle(fontFamily: "montserrat-bold"),
-            ),
+        ),
+        ListItem(
+          title: const Text("حذف الحساب"),
+          trailing: Icon(
+            Icons.delete_forever_outlined,
+            color: Theme.of(context).colorScheme.primary,
           ),
-          Divider(
-            color: Colors.grey.shade200,
-            thickness: 0.5,
-            height: 0,
-          ),
-          CustomListTile(
-              title: "حذف الحساب",
-              icon: Icons.delete_forever_outlined,
-              onTap: () => Navigator.pushNamed(context, "/delete-user"),
-              isNavigation: true)
-        ],
-      ),
+          onTap: () => Navigator.pushNamed(context, "/delete-user"),
+        )
+      ],
     );
   }
 }
@@ -341,7 +350,7 @@ class CustomListTile extends StatelessWidget {
             if (isNavigation)
               Icon(
                 Icons.chevron_right_outlined,
-                color: Tertiary().s500,
+                color: Theme.of(context).colorScheme.primary,
               ),
           ],
         ),

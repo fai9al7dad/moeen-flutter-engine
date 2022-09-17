@@ -114,7 +114,8 @@ class _SearchUsersState extends State<SearchUsers> {
                                       toUserID: searchResult![index].id),
                                   subtitle: Text(
                                       "رقم المعرف: ${searchResult![index].id}"),
-                                  trailingIcon: Icons.touch_app_outlined);
+                                  trailing:
+                                      const Icon(Icons.touch_app_outlined));
                             },
                           ),
                         )

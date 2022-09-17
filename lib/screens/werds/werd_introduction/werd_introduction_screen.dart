@@ -32,7 +32,7 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
           backgroundColor: const Color(0xff059669),
           onPressed: () => startWerd(context),
           icon: const Icon(Icons.rocket_launch_rounded),
-          label: const Text("بدأ ")),
+          label: const Text("بدأ ", style: TextStyle(color: Colors.white))),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(

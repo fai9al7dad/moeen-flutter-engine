@@ -55,13 +55,13 @@ class _SelectDuoState extends State<SelectDuo> {
       padding: const EdgeInsets.all(20),
       child: RefreshIndicator(
         onRefresh: fetchDuos,
-        child: ListView.separated(
+        child: ListView.builder(
             itemCount: duos.length,
-            separatorBuilder: (context, index) => const Divider(
-                  thickness: 0.8,
-                  height: 1,
-                  color: Color(0xffe4e4e7),
-                ),
+            // separatorBuilder: (context, index) => const Divider(
+            //       thickness: 0.8,
+            //       height: 1,
+            //       color: Color(0xffe4e4e7),
+            //     ),
             itemBuilder: (context, index) {
               return ListItem(
                   index: index,
@@ -75,7 +75,10 @@ class _SelectDuoState extends State<SelectDuo> {
                             reciterID: duos[index].id),
                       )),
                   subtitle: Text("رقم المعرف: ${duos[index].id}"),
-                  trailingIcon: Icons.chevron_right);
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Theme.of(context).colorScheme.primary,
+                  ));
             }),
       ),
     );

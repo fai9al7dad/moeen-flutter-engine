@@ -82,10 +82,10 @@ class _SurahFiltersState extends State<SurahFilters> {
             groupBy: (element) {
               return element.chapterCode;
             },
-            separator: const Divider(
-              thickness: 0.8,
-              height: 0,
-            ),
+            // separator: const Divider(
+            //   thickness: 0.8,
+            //   height: 0,
+            // ),
             useStickyGroupSeparators: true,
             stickyHeaderBackgroundColor:
                 Theme.of(context).scaffoldBackgroundColor,
@@ -102,7 +102,10 @@ class _SurahFiltersState extends State<SurahFilters> {
                 ),
             indexedItemBuilder: (context, element, index) {
               return ListItem(
-                  trailingIcon: Icons.chevron_right,
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   onTap: () {
                     Navigator.pop(context, element.pageID - 1);
                   },

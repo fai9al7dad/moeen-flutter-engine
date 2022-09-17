@@ -5,41 +5,51 @@ class ListItem extends StatelessWidget {
   final void Function()? onTap;
   final Widget? title;
   final Widget? subtitle;
-  final IconData? trailingIcon;
+  final Widget? trailing;
+  final Widget? leading;
+  final Color? iconColor;
   const ListItem(
       {Key? key,
       this.index,
       this.onTap,
       required this.title,
-      required this.subtitle,
-      this.trailingIcon})
+      this.subtitle,
+      this.leading,
+      this.iconColor,
+      this.trailing})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: Colors.white,
-      onTap: onTap,
-      leading: index != null
-          ? Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                  color: const Color(0xffecfdf5),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: const Color(0xffd1fae5))),
-              child: Center(
-                  child: Text(
-                "${index! + 1}",
-                style: const TextStyle(color: Color(0xff047857), fontSize: 12),
-              )),
-            )
-          : null,
-      title: title,
-      subtitle: subtitle,
-      trailing: Icon(
-        trailingIcon,
-        color: const Color(0xff059669),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 5),
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          border: Border.all(color: Theme.of(context).colorScheme.secondary),
+          borderRadius: BorderRadius.circular(7)),
+      child: ListTile(
+        tileColor: Theme.of(context).colorScheme.background,
+        onTap: onTap,
+        leading: index != null
+            ? Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: const Color(0xFF10B981))),
+                child: Center(
+                    child: Text(
+                  "${index! + 1}",
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: 12),
+                )),
+              )
+            : leading,
+        title: title,
+        subtitle: subtitle,
+        trailing: trailing,
+        iconColor: iconColor,
       ),
     );
   }

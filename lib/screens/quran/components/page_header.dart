@@ -109,9 +109,10 @@ class DuosOrWerd extends StatelessWidget {
             )
           : CircleAvatar(
               // constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
-
+              backgroundColor: Theme.of(context).colorScheme.primary,
               radius: fixedFontSizePercentageForHeader - 2,
               child: IconButton(
+                  color: Colors.white,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minHeight: 0, minWidth: 0),
                   onPressed: () => {

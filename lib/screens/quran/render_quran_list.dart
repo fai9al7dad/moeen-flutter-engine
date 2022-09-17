@@ -120,7 +120,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                   PageView.builder(
                     controller: quranProvider.pageController,
                     allowImplicitScrolling: true,
-                    // physics: const PageScrollPhysics(),
+                    physics: const CustomPageViewScrollPhysics(),
                     reverse: true,
                     // physics: const AlwaysScrollableScrollPhysics(),
                     // scrollDirection: Axis.horizontal,

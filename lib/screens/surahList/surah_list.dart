@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
@@ -54,45 +55,68 @@ class _RenderListState extends State<RenderList> {
     }
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const Divider(
-          thickness: 0.8,
-          height: 0,
-        ),
+      child: ListView.builder(
+        // separatorBuilder: (context, index) => const Divider(
+        //   thickness: 0.8,
+        //   height: 0,
+        // ),
         itemCount: surahs.length,
         itemBuilder: (context, index) {
           return Directionality(
             textDirection: TextDirection.rtl,
-            child: ListTile(
-              tileColor: Colors.white,
+            child: ListItem(
+              index: index,
               onTap: () {
                 Navigator.pop(context, surahs[index]["pages"][0] - 1);
               },
-              leading: Text(surahs[index]["id"].toString()),
-              title: Text(
-                surahs[index]["id"].toString().padLeft(3, '0'),
-                style: const TextStyle(fontFamily: "surahname", fontSize: 29),
+              // leading: Text(surahs[index]["id"].toString()),
+              title: Row(
+                children: [
+                  Text(
+                    surahs[index]["id"].toString().padLeft(3, '0'),
+                    style:
+                        const TextStyle(fontFamily: "surahname", fontSize: 29),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15.0, top: 1.0, bottom: 1.0),
+                      child: Text(
+                        "${surahs[index]["pages"][0]} - ${surahs[index]["pages"][1]}",
+                        style: TextStyle(
+                            fontSize: 8,
+                            fontFamily: "montserrat",
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withOpacity(0.5)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               subtitle: Text(
                 "عدد صفحاتها ${surahs[index]["pages"][1] - surahs[index]["pages"][0] + 1}، عدد أياتها ${surahs[index]['verses_count']}",
                 style: const TextStyle(fontSize: 10, fontFamily: "montserrat"),
               ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    "${surahs[index]["pages"][0]} - ${surahs[index]["pages"][1]}",
-                    style:
-                        const TextStyle(fontSize: 10, fontFamily: "montserrat"),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SurahMistakesAndWarnings(
-                      chapterCode:
-                          surahs[index]["id"].toString().padLeft(3, '0'))
-                ],
+              trailing: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 90,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SurahMistakesAndWarnings(
+                        chapterCode:
+                            surahs[index]["id"].toString().padLeft(3, '0')),
+                    Icon(Icons.chevron_right,
+                        color: Theme.of(context).colorScheme.primary),
+                  ],
+                ),
               ),
             ),
           );
@@ -134,15 +158,13 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
     var warnings =
         mw["warnings"] == 0 || mw["warnings"] == null ? 0 : mw["warnings"];
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
-        setState(() {
-          _mistakes = mistakes;
-          _warnings = warnings;
-          _loading = false;
-        });
-      }
-    });
+    if (mounted) {
+      setState(() {
+        _mistakes = mistakes;
+        _warnings = warnings;
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -161,43 +183,49 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           _mistakes > 0
-              ? Row(children: [
-                  Text(
-                    _mistakes.toString(),
-                    style: const TextStyle(
-                        fontSize: 10,
-                        color: Color(0xffae8f74),
-                        fontFamily: "montserrat"),
-                  ),
-                  const SizedBox(width: 1),
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(int.parse(MistakesColors.mistake))),
-                    height: 8,
-                    width: 8,
-                  )
-                ])
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(int.parse(MistakesColors.mistake))),
+                        height: 12,
+                        width: 12,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        _mistakes.toString(),
+                        style: TextStyle(
+                            fontSize: 8,
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: "montserrat"),
+                      ),
+                    ])
               : const SizedBox(width: 0),
-          const SizedBox(width: 4),
+          const SizedBox(width: 10),
           _warnings > 0
-              ? Row(children: [
-                  Text(
-                    _warnings.toString(),
-                    style: const TextStyle(
-                        fontSize: 10,
-                        color: Color(0xffae8f74),
-                        fontFamily: "montserrat"),
-                  ),
-                  const SizedBox(width: 1),
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(int.parse(MistakesColors.warning))),
-                    height: 8,
-                    width: 8,
-                  )
-                ])
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(int.parse(MistakesColors.warning))),
+                        height: 12,
+                        width: 12,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        _warnings.toString(),
+                        style: TextStyle(
+                            fontSize: 8,
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: "montserrat"),
+                      ),
+                    ])
               : const SizedBox(width: 0),
         ],
       ),

@@ -72,7 +72,8 @@ class _DuosScreenState extends State<DuosScreen> {
                   // Add your onPressed code here!
                   Navigator.pushNamed(context, "/search-users");
                 },
-                label: const Text('ارسال دعوة'),
+                label: const Text('ارسال دعوة',
+                    style: TextStyle(color: Colors.white)),
                 // icon: const Icon(Icons.send),
 
                 backgroundColor: const Color(0xff059669),
@@ -81,18 +82,25 @@ class _DuosScreenState extends State<DuosScreen> {
             appBar: AppBar(
               elevation: 0.8,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              foregroundColor: Tertiary().s800,
-              title: const Text(
+              foregroundColor: Theme.of(context).primaryColor,
+              title: Text(
                 "اختر الثنائي",
-                style: TextStyle(fontFamily: "montserrat", fontSize: 14),
+                style: TextStyle(
+                    fontFamily: "montserrat",
+                    fontSize: 14,
+                    color: Theme.of(context).primaryColor),
               ),
               centerTitle: true,
               bottom: TabBar(
                   labelStyle: TextStyle(
                       fontFamily: "montserrat",
                       fontSize: 14,
-                      color: Tertiary().s800),
-                  labelColor: Tertiary().s800,
+                      color: Theme.of(context).primaryColor),
+                  enableFeedback: true,
+                  indicatorColor: Theme.of(context).colorScheme.primary,
+                  labelColor: Theme.of(context).primaryColor,
+                  unselectedLabelColor:
+                      Theme.of(context).primaryColor.withOpacity(0.5),
                   tabs: const [
                     Tab(
                       text: "الثنائيات",

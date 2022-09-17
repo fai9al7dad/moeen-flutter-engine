@@ -25,7 +25,8 @@ class FinishWerd extends StatelessWidget {
                   Navigator.pushNamedAndRemoveUntil(
                       context, "/", (Route route) => false);
                 },
-                label: const Text("إنهاء الورد")),
+                label: const Text("إنهاء الورد",
+                    style: TextStyle(color: Colors.white))),
           ),
           body: Directionality(
             textDirection: TextDirection.rtl,

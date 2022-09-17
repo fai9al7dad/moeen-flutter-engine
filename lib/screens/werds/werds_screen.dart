@@ -151,7 +151,8 @@ class _WerdsScreenState extends State<WerdsScreen> {
         child: FloatingActionButton.extended(
             backgroundColor: const Color(0xff059669),
             onPressed: () => startWerd(),
-            label: const Text("إضافة ورد")),
+            label:
+                const Text("إضافة ورد", style: TextStyle(color: Colors.white))),
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
@@ -160,13 +161,8 @@ class _WerdsScreenState extends State<WerdsScreen> {
               child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: werds!.isNotEmpty
-                      ? ListView.separated(
+                      ? ListView.builder(
                           itemCount: werds!.length,
-                          separatorBuilder: (context, index) => const Divider(
-                                thickness: 0.8,
-                                height: 1,
-                                color: Color(0xffe4e4e7),
-                              ),
                           itemBuilder: (context, index) {
                             String type;
                             if (Provider.of<AuthProvider>(context,
@@ -195,11 +191,14 @@ class _WerdsScreenState extends State<WerdsScreen> {
                                                     isAccepted: werds![index]
                                                         .isAccepted,
                                                     type: type))),
-                                    title: Text(
-                                        "${parseDate(date: werds![index].createdAt)}"),
-                                    trailingIcon: Icons.chevron_right,
+                                    title: Text("الورد الأول"),
+                                    trailing: Icon(
+                                      Icons.chevron_right,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
                                     subtitle: Text(
-                                        "رقم المعرف: ${werds![index].id}")),
+                                        "${parseDate(date: werds![index].createdAt)}")),
                               );
                             }
                             return ListItem(
@@ -213,11 +212,13 @@ class _WerdsScreenState extends State<WerdsScreen> {
                                                 isAccepted:
                                                     werds![index].isAccepted,
                                                 type: type))),
-                                title: Text(
-                                    "${parseDate(date: werds![index].createdAt)}"),
-                                trailingIcon: Icons.chevron_right,
-                                subtitle:
-                                    Text("رقم المعرف: ${werds![index].id}"));
+                                title: Text("الورد الأول"),
+                                trailing: Icon(
+                                  Icons.chevron_right,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                subtitle: Text(
+                                    "${parseDate(date: werds![index].createdAt)}"));
                           })
                       : const Center(child: Text("لا يوجد أوراد بينكم"))),
             ),

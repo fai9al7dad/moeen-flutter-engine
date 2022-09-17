@@ -4,6 +4,7 @@ import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/CustomShowCase.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
 import 'package:moeen/screens/settings/settings.dart';
@@ -128,13 +129,13 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
                   fetchInvites: fetchInvites,
                   username: element.firstUser?.username);
             } else {
-              return ListTile(
-                tileColor: Colors.white,
+              return ListItem(
                 title: Text("${element.firstUser?.username}"),
                 subtitle: const Text("بإنتظار القبول"),
                 trailing: TextButton(
-                  child:
-                      const Text("إلغاء", style: TextStyle(color: Colors.grey)),
+                  child: Text("إلغاء",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary)),
                   onPressed: () async {
                     try {
                       await api.deletePendingDuoInvite(

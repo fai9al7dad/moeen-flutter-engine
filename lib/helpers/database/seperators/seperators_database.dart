@@ -151,6 +151,7 @@ class SeperatorsDB {
           'surah': null,
           'verseNumber': null,
           'wordID': null,
+          'pageNumber': null,
         },
         where: "id = ?",
         whereArgs: [seperator.id]);

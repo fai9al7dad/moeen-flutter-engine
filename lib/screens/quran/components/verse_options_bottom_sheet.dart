@@ -117,7 +117,11 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
                               : const Icon(Icons.bookmark_add_outlined),
                           trailing: seperators[index].verseNumber != null
                               ? IconButton(
-                                  icon: const Icon(Icons.chevron_right),
+                                  icon: Icon(
+                                    Icons.chevron_right,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                                   onPressed: () => navigateToQuranPage(
                                       page: seperators[index].pageNumber!))
                               : null,

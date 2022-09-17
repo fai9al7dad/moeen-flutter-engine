@@ -158,8 +158,9 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
                   "قم بقبول الورد لحفظ الأخطاء والتنبيهات المسجلة في هذا الورد في مصحفك",
               child: FloatingActionButton.extended(
                 onPressed: () => acceptHighlights(),
-                label:
-                    Text(acceptedState == true ? "تم القبول 👍" : 'قبول الورد'),
+                label: Text(
+                    acceptedState == true ? "تم القبول 👍" : 'قبول الورد',
+                    style: const TextStyle(color: Colors.white)),
                 backgroundColor: const Color(0xff059669),
               ),
             )
@@ -201,13 +202,8 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
                     Expanded(
                       child: Directionality(
                         textDirection: TextDirection.rtl,
-                        child: ListView.separated(
+                        child: ListView.builder(
                           itemCount: highlights.length,
-                          separatorBuilder: (context, index) => const Divider(
-                            thickness: 0.8,
-                            height: 1,
-                            color: Color(0xffe4e4e7),
-                          ),
                           itemBuilder: (context, index) {
                             return ListItem(
                                 index: index,
