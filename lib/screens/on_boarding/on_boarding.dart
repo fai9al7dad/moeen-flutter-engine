@@ -65,15 +65,16 @@ class OnBoarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0.5,
-          title: const Text("الشرح",
-              style: TextStyle(color: Colors.black, fontSize: 14)),
+          title: Text("الشرح",
+              style: TextStyle(
+                  fontSize: 14, color: Theme.of(context).primaryColor)),
           centerTitle: true,
           leading: IconButton(
-            icon: const Icon(Icons.close, color: Colors.black),
+            icon: Icon(Icons.close, color: Theme.of(context).primaryColor),
             onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
               prefs.setBool("finishedOnBoarding", true);
@@ -118,9 +119,21 @@ class Slide extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const SizedBox(height: 0),
-          Image.asset(
-            slide["img"],
-            width: 300,
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 1), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Image.asset(
+              slide["img"],
+              width: 300,
+            ),
           ),
           Column(children: [
             Text(slide["title"],

@@ -44,8 +44,7 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
     Navigator.of(context).pop();
 
     // if new seperator same as exisiting delete it
-    if (pageNumber == widget.item["pageNumber"] &&
-        verseNumber.toString() == widget.item["verseNumber"]) {
+    if (wordID == widget.item["wordID"]) {
       Provider.of<QuranProvider>(context, listen: false).clearSeperator(
           id: id,
           pageNumber: widget.item["pageNumber"],

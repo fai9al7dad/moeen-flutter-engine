@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/components/list_item.dart';
+import 'package:moeen/components/streak_progress_widget.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
@@ -33,10 +35,11 @@ class WerdsScreen extends StatefulWidget {
 }
 
 class _WerdsScreenState extends State<WerdsScreen> {
+  List<WerdsModel>? werdsApi = [];
   List<WerdsModel>? werds = [];
   bool loading = true;
   bool appBarLoading = false;
-
+  int sliderValue = 0;
   @override
   void initState() {
     super.initState();
@@ -58,6 +61,35 @@ class _WerdsScreenState extends State<WerdsScreen> {
     }
   }
 
+  // String getWerdType({required int reciterID}) {
+  //   final int? authUserID =
+  //       Provider.of<AuthProvider>(context, listen: false).authUser?.id;
+  //   if (authUserID == reciterID) {
+  //     return "asReciter";
+  //   } else {
+  //     return "asCorrector";
+  //   }
+  // }
+
+  void filterWerds(type) {
+    final int? authUserID =
+        Provider.of<AuthProvider>(context, listen: false).authUser?.id;
+
+    var filteredWerdsByReciter = werdsApi!.where((element) {
+      if (type == "asReciter") {
+        return element.reciterID == authUserID;
+      } else if (type == "asListener") {
+        return element.reciterID != authUserID;
+      } else {
+        return true;
+      }
+    }).toList();
+
+    setState(() {
+      werds = filteredWerdsByReciter;
+    });
+  }
+
   Api api = Api();
   void getWerds() async {
     setState(() {
@@ -67,8 +99,9 @@ class _WerdsScreenState extends State<WerdsScreen> {
     if (mounted) {
       setState(() {
         loading = false;
-        werds = res;
+        werdsApi = res;
       });
+      filterWerds("all");
     }
   }
 
@@ -141,7 +174,7 @@ class _WerdsScreenState extends State<WerdsScreen> {
     // final args = ModalRoute.of(context)!.settings.arguments as DuosScreen;
 
     return Scaffold(
-      appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
+      // appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
       floatingActionButton: CustomShowCase(
         overlayPadding: const EdgeInsets.all(10),
         shapeBorder: const CircleBorder(),
@@ -154,74 +187,161 @@ class _WerdsScreenState extends State<WerdsScreen> {
             label:
                 const Text("إضافة ورد", style: TextStyle(color: Colors.white))),
       ),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : Directionality(
-              textDirection: TextDirection.rtl,
-              child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: werds!.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: werds!.length,
-                          itemBuilder: (context, index) {
-                            String type;
-                            if (Provider.of<AuthProvider>(context,
-                                        listen: false)
-                                    .authUser
-                                    ?.id ==
-                                werds![index].reciterID) {
-                              type = "asReciter";
-                            } else {
-                              type = "asCorrector";
-                            }
-                            if (index == 0) {
-                              return CustomShowCase(
-                                caseKey: _two,
-                                title: "تفاصيل الورد",
-                                description:
-                                    "قم بالضغط على الورد لتتمكن من رؤية الأخطاء والتنبيهات المسجلة فيه",
-                                child: ListItem(
-                                    index: index,
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ViewWerdHighlights(
-                                                    werdID: werds![index].id,
-                                                    isAccepted: werds![index]
-                                                        .isAccepted,
-                                                    type: type))),
-                                    title: Text("الورد الأول"),
-                                    trailing: Icon(
-                                      Icons.chevron_right,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    subtitle: Text(
-                                        "${parseDate(date: werds![index].createdAt)}")),
-                              );
-                            }
-                            return ListItem(
-                                index: index,
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ViewWerdHighlights(
-                                                werdID: werds![index].id,
-                                                isAccepted:
-                                                    werds![index].isAccepted,
-                                                type: type))),
-                                title: Text("الورد الأول"),
-                                trailing: Icon(
-                                  Icons.chevron_right,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                subtitle: Text(
-                                    "${parseDate(date: werds![index].createdAt)}"));
-                          })
-                      : const Center(child: Text("لا يوجد أوراد بينكم"))),
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _appBar(context),
+            const SliverPadding(
+              padding: EdgeInsets.only(top: 10),
             ),
+            _slidingWerdFIlter(context),
+            loading
+                ? const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()))
+                : SliverPadding(
+                    padding: const EdgeInsets.all(15),
+                    sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        String type;
+                        if (Provider.of<AuthProvider>(context, listen: false)
+                                .authUser
+                                ?.id ==
+                            werds![index].reciterID) {
+                          type = "asReciter";
+                        } else {
+                          type = "asCorrector";
+                        }
+                        return _werdCard(context, index, type);
+                      },
+                      childCount: werds!.length,
+                    )),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _slidingWerdFIlter(BuildContext context) {
+    return SliverToBoxAdapter(
+        child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: CupertinoSlidingSegmentedControl<int>(
+                  // backgroundColor: CupertinoColors.white,
+                  thumbColor: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.all(8),
+                  groupValue: sliderValue,
+                  children: const {
+                    0: Text("جميع الأوراد"),
+                    1: Text("أورادك"),
+                    2: Text("أوراد زميلك"),
+                  },
+                  onValueChanged: (value) {
+                    setState(() {
+                      sliderValue = value!;
+                    });
+                    if (value == 0) {
+                      filterWerds("all");
+                    } else if (value == 1) {
+                      filterWerds("asReciter");
+                    } else if (value == 2) {
+                      filterWerds("asListener");
+                    }
+                  },
+                ))));
+  }
+
+  SliverAppBar _appBar(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      // scrolledUnderElevation: 10,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      expandedHeight: 230.0,
+      centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColor,
+      // title: const Text(
+      //   "الأوراد",
+      //   style: TextStyle(fontSize: 14),
+      // ),
+      elevation: 0,
+      // actions: [WerdFilterSlider()],
+      flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.parallax,
+        // expandedTitleScale: 1,
+        title: Text(
+          "${widget.username}",
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
+        background:
+            Hero(tag: "duo_${widget.duoID}", child: CircleStreakProgress()),
+        //  Column(
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: const [
+        //     CircleStreakProgress(),
+
+        //   ],
+        // ),
+      ),
+    );
+  }
+
+  ListItem _werdCard(BuildContext context, int index, String type) {
+    return ListItem(
+        index: index,
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewWerdHighlights(
+                    werdID: werds![index].id,
+                    isAccepted: werds![index].isAccepted,
+                    type: type))),
+        title: Text("الورد الأول"),
+        trailing: Icon(
+          Icons.chevron_right,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        subtitle: Text("${parseDate(date: werds![index].createdAt)}"));
+  }
+}
+
+class CircleStreakProgress extends StatelessWidget {
+  const CircleStreakProgress({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(alignment: Alignment.center, children: [
+          SizedBox(
+            width: 90,
+            height: 90,
+            child: CircularProgressIndicator(
+              strokeWidth: 5,
+              value: 0.8,
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+
+              // borderRadius: 900,
+            ),
+          ),
+          const Text("🌾", style: TextStyle(fontSize: 20))
+        ]),
+        const SizedBox(
+          height: 10,
+        ),
+        Text("رائع جدا ، استمروا 👍",
+            style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).primaryColor.withOpacity(0.8))),
+      ],
     );
   }
 }

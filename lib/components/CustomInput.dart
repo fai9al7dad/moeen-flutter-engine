@@ -34,7 +34,8 @@ class CustomInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration:
+          BoxDecoration(color: Theme.of(context).colorScheme.background),
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType ?? TextInputType.text,
@@ -48,17 +49,20 @@ class CustomInput extends StatelessWidget {
         onFieldSubmitted: onFieldSubmitted,
         textInputAction: textInputAction,
         decoration: InputDecoration(
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).colorScheme.background,
           label: Text(
             label,
             style: const TextStyle(fontFamily: "montserrat"),
           ),
           // hintText: 'اسم المستخدم',
           prefixIcon: Icon(prefixIcon),
-
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(7),
+          ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5),
-            borderSide: BorderSide(color: Colors.grey.shade200, width: 1.0),
+            borderRadius: BorderRadius.circular(7),
+            borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.secondary, width: 2.0),
           ),
         ),
       ),

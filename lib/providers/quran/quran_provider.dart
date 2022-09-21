@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -184,7 +183,7 @@ class QuranProvider with ChangeNotifier {
       refreshData(pageNumber: pageNumber);
       try {
         await api.addHighlightBySelfUserID(wordID: id, type: type);
-      } on DioError catch (e) {
+      } on DioError  {
         print("error from highlight/add endpoint... adding to temp colors ");
         // init tempwrodsColorsMap, and add word to it
         final tempWordsColorsMap = TempWordColorMap();

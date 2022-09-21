@@ -6,7 +6,6 @@ import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
-import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:provider/provider.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -33,13 +32,27 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<QuranProvider>(context, listen: false).getData();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    Provider.of<ThemeProvider>(context).fetchTheme();
+
     return ShowCaseWidget(
         builder: Builder(
       builder: (context) => MaterialApp(

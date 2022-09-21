@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran_simple/quran_simple_database.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
@@ -77,14 +78,14 @@ class _SearchQuranState extends State<SearchQuran>
     return SlideTransition(
       position: _offset,
       child: Container(
-        color: const Color(0xfffff8ed),
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Directionality(
             textDirection: TextDirection.rtl,
             child: Column(
               children: [
                 Container(
                     decoration: BoxDecoration(
-                        color: const Color(0xfffff8ed),
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border(
                             bottom: BorderSide(color: Colors.grey[300]!))),
                     child: Padding(
@@ -122,7 +123,7 @@ class _SearchQuranState extends State<SearchQuran>
                 Text("نتيجة البحث : ${searchResult.length}"),
                 Expanded(
                     child: Container(
-                        color: const Color(0xfffff8ed),
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: searchResult.isNotEmpty
                             ? GroupedListView<dynamic, String>(
                                 elements: searchResult,
@@ -152,90 +153,85 @@ class _SearchQuranState extends State<SearchQuran>
                                     return Padding(
                                       padding: const EdgeInsets.only(
                                           left: 8.0, right: 8.0),
-                                      child: Card(
-                                        // color: Colors.white,
+                                      child: ListItem(
+                                        // tileColor: Colors.white,
 
-                                        margin: const EdgeInsets.all(5),
-                                        elevation: 0.5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ListTile(
-                                            // tileColor: Colors.white,
-
-                                            title: Text(
-                                                "الصفحة : ${element.page.toString()}"),
-                                            subtitle: Text(
-                                                "سورة ${element.suraNameAr}"),
-                                            onTap: () => navigateToQuranPage(
-                                                page: element.page),
-                                          ),
-                                        ),
+                                        title: Text(
+                                            "الصفحة : ${element.page.toString()}"),
+                                        subtitle:
+                                            Text("سورة ${element.suraNameAr}"),
+                                        onTap: () => navigateToQuranPage(
+                                            page: element.page),
                                       ),
                                     );
                                   } else if (element.type == "surah") {
                                     return Padding(
                                       padding: const EdgeInsets.only(
                                           left: 8.0, right: 8.0),
-                                      child: Card(
-                                        // color: Colors.white,
+                                      child: ListItem(
+                                        // tileColor: Colors.white,
 
-                                        margin: const EdgeInsets.all(5),
-                                        elevation: 0.5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ListTile(
-                                            // tileColor: Colors.white,
-
-                                            title: Text(
-                                                "${element.suraNo.toString()}. ${element.suraNameAr.toString()}"),
-                                            subtitle: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                    "الصفحة : ${element.page.toString()}"),
-                                                Text(
-                                                    "الجزء : ${element.jozz.toString()}"),
-                                              ],
-                                            ),
-                                            onTap: () => navigateToQuranPage(
-                                                page: element.page),
-                                          ),
+                                        title: Text(
+                                            "${element.suraNo.toString()}. ${element.suraNameAr.toString()}"),
+                                        subtitle: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                                "الصفحة : ${element.page.toString()}"),
+                                            Text(
+                                                "الجزء : ${element.jozz.toString()}"),
+                                          ],
                                         ),
+                                        onTap: () => navigateToQuranPage(
+                                            page: element.page),
                                       ),
                                     );
                                   } else {
                                     return Padding(
                                       padding: const EdgeInsets.only(
                                           left: 8.0, right: 8.0),
-                                      child: Card(
-                                        // color: Colors.white,
+                                      child: ListItem(
+                                        // tileColor: Colors.white,
 
-                                        margin: const EdgeInsets.all(5),
-                                        elevation: 0.5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: ListTile(
-                                            // tileColor: Colors.white,
-
-                                            title: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                    "الصفحة : ${element.page.toString()}"),
-                                                Text(
-                                                    "الجزء : ${element.jozz.toString()}"),
-                                              ],
-                                            ),
-                                            subtitle: Text(
-                                                "\n${element.ayaTextEmlaey}"),
-                                            onTap: () => navigateToQuranPage(
-                                                page: element.page),
+                                        title: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "السورة : ${element.suraNameAr.toString()}",
+                                                style: const TextStyle(
+                                                    fontSize: 14),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "الصفحة : ${element.page.toString()}",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    "الجزء : ${element.jozz.toString()}",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
+                                        subtitle: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Text(
+                                              "\n${element.ayaTextEmlaey}"),
+                                        ),
+                                        onTap: () => navigateToQuranPage(
+                                            page: element.page),
                                       ),
                                     );
                                   }

@@ -46,7 +46,6 @@ class _MainScaffoldState extends State<MainScaffold> {
     checkOnBoarding();
     initSeperators();
     Provider.of<AuthProvider>(context, listen: false).tryToken();
-    Provider.of<QuranProvider>(context, listen: false).getData();
     Provider.of<QuranProvider>(context, listen: false).refreshSeperotrs();
     Provider.of<QuranProvider>(context, listen: false)
         .refreshData(pageNumber: 1);
@@ -120,7 +119,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                   PageView.builder(
                     controller: quranProvider.pageController,
                     allowImplicitScrolling: true,
-                    physics: const CustomPageViewScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     reverse: true,
                     // physics: const AlwaysScrollableScrollPhysics(),
                     // scrollDirection: Axis.horizontal,

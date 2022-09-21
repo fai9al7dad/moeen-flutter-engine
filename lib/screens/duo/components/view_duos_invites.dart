@@ -170,48 +170,84 @@ class AcceptOrRejectInvite extends StatelessWidget {
 
   void acceptOrRejectInvite({inviteID, type, context}) async {
     final Api api = Api();
-    try {
-      await api.acceptOrRejectInvite(fromUserID: inviteID, type: type);
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.green[200],
-          content: Text(
-            type == "accept" ? "تم القبول 👍✅" : "تم الرفض 👍❌",
-            style: TextStyle(color: Colors.green[900]),
-          )));
-      fetchInvites!();
-    } on Dio.DioError catch (e) {
-      print(e.response?.data);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.red[200],
-          content: Text(
-            e.response?.data["message"],
-            style: TextStyle(color: Colors.red[900]),
-          )));
-    }
+    // try {
+    //   await api.acceptOrRejectInvite(fromUserID: inviteID, type: type);
+    //   // ignore: use_build_context_synchronously
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //       backgroundColor: Colors.green[200],
+    //       content: Text(
+    //         type == "accept" ? "تم القبول 👍✅" : "تم الرفض 👍❌",
+    //         style: TextStyle(color: Colors.green[900]),
+    //       )));
+    //   fetchInvites!();
+    // } on Dio.DioError catch (e) {
+    //   print(e.response?.data);
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //       backgroundColor: Colors.red[200],
+    //       content: Text(
+    //         e.response?.data["message"],
+    //         style: TextStyle(color: Colors.red[900]),
+    //       )));
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        tileColor: Colors.white,
+    return ListItem(
         title: Text("${username}"),
         subtitle: Text("رقم المعرف: ${id}"),
         trailing: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 130),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton(
-                  onPressed: () => acceptOrRejectInvite(
-                      inviteID: id, type: "accept", context: context),
-                  child: const Text("قبول")),
-              TextButton(
-                  onPressed: () => acceptOrRejectInvite(
-                      inviteID: id, type: "reject", context: context),
-                  child: const Text(
-                    "رفض",
-                    style: TextStyle(color: Colors.red),
-                  )),
+              Column(
+                // crossAxisAlignment: Cr,\
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.check_circle_outline,
+                      size: 25, color: Theme.of(context).colorScheme.primary),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text("قبول",
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.5),
+                          fontSize: 10))
+                ],
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                // crossAxisAlignment: Cr,\
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.highlight_off_outlined,
+                      size: 25,
+                      color: Theme.of(context).primaryColor.withOpacity(0.5)),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text("رفض",
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.5),
+                          fontSize: 10))
+                ],
+              ),
+              // ElevatedButton(
+              //     onPressed: () => acceptOrRejectInvite(
+              //         inviteID: id, type: "accept", context: context),
+              //     child: const Text("قبول")),
+              // TextButton(
+              //     onPressed: () => acceptOrRejectInvite(
+              //         inviteID: id, type: "reject", context: context),
+              //     child: const Text(
+              //       "رفض",
+              //       style: TextStyle(color: Colors.red),
+              //     )),
             ],
           ),
         ));

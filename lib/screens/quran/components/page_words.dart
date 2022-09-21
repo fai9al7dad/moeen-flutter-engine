@@ -1,20 +1,14 @@
-import 'dart:developer';
-import 'dart:io';
+
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moeen/components/CustomShowCase.dart';
-import 'package:moeen/helpers/database/quran/quran_models.dart';
-import 'package:moeen/helpers/database/seperators/seperators_database.dart';
-import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
-import 'package:moeen/helpers/general/constants.dart';
+
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/verse_options_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 class PageWords extends StatelessWidget {
   final List page;

@@ -66,7 +66,6 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
       acceptedState = widget.isAccepted ?? false;
     });
     var res = await api.getHighlightsByWerdID(werdID: widget.werdID);
-
     List<Word> data = [];
     if (res.isNotEmpty) {
       for (var i = 0; i < res.length; i++) {

@@ -31,7 +31,10 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
         bottomNavigationBar: BottomNavigationBar(
           // type: BottomNavigationBarType.shifting,
           unselectedItemColor: Colors.grey,
-
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          unselectedFontSize: 0,
+          selectedFontSize: 0,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.group_outlined),
