@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/screens/settings/settings.dart';
@@ -56,8 +57,8 @@ class _DeleteUserScreenState extends State<DeleteUserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                  StyledContainer(
-                      child: Padding(
+                  ListItem(
+                      title: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
@@ -81,19 +82,17 @@ class _DeleteUserScreenState extends State<DeleteUserScreen> {
                     ),
                   )),
                   const SizedBox(height: 20),
-                  GestureDetector(
+                  ListItem(
                     onTap: () => triggerDialog(),
-                    child: const StyledContainer(
-                        child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Center(
-                        child: Text("حذف الحساب",
-                            style: TextStyle(
-                                fontFamily: "montserrat-bold",
-                                fontSize: 14,
-                                color: Colors.red)),
-                      ),
-                    )),
+                    title: const Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Center(
+                          child: Text("حذف الحساب",
+                              style: TextStyle(
+                                  fontFamily: "montserrat-bold",
+                                  fontSize: 14,
+                                  color: Colors.red)),
+                        )),
                   )
                 ],
               ),

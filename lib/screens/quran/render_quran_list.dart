@@ -49,7 +49,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     Provider.of<QuranProvider>(context, listen: false).refreshSeperotrs();
     Provider.of<QuranProvider>(context, listen: false)
         .refreshData(pageNumber: 1);
-
+    checkTemp();
     // Provider.of<QuranProvider>(context, listen: false).refreshData();
 
     // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
@@ -58,6 +58,15 @@ class _MainScaffoldState extends State<MainScaffold> {
   void initSeperators() async {
     final seperatorsDB = SeperatorsDB();
     await seperatorsDB.fillTable();
+  }
+
+  Future<void> checkTemp() async {
+    final prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("accessToken");
+    if (token != null) {
+      print("true");
+      Provider.of<QuranProvider>(context, listen: false).syncTemp();
+    }
   }
 
   void checkOnBoarding() async {

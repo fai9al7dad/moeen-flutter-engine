@@ -34,8 +34,9 @@ class CustomInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration:
-          BoxDecoration(color: Theme.of(context).colorScheme.background),
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: BorderRadius.circular(7)),
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType ?? TextInputType.text,

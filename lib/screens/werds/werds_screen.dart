@@ -15,6 +15,9 @@ import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:moeen/screens/werds/components/duo_info_appbar.dart';
+import 'package:moeen/screens/werds/components/werd_card.dart';
+import 'package:moeen/screens/werds/components/werd_shimmer.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +38,8 @@ class WerdsScreen extends StatefulWidget {
 }
 
 class _WerdsScreenState extends State<WerdsScreen> {
+  final now = DateTime.now();
+
   List<WerdsModel>? werdsApi = [];
   List<WerdsModel>? werds = [];
   bool loading = true;
@@ -105,11 +110,6 @@ class _WerdsScreenState extends State<WerdsScreen> {
     }
   }
 
-  String parseDate({date}) {
-    var d = DateTime.parse(date);
-    return "${d.year}-${d.month}-${d.day}";
-  }
-
   void startWerd() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -172,7 +172,6 @@ class _WerdsScreenState extends State<WerdsScreen> {
   @override
   Widget build(BuildContext context) {
     // final args = ModalRoute.of(context)!.settings.arguments as DuosScreen;
-
     return Scaffold(
       // appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
       floatingActionButton: CustomShowCase(
@@ -191,16 +190,24 @@ class _WerdsScreenState extends State<WerdsScreen> {
         textDirection: TextDirection.rtl,
         child: CustomScrollView(
           slivers: <Widget>[
-            _appBar(context),
+            DuoInfoAppBar(duoID: widget.duoID, username: widget.username),
             const SliverPadding(
               padding: EdgeInsets.only(top: 10),
             ),
             _slidingWerdFIlter(context),
             loading
-                ? const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()))
+                ? SliverPadding(
+                    padding: const EdgeInsets.all(20),
+                    sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return const WerdShimmer();
+                      },
+                      childCount: 5,
+                    )),
+                  )
                 : SliverPadding(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(20),
                     sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -213,7 +220,8 @@ class _WerdsScreenState extends State<WerdsScreen> {
                         } else {
                           type = "asCorrector";
                         }
-                        return _werdCard(context, index, type);
+                        return WerdCard(
+                            index: index, type: type, werd: werds![index]);
                       },
                       childCount: werds!.length,
                     )),
@@ -253,95 +261,5 @@ class _WerdsScreenState extends State<WerdsScreen> {
                     }
                   },
                 ))));
-  }
-
-  SliverAppBar _appBar(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      // scrolledUnderElevation: 10,
-      backgroundColor: Theme.of(context).colorScheme.background,
-      expandedHeight: 230.0,
-      centerTitle: true,
-      foregroundColor: Theme.of(context).primaryColor,
-      // title: const Text(
-      //   "الأوراد",
-      //   style: TextStyle(fontSize: 14),
-      // ),
-      elevation: 0,
-      // actions: [WerdFilterSlider()],
-      flexibleSpace: FlexibleSpaceBar(
-        collapseMode: CollapseMode.parallax,
-        // expandedTitleScale: 1,
-        title: Text(
-          "${widget.username}",
-          style: TextStyle(color: Theme.of(context).primaryColor),
-        ),
-        background:
-            Hero(tag: "duo_${widget.duoID}", child: CircleStreakProgress()),
-        //  Column(
-        //   crossAxisAlignment: CrossAxisAlignment.center,
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: const [
-        //     CircleStreakProgress(),
-
-        //   ],
-        // ),
-      ),
-    );
-  }
-
-  ListItem _werdCard(BuildContext context, int index, String type) {
-    return ListItem(
-        index: index,
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ViewWerdHighlights(
-                    werdID: werds![index].id,
-                    isAccepted: werds![index].isAccepted,
-                    type: type))),
-        title: Text("الورد الأول"),
-        trailing: Icon(
-          Icons.chevron_right,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        subtitle: Text("${parseDate(date: werds![index].createdAt)}"));
-  }
-}
-
-class CircleStreakProgress extends StatelessWidget {
-  const CircleStreakProgress({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Stack(alignment: Alignment.center, children: [
-          SizedBox(
-            width: 90,
-            height: 90,
-            child: CircularProgressIndicator(
-              strokeWidth: 5,
-              value: 0.8,
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-
-              // borderRadius: 900,
-            ),
-          ),
-          const Text("🌾", style: TextStyle(fontSize: 20))
-        ]),
-        const SizedBox(
-          height: 10,
-        ),
-        Text("رائع جدا ، استمروا 👍",
-            style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).primaryColor.withOpacity(0.8))),
-      ],
-    );
   }
 }

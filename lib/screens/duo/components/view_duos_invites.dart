@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/CustomShowCase.dart';
 import 'package:moeen/components/list_item.dart';
+import 'package:moeen/components/skeleton.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
+import 'package:moeen/screens/duo/components/invites_shimmer.dart';
 import 'package:moeen/screens/settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -71,9 +73,7 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const ShimmerLoading();
     }
     if (invites.isEmpty) {
       return const Center(
@@ -148,6 +148,26 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
                 ),
               );
             }
+          }),
+    );
+  }
+}
+
+class ShimmerLoading extends StatelessWidget {
+  const ShimmerLoading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: ListView.builder(
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: const InvitesShimmer());
           }),
     );
   }

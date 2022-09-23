@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
@@ -7,6 +6,7 @@ import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart'
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/general/constants.dart';
 
 import 'package:collection/collection.dart';
@@ -129,6 +129,29 @@ class QuranProvider with ChangeNotifier {
     refreshSeperotrs();
   }
 
+  Future<void> syncTemp() async {
+    final tempWordsColorsMap = TempWordColorMap();
+    var colors = await tempWordsColorsMap.getAllColors();
+    if (colors.isNotEmpty) {
+      // get all colors from temp
+      // and send them to server
+      // then delete all colors from temp
+      final temp = TempWordColorMap();
+      final api = Api();
+      List<Future> promises = [];
+
+      for (var i = 0; i < colors.length; i++) {
+        var type = GeneralHelpers().getTypeFromColor(colors[i].color);
+        promises.add(
+            api.addHighlightBySelfUserID(wordID: colors[i].wordID, type: type));
+      }
+      await Future.wait(promises);
+      await temp.deleteAllColors();
+    }
+    return;
+    // navigate pop
+  }
+
   // clear seperator
   void clearSeperator(
       {id, name, color, pageNumber, surah, verseNumber, wordID}) async {
@@ -183,7 +206,7 @@ class QuranProvider with ChangeNotifier {
       refreshData(pageNumber: pageNumber);
       try {
         await api.addHighlightBySelfUserID(wordID: id, type: type);
-      } on DioError  {
+      } on DioError {
         print("error from highlight/add endpoint... adding to temp colors ");
         // init tempwrodsColorsMap, and add word to it
         final tempWordsColorsMap = TempWordColorMap();

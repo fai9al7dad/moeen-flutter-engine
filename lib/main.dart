@@ -45,28 +45,28 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     Provider.of<QuranProvider>(context, listen: false).getData();
+    Provider.of<ThemeProvider>(context, listen: false).fetchTheme();
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    Provider.of<ThemeProvider>(context).fetchTheme();
-
-    return ShowCaseWidget(
-        builder: Builder(
-      builder: (context) => MaterialApp(
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        routes: CustomRouter.routes,
-        title: 'تطبيق معين',
-        debugShowCheckedModeBanner: false,
-        themeMode: themeProvider.themeMode,
-        theme: MyTheme.lightTheme,
-        darkTheme: MyTheme.darkTheme,
-      ),
-    ));
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) => ShowCaseWidget(
+          builder: Builder(
+        builder: (context) => MaterialApp(
+          useInheritedMediaQuery: true,
+          locale: DevicePreview.locale(context),
+          builder: DevicePreview.appBuilder,
+          routes: CustomRouter.routes,
+          title: 'تطبيق معين',
+          debugShowCheckedModeBanner: false,
+          themeMode: themeProvider.themeMode,
+          theme: MyTheme.lightTheme,
+          darkTheme: MyTheme.darkTheme,
+        ),
+      )),
+    );
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:moeen/components/streak_progress_widget.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
+import 'package:moeen/screens/duo/components/duo_shimmer.dart';
 import 'package:moeen/screens/werds/werds_screen.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:square_percent_indicater/square_percent_indicater.dart';
@@ -46,9 +47,7 @@ class _SelectDuoState extends State<SelectDuo> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const ShimmerLoading();
     }
     if (duos.isEmpty) {
       return const Center(child: Text("لا يوجد لديك ثنائيات"));
@@ -71,9 +70,7 @@ class _SelectDuoState extends State<SelectDuo> {
                       child: const StreakProgressWidget()),
                   // index: index,
                   title: Text("${duos[index].username}"),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => WerdsScreen(
                             duoID: duos[index].duoID,
                             username: duos[index].username,
@@ -86,6 +83,24 @@ class _SelectDuoState extends State<SelectDuo> {
                   ));
             }),
       ),
+    );
+  }
+}
+
+class ShimmerLoading extends StatelessWidget {
+  const ShimmerLoading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: ListView.builder(
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return const DuoShimmer();
+          }),
     );
   }
 }

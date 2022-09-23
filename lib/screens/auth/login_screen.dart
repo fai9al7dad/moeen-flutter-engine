@@ -9,6 +9,7 @@ import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
+import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,14 +61,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'حياكم الله 👋',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontFamily: "montserrat-bold",
                             fontSize: 30,
-                            color: Colors.green[500],
-                            shadows: const [
+                            shadows: [
                               Shadow(
                                 offset: Offset(1, 1),
                                 blurRadius: 0.5,
@@ -78,13 +78,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(
+                      const Text(
                         'الرجاء تسجيل الدخول للإستمرار',
                         textAlign: TextAlign.end,
                         style: TextStyle(
                           fontFamily: "montserrat",
                           fontSize: 12,
-                          color: Colors.green[800],
                         ),
                       ),
                       const SizedBox(
@@ -153,6 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   };
                                   if (_formKey.currentState!.validate()) {
                                     void login() async {
+                                      if (isLoading == true) return;
+
                                       try {
                                         setState(() {
                                           isLoading = true;
@@ -239,24 +240,8 @@ class SyncDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> onSync() async {
-      // get all colors from temp
-      // and send them to server
-      // then delete all colors from temp
-      final temp = TempWordColorMap();
-      final api = Api();
-      List<Future> promises = [];
-      var colors = await temp.getAllColors();
-
-      for (var i = 0; i < colors.length; i++) {
-        var type = GeneralHelpers().getTypeFromColor(colors[i].color);
-        promises.add(
-            api.addHighlightBySelfUserID(wordID: colors[i].wordID, type: type));
-      }
-      await Future.wait(promises);
-      await temp.deleteAllColors();
-      // navigate pop
-      Navigator.of(context).pop();
+    void onSync() {
+      Provider.of<QuranProvider>(context).syncTemp();
     }
 
     return Directionality(

@@ -3,15 +3,14 @@ import 'package:moeen/screens/about/about_app.dart';
 import 'package:moeen/screens/auth/forgot_password.dart';
 import 'package:moeen/screens/auth/login_screen.dart';
 import 'package:moeen/screens/auth/register_screen.dart';
+import 'package:moeen/screens/auth/register_welcome.dart';
 import 'package:moeen/screens/contact/contactScreen.dart';
 import 'package:moeen/screens/delete_user/delete_user_screen.dart';
 import 'package:moeen/screens/duo/duosScreen.dart';
 import 'package:moeen/screens/extra_screen_container/extra_screens_container.dart';
-import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:moeen/screens/quran/render_quran_list.dart';
 import 'package:moeen/screens/search_users/search_users.dart';
 import 'package:moeen/screens/settings/settings.dart';
-import 'package:moeen/screens/surahList/surah_list.dart';
 import 'package:moeen/screens/surahList/surahs_tabs_wrapper.dart';
 import 'package:moeen/screens/werds/finish_werd.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
@@ -32,6 +31,7 @@ class CustomRouter {
     '/duos': (context) => const DuosScreen(),
     '/register': (context) => const RegisterScreen(),
     '/forgot-password': (context) => const ForgotPassword(),
+    '/register-welcome': (context) => const RegisterWelcome(),
     '/search-users': (context) => const SearchUsers(),
     '/werds': (context) => const WerdsScreen(),
     '/finish-werd': (context) => const FinishWerd(),

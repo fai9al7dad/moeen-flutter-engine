@@ -5,6 +5,7 @@ import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'package:moeen/components/CustomInput.dart';
 import 'package:moeen/helpers/dio/api.dart';
+import 'package:moeen/screens/auth/register_welcome.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -36,14 +37,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                const Text(
                   'مستخدم جديد 🥳',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontFamily: "montserrat-bold",
                       fontSize: 30,
-                      color: Colors.green[500],
-                      shadows: const [
+                      shadows: [
                         Shadow(
                           offset: Offset(1, 1),
                           blurRadius: 0.5,
@@ -54,13 +54,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   'الرجاء تسجيل حساب للإستمرار',
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontFamily: "montserrat",
                     fontSize: 12,
-                    color: Colors.green[800],
                   ),
                 ),
                 const SizedBox(
@@ -70,25 +69,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      CustomInput(
-                          controller: usernameController,
-                          prefixIcon: Icons.person_outline,
-                          label: "اسم المستخدم",
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء ادخال اسم المستخدم';
-                            }
-                            return null;
-                          }),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomInput(
                             controller: emailController,
                             prefixIcon: Icons.email_outlined,
+                            onChanged: (value) {
+                              usernameController.text = value.split('@')[0];
+                            },
                             label: "البريد الإلكتروني",
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -110,6 +99,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                       ),
                       const SizedBox(
+                        height: 15,
+                      ),
+                      CustomInput(
+                          controller: usernameController,
+                          prefixIcon: Icons.person_outline,
+                          label: "اسم المستخدم",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'الرجاء ادخال اسم المستخدم';
+                            }
+                            return null;
+                          }),
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomInput(
@@ -128,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       CustomInput(
                         controller: confirmPasswordController,
@@ -155,6 +157,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             };
                             if (_formKey.currentState!.validate()) {
                               void register() async {
+                                if (isLoading == true) return;
+
                                 try {
                                   setState(() {
                                     isLoading = true;
@@ -162,16 +166,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Api api = Api();
                                   await api.register(data: payload);
                                   // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                          backgroundColor: Colors.green[200],
-                                          content: Text(
-                                            "تم تسجيل حسابك بنجاح يمكنك تسجيل الدخول الآن",
-                                            style: TextStyle(
-                                                color: Colors.green[900]),
-                                          )));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => RegisterWelcome(
+                                              payload: payload)));
+
                                   // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(SnackBar(
+                                  //         backgroundColor: Colors.green[200],
+                                  //         content: Text(
+                                  //           "تم تسجيل حسابك بنجاح يمكنك تسجيل الدخول الآن",
+                                  //           style: TextStyle(
+                                  //               color: Colors.green[900]),
+                                  //         )));
+                                  // ignore: use_build_context_synchronously
                                 } on Dio.DioError catch (e) {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
