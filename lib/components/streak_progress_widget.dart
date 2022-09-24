@@ -2,41 +2,47 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:square_percent_indicater/square_percent_indicater.dart';
 
 class StreakProgressWidget extends StatefulWidget {
   final double? height;
   final double? width;
+  final double? strokeWidth;
   final double? borderRadius;
-  const StreakProgressWidget({
-    Key? key,
-    this.height,
-    this.width,
-    this.borderRadius,
-  }) : super(key: key);
+  final String? latestWerd;
+  const StreakProgressWidget(
+      {Key? key,
+      this.height,
+      this.width,
+      this.borderRadius,
+      this.latestWerd,
+      this.strokeWidth})
+      : super(key: key);
 
   @override
   State<StreakProgressWidget> createState() => _StreakProgressWidgetState();
 }
 
 class _StreakProgressWidgetState extends State<StreakProgressWidget> {
-  int value = 50;
-  Timer? timer;
+  int value = 0;
   @override
   void initState() {
     super.initState();
-    // timer = Timer.periodic(Duration(milliseconds: 20), (Timer t) {
-    //   // setState(() {
-    //   //   value = (value + 1) % 50;
-    //   // });
-    //   timer?.cancel();
-    // });
+    calculateStreak();
   }
 
   @override
   void dispose() {
-    timer?.cancel();
     super.dispose();
+  }
+
+  void calculateStreak() {
+    final GeneralHelpers gh = GeneralHelpers();
+    int streakPercentage = gh.calculateStreak(widget.latestWerd);
+    setState(() {
+      value = streakPercentage;
+    });
   }
 
   @override
@@ -47,10 +53,14 @@ class _StreakProgressWidgetState extends State<StreakProgressWidget> {
       startAngle: StartAngle.bottomRight,
       reverse: true,
       borderRadius: 7,
-      shadowWidth: 5,
-      progressWidth: 5,
+      shadowWidth: widget.strokeWidth ?? 5,
+      progressWidth: widget.strokeWidth ?? 5,
       shadowColor: Theme.of(context).scaffoldBackgroundColor,
-      progressColor: Theme.of(context).colorScheme.primary,
+      progressColor: value == 100
+          ? Theme.of(context).colorScheme.primary
+          : value <= 70 && value > 25
+              ? Colors.yellow
+              : Colors.red,
       progress: value / 100,
       child: Container(
         decoration: BoxDecoration(
@@ -61,13 +71,11 @@ class _StreakProgressWidgetState extends State<StreakProgressWidget> {
             child: Text(
           value == 100
               ? "😍"
-              : value < 99 && value > 50
+              : value < 99 && value == 70
                   ? "😁"
-                  : value < 50 && value > 30
-                      ? "😐"
-                      : value < 30 && value > 1
-                          ? "😨"
-                          : "🌾",
+                  : value < 70 && value >= 1
+                      ? "😨"
+                      : "🌾",
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         )),
       ),

@@ -2,13 +2,14 @@ class DuosModel {
   String? username;
   int? id;
   int? duoID;
-
-  DuosModel({this.username, this.id, this.duoID});
+  String? latestWerd;
+  DuosModel({this.username, this.id, this.duoID, this.latestWerd});
 
   DuosModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
     id = json['id'];
     duoID = json['duoID'];
+    latestWerd = json['latestWerd'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +17,7 @@ class DuosModel {
     data['username'] = username;
     data['id'] = id;
     data['duoID'] = duoID;
+    data['latestWerd'] = latestWerd;
     return data;
   }
 }

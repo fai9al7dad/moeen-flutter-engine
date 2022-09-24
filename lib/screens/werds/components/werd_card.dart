@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:moeen/components/list_item.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
@@ -22,13 +23,9 @@ class WerdCard extends StatefulWidget {
 
 class _WerdCardState extends State<WerdCard> {
   final DateTime now = DateTime.now();
-  bool isNew = false;
-  String parseDate({date}) {
-    var d = DateTime.parse(date);
+  final GeneralHelpers _generalHelpers = GeneralHelpers();
 
-    final today = DateTime(now.year, now.month, now.day);
-    return "${d.year}-${d.month}-${d.day}";
-  }
+  bool isNew = false;
 
   @override
   void initState() {
@@ -38,11 +35,11 @@ class _WerdCardState extends State<WerdCard> {
   }
 
   void checkIfNew() {
-    final today =
-        parseDate(date: DateTime(now.year, now.month, now.day).toString());
-    final yesterday =
-        parseDate(date: DateTime(now.year, now.month, now.day - 1).toString());
-    final werdDate = parseDate(date: widget.werd.createdAt);
+    final today = _generalHelpers.parseDate(
+        date: DateTime(now.year, now.month, now.day).toString());
+    final yesterday = _generalHelpers.parseDate(
+        date: DateTime(now.year, now.month, now.day - 1).toString());
+    final werdDate = _generalHelpers.parseDate(date: widget.werd.createdAt);
 
     if (werdDate == today || werdDate == yesterday) {
       setState(() {
@@ -97,7 +94,8 @@ class _WerdCardState extends State<WerdCard> {
           ],
         ),
       ),
-      subtitle: Text("${parseDate(date: widget.werd.createdAt)}"),
+      subtitle:
+          Text("${_generalHelpers.parseDate(date: widget.werd.createdAt)}"),
     );
   }
 }

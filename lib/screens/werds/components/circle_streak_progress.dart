@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class CircleStreakProgress extends StatelessWidget {
+class CircleStreakProgress extends StatefulWidget {
+  final String? latestWerd;
+
   const CircleStreakProgress({
     Key? key,
+    this.latestWerd,
   }) : super(key: key);
 
+  @override
+  State<CircleStreakProgress> createState() => _CircleStreakProgressState();
+}
+
+class _CircleStreakProgressState extends State<CircleStreakProgress> {
   @override
   Widget build(BuildContext context) {
     return Column(

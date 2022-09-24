@@ -33,6 +33,50 @@ class GeneralHelpers {
     return color;
   }
 
+  String parseDate({String? date}) {
+    final DateTime now = DateTime.now();
+
+    var d = DateTime.parse(date!);
+
+    final today = DateTime(now.year, now.month, now.day);
+    return "${d.year}-${d.month}-${d.day}";
+  }
+
+  int calculateStreak(latestWerd) {
+    final GeneralHelpers gh = GeneralHelpers();
+    // if latest werd is today then show 100% progress
+    // if latest werd is yesterday then show 50% progress
+    // if latest werd is before yesterday then show 0% progress
+    // if latest werd is null then show 0% progress
+    final DateTime now = DateTime.now();
+    String? latestWerdFormattedDate;
+    if (latestWerd != null) {
+      latestWerdFormattedDate = gh.parseDate(date: latestWerd!);
+    }
+
+    final today =
+        gh.parseDate(date: DateTime(now.year, now.month, now.day).toString());
+    final yesterday = gh.parseDate(
+        date: DateTime(now.year, now.month, now.day - 1).toString());
+    final dayBeforeYesterday = gh.parseDate(
+        date: DateTime(now.year, now.month, now.day - 2).toString());
+
+    int limit = 0;
+    if (latestWerdFormattedDate == null) {
+      limit = 0;
+    } else if (latestWerdFormattedDate == today) {
+      limit = 100;
+    } else if (latestWerdFormattedDate == yesterday) {
+      limit = 70;
+    } else if (latestWerdFormattedDate == dayBeforeYesterday) {
+      limit = 25;
+    } else {
+      limit = 0;
+    }
+
+    return limit;
+  }
+
   Map<String, double> getResponsiveFontAndLineHeightPercentage(
       {height, width}) {
     double fixedFontSizePercentage = height * 0.035;

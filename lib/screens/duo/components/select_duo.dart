@@ -64,26 +64,42 @@ class _SelectDuoState extends State<SelectDuo> {
             //       color: Color(0xffe4e4e7),
             //     ),
             itemBuilder: (context, index) {
-              return ListItem(
-                  leading: Hero(
-                      tag: "duo_${duos[index].id}",
-                      child: const StreakProgressWidget()),
-                  // index: index,
-                  title: Text("${duos[index].username}"),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => WerdsScreen(
-                            duoID: duos[index].duoID,
-                            username: duos[index].username,
-                            reciterID: duos[index].id),
-                      )),
-                  subtitle: Text("رقم المعرف: ${duos[index].id}"),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Theme.of(context).colorScheme.primary,
-                  ));
+              return DuoCard(duo: duos[index]);
             }),
       ),
     );
+  }
+}
+
+class DuoCard extends StatelessWidget {
+  const DuoCard({
+    Key? key,
+    required this.duo,
+  }) : super(key: key);
+
+  final DuosModel duo;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListItem(
+        leading: Hero(
+            tag: "duo_${duo.id}",
+            child: StreakProgressWidget(latestWerd: duo.latestWerd)),
+        // index: index,
+        title: Text("${duo.username}"),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => WerdsScreen(
+                duoID: duo.duoID,
+                username: duo.username,
+                reciterID: duo.id,
+                latestWerd: duo.latestWerd,
+              ),
+            )),
+        subtitle: Text("رقم المعرف: ${duo.id}"),
+        trailing: Icon(
+          Icons.chevron_right,
+          color: Theme.of(context).colorScheme.primary,
+        ));
   }
 }
 

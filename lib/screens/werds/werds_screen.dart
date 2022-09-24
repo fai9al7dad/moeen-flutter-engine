@@ -30,7 +30,9 @@ class WerdsScreen extends StatefulWidget {
   final int? duoID;
   final String? username;
   final int? reciterID;
-  const WerdsScreen({Key? key, this.duoID, this.username, this.reciterID})
+  final String? latestWerd;
+  const WerdsScreen(
+      {Key? key, this.duoID, this.username, this.reciterID, this.latestWerd})
       : super(key: key);
 
   @override
@@ -190,7 +192,10 @@ class _WerdsScreenState extends State<WerdsScreen> {
         textDirection: TextDirection.rtl,
         child: CustomScrollView(
           slivers: <Widget>[
-            DuoInfoAppBar(duoID: widget.duoID, username: widget.username),
+            DuoInfoAppBar(
+                duoID: widget.duoID,
+                username: widget.username,
+                latestWerd: widget.latestWerd),
             const SliverPadding(
               padding: EdgeInsets.only(top: 10),
             ),
