@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -184,6 +182,7 @@ class PageWords extends StatelessWidget {
                               pageNumber: item["pageNumber"],
                               verseNumber: item["verseNumber"],
                               chapterCode: item["chapterCode"],
+                              context: context,
                               color: found?.color),
                           HapticFeedback.lightImpact(),
                         },
@@ -212,6 +211,7 @@ class PageWords extends StatelessWidget {
                               pageNumber: item["pageNumber"],
                               verseNumber: item["verseNumber"],
                               chapterCode: item["chapterCode"],
+                              context: context,
                               color: found?.color),
                           HapticFeedback.lightImpact(),
                         },
@@ -236,6 +236,7 @@ class PageWords extends StatelessWidget {
                               id: item["wordID"],
                               pageNumber: item["pageNumber"],
                               verseNumber: item["verseNumber"],
+                              context: context,
                               chapterCode: item["chapterCode"],
                               color: found?.color),
                           HapticFeedback.lightImpact(),

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/seperators/seperators_database.dart';
 import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
@@ -174,6 +175,7 @@ class QuranProvider with ChangeNotifier {
       required pageNumber,
       required verseNumber,
       required chapterCode,
+      required context,
       color}) async {
     String newColor;
     String type;
@@ -222,24 +224,39 @@ class QuranProvider with ChangeNotifier {
       await werdColorsMaps.insertWord(word);
       refreshData(pageNumber: pageNumber);
 
-      await api.addHighlightByWerdID(
-          werdID: _werd["werdID"],
-          reciterUserID: _werd["reciterID"],
-          type: type,
-          wordID: id);
-      if (type == "warning") {
-        _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] += 1};
-      }
-      if (type == "mistake") {
-        _werd = {..._werd, "mistakesCounter": _werd["mistakesCounter"] += 1};
-        _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] -= 1};
-      }
-      if (type == "revert") {
-        if (_werd["mistakesCounter"] > 0) {
-          _werd = {..._werd, "mistakesCounter": _werd["mistakesCounter"] -= 1};
-        } else {
-          _werd = {..._werd, "mistakesCounter": 0};
+      try {
+        await api.addHighlightByWerdID(
+            werdID: _werd["werdID"],
+            reciterUserID: _werd["reciterID"],
+            type: type,
+            wordID: id);
+        if (type == "warning") {
+          _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] += 1};
         }
+        if (type == "mistake") {
+          _werd = {..._werd, "mistakesCounter": _werd["mistakesCounter"] += 1};
+          _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] -= 1};
+        }
+        if (type == "revert") {
+          if (_werd["mistakesCounter"] > 0) {
+            _werd = {
+              ..._werd,
+              "mistakesCounter": _werd["mistakesCounter"] -= 1
+            };
+          } else {
+            _werd = {..._werd, "mistakesCounter": 0};
+          }
+        }
+      } catch (e) {
+        await werdColorsMaps.deleteColor(wordID: word.wordID);
+        refreshData(pageNumber: pageNumber);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red[200],
+            content: Text(
+              "حصل خطأ ما، تأكد من اتصالك بالإنترنت",
+              style: TextStyle(color: Colors.red[900]),
+            )));
       }
     }
 

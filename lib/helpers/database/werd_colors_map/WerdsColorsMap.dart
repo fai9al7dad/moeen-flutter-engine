@@ -157,6 +157,15 @@ class WerdsColorsMap {
     await dbClient!.delete(WerdsColorsMapTable);
   }
 
+  Future<void> deleteColor({wordID}) async {
+    // Get a reference to the database.
+    var dbClient = await db;
+
+    // Query the table for all The Dogs.
+    await dbClient!
+        .delete(WerdsColorsMapTable, where: "wordID = ?", whereArgs: [wordID]);
+  }
+
   Future getColorByID({id}) async {
     // Get a reference to the database.
     var dbClient = await db;

@@ -121,6 +121,7 @@ class _ViewWerdHighlightsState extends State<ViewWerdHighlights> {
           id: highlights[i].id,
           pageNumber: highlights[i].pageID,
           verseNumber: highlights[i].verseNumber,
+          context: context,
           chapterCode: highlights[i].chapterCode);
     }
     await api.acceptWerd(werdID: widget.werdID);
