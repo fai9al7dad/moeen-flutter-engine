@@ -13,8 +13,13 @@ class WerdCard extends StatefulWidget {
   final WerdsModel werd;
   final int index;
   final String type;
+  final String duoName;
   const WerdCard(
-      {Key? key, required this.werd, required this.index, required this.type})
+      {Key? key,
+      required this.werd,
+      required this.index,
+      required this.type,
+      required this.duoName})
       : super(key: key);
 
   @override
@@ -68,7 +73,14 @@ class _WerdCardState extends State<WerdCard> {
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontSize: 12)),
-          Text("الورد الأول"),
+          Text(
+            widget.werd.reciterID ==
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .authUser
+                        ?.id
+                ? "وردك"
+                : "ورد ${widget.duoName}",
+          ),
         ],
       ),
       trailing: SizedBox(

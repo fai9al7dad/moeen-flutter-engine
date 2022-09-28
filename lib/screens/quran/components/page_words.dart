@@ -29,7 +29,7 @@ class PageWords extends StatelessWidget {
         ),
         text: TextSpan(
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
               height: fixedLineHeightPercentage,
               fontSize: fixedFontSizePercentage,
               shadows: const [

@@ -83,7 +83,7 @@ class _DuoInfoAppBarState extends State<DuoInfoAppBar> {
       streakPercentage == 100
           ? "رائع جدا، استمروا 👍"
           : streakPercentage == 70
-              ? "ما سمعتم أمس، استعينوا بالله واستمروا "
+              ? "ما سمعتم اليوم، استعينوا بالله وابدأوا "
               : streakPercentage == 25
                   ? "لكم مدة ما سمعتم، بادر وأكسر الفتور 💪"
                   : "أبدأوا بالتسميع اليوم، لتبدأوا ستريك",

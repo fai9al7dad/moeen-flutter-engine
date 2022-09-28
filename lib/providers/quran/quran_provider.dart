@@ -230,23 +230,6 @@ class QuranProvider with ChangeNotifier {
             reciterUserID: _werd["reciterID"],
             type: type,
             wordID: id);
-        if (type == "warning") {
-          _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] += 1};
-        }
-        if (type == "mistake") {
-          _werd = {..._werd, "mistakesCounter": _werd["mistakesCounter"] += 1};
-          _werd = {..._werd, "warningsCounter": _werd["warningsCounter"] -= 1};
-        }
-        if (type == "revert") {
-          if (_werd["mistakesCounter"] > 0) {
-            _werd = {
-              ..._werd,
-              "mistakesCounter": _werd["mistakesCounter"] -= 1
-            };
-          } else {
-            _werd = {..._werd, "mistakesCounter": 0};
-          }
-        }
       } catch (e) {
         await werdColorsMaps.deleteColor(wordID: word.wordID);
         refreshData(pageNumber: pageNumber);

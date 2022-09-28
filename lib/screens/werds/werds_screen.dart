@@ -1,10 +1,6 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomShowCase.dart';
-import 'package:moeen/components/list_item.dart';
 import 'package:moeen/components/streak_progress_widget.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
@@ -15,10 +11,8 @@ import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
-import 'package:moeen/screens/werds/components/duo_info_appbar.dart';
-import 'package:moeen/screens/werds/components/werd_card.dart';
 import 'package:moeen/screens/werds/components/werd_shimmer.dart';
-import 'package:moeen/screens/werds/werd_highlights/view_werd_highlights.dart';
+import 'package:moeen/screens/werds/components/werds_calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -175,96 +169,75 @@ class _WerdsScreenState extends State<WerdsScreen> {
   Widget build(BuildContext context) {
     // final args = ModalRoute.of(context)!.settings.arguments as DuosScreen;
     return Scaffold(
-      // appBar: CustomAppBar(title: "الأوراد", showLoading: appBarLoading),
-      floatingActionButton: CustomShowCase(
-        overlayPadding: const EdgeInsets.all(10),
-        shapeBorder: const CircleBorder(),
-        caseKey: _one,
-        title: "الأوراد",
-        description: "قم بإضافة ورد لتتمكن من رؤية مصحف صديقك والتصحيح له",
-        child: FloatingActionButton.extended(
-            backgroundColor: const Color(0xff059669),
-            onPressed: () => startWerd(),
-            label:
-                const Text("إضافة ورد", style: TextStyle(color: Colors.white))),
-      ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            DuoInfoAppBar(
-                duoID: widget.duoID,
-                username: widget.username,
-                latestWerd: widget.latestWerd),
-            const SliverPadding(
-              padding: EdgeInsets.only(top: 10),
-            ),
-            _slidingWerdFIlter(context),
-            loading
-                ? SliverPadding(
-                    padding: const EdgeInsets.all(20),
-                    sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return const WerdShimmer();
-                      },
-                      childCount: 5,
-                    )),
-                  )
-                : SliverPadding(
-                    padding: const EdgeInsets.all(20),
-                    sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        String type;
-                        if (Provider.of<AuthProvider>(context, listen: false)
-                                .authUser
-                                ?.id ==
-                            werds![index].reciterID) {
-                          type = "asReciter";
-                        } else {
-                          type = "asCorrector";
-                        }
-                        return WerdCard(
-                            index: index, type: type, werd: werds![index]);
-                      },
-                      childCount: werds!.length,
-                    )),
+        appBar: CustomAppBar(
+            title: "${widget.username}",
+            showLoading: appBarLoading,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Hero(
+                  tag: "duo_${widget.duoID}",
+                  child: StreakProgressWidget(
+                    width: 40,
+                    height: 40,
+                    latestWerd: widget.latestWerd,
                   ),
-          ],
+                ),
+              )
+            ]),
+        floatingActionButton: CustomShowCase(
+          overlayPadding: const EdgeInsets.all(10),
+          shapeBorder: const CircleBorder(),
+          caseKey: _one,
+          title: "الأوراد",
+          description: "قم بإضافة ورد لتتمكن من رؤية مصحف صديقك والتصحيح له",
+          child: FloatingActionButton.extended(
+              backgroundColor: const Color(0xff059669),
+              onPressed: () => startWerd(),
+              label: const Text("إضافة ورد",
+                  style: TextStyle(color: Colors.white))),
         ),
-      ),
-    );
-  }
-
-  SliverToBoxAdapter _slidingWerdFIlter(BuildContext context) {
-    return SliverToBoxAdapter(
-        child: Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: CupertinoSlidingSegmentedControl<int>(
-                  // backgroundColor: CupertinoColors.white,
-                  thumbColor: Theme.of(context).colorScheme.primary,
-                  padding: const EdgeInsets.all(8),
-                  groupValue: sliderValue,
-                  children: const {
-                    0: Text("جميع الأوراد"),
-                    1: Text("أورادك"),
-                    2: Text("أوراد زميلك"),
-                  },
-                  onValueChanged: (value) {
-                    setState(() {
-                      sliderValue = value!;
-                    });
-                    if (value == 0) {
-                      filterWerds("all");
-                    } else if (value == 1) {
-                      filterWerds("asReciter");
-                    } else if (value == 2) {
-                      filterWerds("asListener");
-                    }
-                  },
-                ))));
+        body: Directionality(
+            textDirection: TextDirection.rtl,
+            child: loading
+                ? const WerdShimmer()
+                : werds!.isNotEmpty
+                    ? WerdsCalendar(
+                        werds: werds,
+                        username: widget.username ?? "",
+                      )
+                    : const Center(child: Text("لا يوجد أوراد بينكم"))));
   }
 }
+
+
+// SliverToBoxAdapter _slidingWerdFIlter(BuildContext context) {
+//   return SliverToBoxAdapter(
+//       child: Align(
+//           alignment: Alignment.centerRight,
+//           child: Padding(
+//               padding: const EdgeInsets.only(right: 15.0),
+//               child: CupertinoSlidingSegmentedControl<int>(
+//                 // backgroundColor: CupertinoColors.white,
+//                 thumbColor: Theme.of(context).colorScheme.primary,
+//                 padding: const EdgeInsets.all(8),
+//                 groupValue: sliderValue,
+//                 children: const {
+//                   0: Text("جميع الأوراد"),
+//                   1: Text("أورادك"),
+//                   2: Text("أوراد زميلك"),
+//                 },
+//                 onValueChanged: (value) {
+//                   setState(() {
+//                     sliderValue = value!;
+//                   });
+//                   if (value == 0) {
+//                     filterWerds("all");
+//                   } else if (value == 1) {
+//                     filterWerds("asReciter");
+//                   } else if (value == 2) {
+//                     filterWerds("asListener");
+//                   }
+//                 },
+//               ))));
+// }

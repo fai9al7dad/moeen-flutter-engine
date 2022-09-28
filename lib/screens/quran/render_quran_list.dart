@@ -63,8 +63,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   Future<void> checkTemp() async {
     final prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("accessToken");
-    if (token != null) {
-      print("true");
+    if (token != null && mounted) {
       Provider.of<QuranProvider>(context, listen: false).syncTemp();
     }
   }
