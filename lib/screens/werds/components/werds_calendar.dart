@@ -84,6 +84,13 @@ class _WerdsCalendarState extends State<WerdsCalendar> {
                 locale: "ar",
                 // firstDay:
                 calendarBuilders: CalendarBuilders(
+                  dowBuilder: (context, day) => Center(
+                    child: Text(
+                      DateFormat.E("ar").format(day),
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 10),
+                    ),
+                  ),
                   defaultBuilder: (context, day, focusedDay) => Container(
                     margin: const EdgeInsets.all(4),
                     alignment: Alignment.center,

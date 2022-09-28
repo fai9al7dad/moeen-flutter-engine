@@ -79,7 +79,7 @@ class DuoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListItem(
         leading: Hero(
-            tag: "duo_${duo.id}",
+            tag: "duo_${duo.duoID}",
             child: StreakProgressWidget(latestWerd: duo.latestWerd)),
         // index: index,
         title: Text("${duo.username}"),
