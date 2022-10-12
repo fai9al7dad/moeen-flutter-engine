@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 
@@ -37,7 +39,6 @@ class _RenderPageState extends State<RenderPage> {
         // Text(mistakes[0]['id'].toString()),
         Column(
       children: [
-
         SizedBox(
             height: widget.fixedFontSizePercentageForHeader < 13 ? 10 : 50),
 

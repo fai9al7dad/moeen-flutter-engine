@@ -1,8 +1,7 @@
 import 'package:confetti/confetti.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/CustomButton.dart';
 import 'dart:math' as math;
@@ -26,14 +25,12 @@ class _RegisterWelcomeState extends State<RegisterWelcome> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     confettiController.play();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     confettiController.dispose();
   }

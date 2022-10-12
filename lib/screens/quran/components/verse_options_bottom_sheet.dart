@@ -83,7 +83,7 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
-        color: const Color(0xfffff8ed),
+        color: Theme.of(context).scaffoldBackgroundColor,
         height: 400,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),

@@ -124,36 +124,39 @@ class _MainScaffoldState extends State<MainScaffold> {
                   }
                 },
                 child: Stack(children: [
-                  PageView.builder(
-                    controller: quranProvider.pageController,
-                    allowImplicitScrolling: true,
-                    physics: const BouncingScrollPhysics(),
-                    reverse: true,
-                    // physics: const AlwaysScrollableScrollPhysics(),
-                    // scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
+                  Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: PageView.builder(
+                      controller: quranProvider.pageController,
+                      allowImplicitScrolling: true,
+                      physics: const BouncingScrollPhysics(),
+                      // reverse: true,
+                      // physics: const AlwaysScrollableScrollPhysics(),
+                      // scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
 
-                    itemCount: quranProvider.quran.length,
-                    onPageChanged: (p) {
-                      quranProvider.refreshData(pageNumber: p + 1);
-                    },
-                    itemBuilder: (context, index) {
-                      return FractionallySizedBox(
-                        widthFactor: 1 / 1.1,
-                        child: RenderPage(
-                            page: quranProvider.quran[index],
-                            fixedFontSizePercentageForHeader:
-                                fixedFontSizePercentageForHeader,
-                            fixedFontSizePercentage: fixedFontSizePercentage,
-                            fixedLineHeightPercentage:
-                                fixedLineHeightPercentage),
-                      );
-                      // return const Text("sdf");
-                      // return const Text("sdf");
-                    },
-                    // itemBuilder: (context, index) {
-                    //   return RenderPage(lines: _items[index]["lines"]);
-                    // }
+                      itemCount: quranProvider.quran.length,
+                      onPageChanged: (p) {
+                        quranProvider.refreshData(pageNumber: p + 1);
+                      },
+                      itemBuilder: (context, index) {
+                        return FractionallySizedBox(
+                          widthFactor: 1 / 1.1,
+                          child: RenderPage(
+                              page: quranProvider.quran[index],
+                              fixedFontSizePercentageForHeader:
+                                  fixedFontSizePercentageForHeader,
+                              fixedFontSizePercentage: fixedFontSizePercentage,
+                              fixedLineHeightPercentage:
+                                  fixedLineHeightPercentage),
+                        );
+                        // return const Text("sdf");
+                        // return const Text("sdf");
+                      },
+                      // itemBuilder: (context, index) {
+                      //   return RenderPage(lines: _items[index]["lines"]);
+                      // }
+                    ),
                   ),
                   if (showExtra)
                     ShowExtras(

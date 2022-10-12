@@ -1,17 +1,23 @@
-import 'package:flutter/gestures.dart';
+import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moeen/components/CustomButton.dart';
+import 'package:moeen/components/CustomInput.dart';
+import 'package:moeen/components/list_item.dart';
+import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/verse_options_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
-class PageWords extends StatelessWidget {
+class PageWords extends StatefulWidget {
   final List page;
   final double fixedFontSizePercentage;
   final double fixedLineHeightPercentage;
+
   const PageWords(
       {Key? key,
       required this.page,
@@ -20,472 +26,514 @@ class PageWords extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<PageWords> createState() => _PageWordsState();
+}
+
+class _PageWordsState extends State<PageWords> {
+  List<List<Widget>> rows = [];
+
+  void fillRows(context) {
+    // print quran provider mistakes
+    List<List<Widget>> rows = [];
+    for (int i = 0; i < 15; i++) {
+      rows.add([]);
+    }
+    int curRow = 0;
+    for (int i = 0; i < widget.page.length; i++) {
+      var item = widget.page[i];
+
+      // var found = _mistakes
+      //     .firstWhereOrNull((element) => element.wordID == item["wordID"]);
+      Widget? el;
+      if (item["isNewChapter"] == 1 &&
+          item["isBismillah"] == 1 &&
+          item["pageNumber"] != 187) {
+        el = Bismillah(
+          fixedFontSizePercentage: widget.fixedFontSizePercentage,
+        );
+      }
+      if (item["isNewChapter"] == 1 && item["isBismillah"] != 1) {
+        el = SurahHeader(
+          fixedFontSizePercentage: widget.fixedFontSizePercentage,
+          chapterCode: item["chapterCode"],
+        );
+      }
+      if (item["isNewChapter"] == 1 && item["pageNumber"] == 187) {
+        el = SurahHeader(
+          fixedFontSizePercentage: widget.fixedFontSizePercentage,
+          chapterCode: item["chapterCode"],
+        );
+      }
+      if (item["charType"] == "end") {
+        el = VerseNumber(
+          context: context,
+          item: item,
+          fixedFontSizePercentage: widget.fixedFontSizePercentage,
+        );
+      }
+      if (item["charType"] == "word") {
+        el = Word(
+          // color: Color(int.parse(found?.color ?? "0xFF000000")),
+          item: item,
+          index: i,
+          fixedFontSizePercentage: widget.fixedFontSizePercentage,
+        );
+      }
+      int curLineNum = item["lineNumber"];
+      // if last item this will return undefined
+      int aftLineNum =
+          i != widget.page.length - 1 ? widget.page[i + 1]["lineNumber"] : 15;
+      bool lineChanged = curLineNum != aftLineNum;
+
+      rows[curRow].add(el!);
+      if (lineChanged) {
+        curRow++;
+      }
+    }
+    // rows[0].add(const Text("s"));
+    if (mounted) {
+      setState(() {
+        this.rows = rows;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fillRows(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<QuranProvider>(
-      builder: (context, quranProvider, child) => RichText(
-        strutStyle: StrutStyle(
-          height: fixedLineHeightPercentage,
-          fontSize: fixedFontSizePercentage,
+    return Column(
+        children: List.generate(rows.length, (row) {
+      return SizedBox(
+        height: widget.fixedLineHeightPercentage *
+            MediaQuery.of(context).size.height *
+            0.0315,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: rows[row],
         ),
-        text: TextSpan(
+      );
+    }));
+  }
+}
+
+class SurahHeader extends StatelessWidget {
+  final double fixedFontSizePercentage;
+  final String chapterCode;
+  const SurahHeader({
+    Key? key,
+    required this.fixedFontSizePercentage,
+    required this.chapterCode,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        SvgPicture.asset(
+          "assets/svg/surah_header_svg.svg",
+          width: fixedFontSizePercentage > 30
+              ? fixedFontSizePercentage * 20
+              : fixedFontSizePercentage * 16,
+          height: fixedFontSizePercentage > 30
+              ? fixedFontSizePercentage * 1.789
+              : fixedFontSizePercentage * 1.72,
+        ),
+        Text("${chapterCode.padLeft(3, '0')}surah",
             style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              height: fixedLineHeightPercentage,
-              fontSize: fixedFontSizePercentage,
-              shadows: const [
-                Shadow(
-                  offset: Offset(0.0, 0.0),
-                  blurRadius: 0.1,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
-            ),
-            children: List.generate(page.length, (index) {
-              var item = page[index];
-              int curLineNum = page[index]["lineNumber"];
-              // if last item this will return undefined
-              int aftLineNum =
-                  index != page.length - 1 ? page[index + 1]["lineNumber"] : 15;
-              bool lineChanged = curLineNum != aftLineNum;
-
-              var hasSeperator = quranProvider.seperators.firstWhereOrNull(
-                (element) => element.wordID == item["wordID"],
-              );
-
-              var found = quranProvider.mistakes.firstWhereOrNull(
-                  (element) => element.wordID == item["wordID"]);
-              if (item["isNewChapter"] == 1) {
-                if (item["isBismillah"] == 1 && item["pageNumber"] != 187) {
-                  return WidgetSpan(
-                      child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("ﱄ",
-                          style: TextStyle(
-                            fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 3,
-                          )),
-                      Text("ﱃ",
-                          style: TextStyle(
-                            fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 3,
-                          )),
-                      Text("ﱂ",
-                          style: TextStyle(
-                            fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 3,
-                          )),
-                      Text("ﱁ",
-                          style: TextStyle(
-                            fontFamily: "p1",
-                            fontSize: fixedFontSizePercentage + 3,
-                          )),
-                    ],
-                  ));
-                }
-                return WidgetSpan(
-                    child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/svg/surah_header_svg.svg",
-                      width: fixedFontSizePercentage > 30
-                          ? fixedFontSizePercentage * 20
-                          : fixedFontSizePercentage * 16,
-                      height: fixedFontSizePercentage > 30
-                          ? fixedFontSizePercentage * 1.789
-                          : fixedFontSizePercentage * 1.72,
-                    ),
-                    Text("${item["chapterCode"].padLeft(3, '0')}surah",
-                        style: TextStyle(
-                          fontFamily: "surahname",
-                          letterSpacing: -3,
-                          fontSize: fixedFontSizePercentage + 5,
-                        )),
-                  ],
-                ));
-              }
-              if (item["charType"] == "end" && !lineChanged) {
-                return TextSpan(
-                    text: item["text"],
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => {
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return VerseOptionsBottomSheet(item: item);
-                                })
-                          },
-                    style: TextStyle(
-                      // backgroundColor: hasSeperator != null
-                      //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                      //     : null,
-                      color: hasSeperator != null
-                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                          : const Color(0xffae8f74),
-                      fontFamily: "p${page[index]['pageNumber']}",
-                    ));
-              }
-              if (item["charType"] == "end" && lineChanged) {
-                return TextSpan(
-                    text: page[index]['pageNumber'] < 3 ||
-                            item["chapterCode"] == "114"
-                        ? "${item["text"]}                                      "
-                        : "${item["text"]} ",
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => {
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return VerseOptionsBottomSheet(item: item);
-                                })
-                          },
-                    style: TextStyle(
-                      // backgroundColor: hasSeperator != null
-                      //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                      //     : null,
-
-                      color: hasSeperator != null
-                          ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                          : const Color(0xffae8f74),
-                      fontFamily: "p${page[index]['pageNumber']}",
-
-                      // shadows: const [
-                      //   Shadow(
-                      //     offset: Offset(0.0, 0.0),
-                      //     blurRadius: 0.2,
-                      //     color: Color.fromARGB(255, 0, 0, 0),
-                      //   ),
-                      // ],
-                    ));
-              }
-
-              // for fatihah
-              if ((page[index]['pageNumber'] == 1 ||
-                      page[index]['pageNumber'] == 2) &&
-                  lineChanged) {
-                return TextSpan(
-                  text:
-                      "${item["text"]}                                        ",
-                  style: TextStyle(
-                    color: found != null
-                        ? Color(int.parse(found.color ?? "0xff000000"))
-                        : null,
-                    fontFamily: "p${page[index]['pageNumber']}",
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => {
-                          // setMW(),
-                          quranProvider.addMistake(
-                              id: item["wordID"],
-                              pageNumber: item["pageNumber"],
-                              verseNumber: item["verseNumber"],
-                              chapterCode: item["chapterCode"],
-                              context: context,
-                              color: found?.color),
-                          HapticFeedback.lightImpact(),
-                        },
-                );
-              }
-
-              if (index == 0 ||
-                  (item['audioUrl'] != null &&
-                      item['audioUrl'].substring(8, 15) == "001_001")) {
-                return TextSpan(
-                  text:
-                      item["text"] == "ﱁﱂ" ? item["text"] : item["text"] + " ",
-                  style: TextStyle(
-                    // backgroundColor: Colors.red,
-                    letterSpacing: item["text"] == "ﱁﱂ" ? 4 : -5,
-                    color: found != null
-                        ? Color(int.parse(found.color ?? "0xff000000"))
-                        : null,
-                    fontFamily: "p${page[index]['pageNumber']}",
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => {
-                          // setMW(),
-                          quranProvider.addMistake(
-                              id: item["wordID"],
-                              pageNumber: item["pageNumber"],
-                              verseNumber: item["verseNumber"],
-                              chapterCode: item["chapterCode"],
-                              context: context,
-                              color: found?.color),
-                          HapticFeedback.lightImpact(),
-                        },
-                );
-              }
-
-              return TextSpan(
-                  text: lineChanged
-                      ? page[index]['text'] + " "
-                      : page[index]['text'],
-                  style: TextStyle(
-                      color: found != null
-                          ? Color(int.parse(found.color ?? "0xff000000"))
-                          : null,
-                      fontFamily: "p${page[index]['pageNumber']}",
-                      letterSpacing:
-                          index == 0 ? fixedFontSizePercentage - 18.5 : null,
-                      fontSize: fixedFontSizePercentage),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => {
-                          quranProvider.addMistake(
-                              id: item["wordID"],
-                              pageNumber: item["pageNumber"],
-                              verseNumber: item["verseNumber"],
-                              context: context,
-                              chapterCode: item["chapterCode"],
-                              color: found?.color),
-                          HapticFeedback.lightImpact(),
-                        });
-            })),
-        textAlign: TextAlign.center,
-      ),
+              fontFamily: "surahname",
+              letterSpacing: -3,
+              fontSize: fixedFontSizePercentage + 5,
+            ))
+      ],
     );
   }
 }
 
+class Bismillah extends StatelessWidget {
+  const Bismillah({
+    Key? key,
+    required this.fixedFontSizePercentage,
+  }) : super(key: key);
 
+  final double fixedFontSizePercentage;
 
-// class PageWords extends StatefulWidget {
-//   final List page;
-//   final double fixedFontSizePercentage;
-//   final double fixedLineHeightPercentage;
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "ﱁﱂﱃﱄ",
+      style: TextStyle(fontFamily: "p1", fontSize: fixedFontSizePercentage),
+    );
+  }
+}
 
-//   const PageWords(
-//       {Key? key,
-//       required this.page,
-//       required this.fixedFontSizePercentage,
-//       required this.fixedLineHeightPercentage})
-//       : super(key: key);
+class VerseNumber extends StatelessWidget {
+  const VerseNumber({
+    Key? key,
+    required this.context,
+    required this.item,
+    required this.fixedFontSizePercentage,
+  }) : super(key: key);
 
-//   @override
-//   State<PageWords> createState() => _PageWordsState();
-// }
+  final double fixedFontSizePercentage;
+  final BuildContext context;
+  final item;
 
-// class _PageWordsState extends State<PageWords> {
-//   List<List<Widget>> rows = [];
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     fillRows();
-//   }
+  @override
+  Widget build(BuildContext context) {
+    // var hasSeperator = quranProvider.seperators.firstWhereOrNull(
+    //   (element) =>
+    //       element.verseNumber.toString() == item["verseNumber"] &&
+    //       element.pageNumber == item["pageNumber"],
+    // );
+    return GestureDetector(
+      onTap: () => {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return VerseOptionsBottomSheet(item: item);
+            })
+      },
+      child: Text(item["text"],
+          style: TextStyle(
+            color: const Color(0xffae8f74),
+            fontSize: fixedFontSizePercentage,
+            fontFamily: "p${item['pageNumber']}",
+          )),
+    );
+  }
+}
 
-//   void fillRows() {
-//     // List mistakes = Provider.of<QuranProvider>(context, listen: false).mistakes;
-//     List<List<Widget>> rows = [];
-//     for (int i = 0; i < 15; i++) {
-//       rows.add([]);
-//     }
-//     int curRow = 0;
+class Word extends StatefulWidget {
+  const Word({
+    Key? key,
+    // required this.color,
+    required this.item,
+    required this.fixedFontSizePercentage,
+    required this.index,
+  }) : super(key: key);
 
-//     for (int i = 0; i < widget.page.length; i++) {
-//       var item = widget.page[i];
+  final double fixedFontSizePercentage;
+  final item;
+  // final Color color;
+  final int index;
 
-//       final row = Row(
-//         children: [
-//           if (item["isNewChapter"] == 1 &&
-//               item["isBismillah"] == 1 &&
-//               item["pageNumber"] != 187)
-//             Bismillah(
-//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
-//             ),
-//           if (item["isNewChapter"] == 1 && item["isBismillah"] != 1)
-//             SurahHeader(
-//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
-//               chapterCode: item["chapterCode"],
-//             ),
-//           if (item["isNewChapter"] == 1 && item["pageNumber"] == 187)
-//             SurahHeader(
-//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
-//               chapterCode: item["chapterCode"],
-//             ),
-//           if (item["charType"] == "end")
-//             VerseNumber(
-//               context: context,
-//               item: item,
-//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
-//             ),
-//           if (item["charType"] == "word")
-//             Word(
-//               color: null,
-//               item: item,
-//               index: i,
-//               fixedFontSizePercentage: widget.fixedFontSizePercentage,
-//             ),
-//         ],
-//       );
-//       int curLineNum = item["lineNumber"];
-//       // if last item this will return undefined
-//       int aftLineNum =
-//           i != widget.page.length - 1 ? widget.page[i + 1]["lineNumber"] : 15;
-//       bool lineChanged = curLineNum != aftLineNum;
+  @override
+  State<Word> createState() => _WordState();
+}
 
-//       rows[curRow].add(row);
-//       if (lineChanged) {
-//         curRow++;
-//       }
-//     }
-//     if (mounted) {
-//       setState(() {
-//         this.rows = rows;
-//       });
-//     }
-//   }
+class _WordState extends State<Word> {
+  Offset _tapPosition = const Offset(0, 0);
+  void _storePosition(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//         children: List.generate(rows.length, (row) {
-//       return SizedBox(
-//         height: widget.fixedLineHeightPercentage *
-//             MediaQuery.of(context).size.height *
-//             0.0315,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: rows[row],
-//         ),
-//       );
-//     }));
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    // var found = quranProvider.mistakes
+    //     .firstWhereOrNull((element) => element.wordID == item["wordID"]);
+    return Consumer<QuranProvider>(
+      builder: (context, quranProvider, child) {
+        var found = quranProvider.mistakes.firstWhereOrNull(
+            (element) => element.wordID == widget.item["wordID"]);
+        return GestureDetector(
+          onTapDown: _storePosition,
+          onLongPress: () => {
+            if (found != null)
+              showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) {
+                    return WordExtras(
+                      item: widget.item,
+                      mistake: found,
+                    );
+                  })
+          },
+          onTap: () => {
+            quranProvider.addMistake(
+                context: context,
+                id: widget.item["wordID"],
+                pageNumber: widget.item["pageNumber"],
+                verseNumber: widget.item["verseNumber"],
+                chapterCode: widget.item["chapterCode"],
+                color: found?.color),
+            HapticFeedback.lightImpact(),
+          },
+          child: Text(
+            "${widget.item["text"]}",
+            style: TextStyle(
+              fontSize: widget.fixedFontSizePercentage,
+              fontFamily: "p${widget.item["pageNumber"]}",
+              color: Color(int.parse(found?.color ?? "0xFF000000")),
+              // shadows: const [
+              //   Shadow(
+              //     offset: Offset(0.0, 0.0),
+              //     blurRadius: 0.1,
+              //     color: Color.fromARGB(255, 0, 0, 0),
+              //   ),
+              // ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
 
-// class SurahHeader extends StatelessWidget {
-//   final double fixedFontSizePercentage;
-//   final String chapterCode;
-//   const SurahHeader({
-//     Key? key,
-//     required this.fixedFontSizePercentage,
-//     required this.chapterCode,
-//   }) : super(key: key);
+class WordExtras extends StatefulWidget {
+  final item;
+  final mistake;
+  const WordExtras({Key? key, required this.item, required this.mistake})
+      : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       alignment: AlignmentDirectional.center,
-//       children: [
-//         SvgPicture.asset(
-//           "assets/svg/surah_header_svg.svg",
-//           width: fixedFontSizePercentage > 30
-//               ? fixedFontSizePercentage * 20
-//               : fixedFontSizePercentage * 16,
-//           height: fixedFontSizePercentage > 30
-//               ? fixedFontSizePercentage * 1.789
-//               : fixedFontSizePercentage * 1.72,
-//         ),
-//         Text("${chapterCode.padLeft(3, '0')}surah",
-//             style: TextStyle(
-//               fontFamily: "surahname",
-//               letterSpacing: -3,
-//               fontSize: fixedFontSizePercentage + 5,
-//             ))
-//       ],
-//     );
-//   }
-// }
+  @override
+  State<WordExtras> createState() => _WordExtrasState();
+}
 
-// class Bismillah extends StatelessWidget {
-//   const Bismillah({
-//     Key? key,
-//     required this.fixedFontSizePercentage,
-//   }) : super(key: key);
+class _WordExtrasState extends State<WordExtras> {
+  TextEditingController noteController = TextEditingController();
 
-//   final double fixedFontSizePercentage;
+  int groupValue = 0;
+  @override
+  void initState() {
+    super.initState();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Text(
-//       "ﱁﱂﱃﱄ",
-//       style: TextStyle(fontFamily: "p1", fontSize: fixedFontSizePercentage),
-//     );
-//   }
-// }
+  @override
+  void dispose() {
+    super.dispose();
+    noteController.dispose();
+  }
 
-// class VerseNumber extends StatelessWidget {
-//   const VerseNumber({
-//     Key? key,
-//     required this.context,
-//     required this.item,
-//     required this.fixedFontSizePercentage,
-//   }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      builder: ((context, scrollController) => Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: SingleChildScrollView(
+                controller: scrollController,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child:
+                      // height: 600,
+                      Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 0.0),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _wordDetails(),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          _notesSlider(context),
+                          if (groupValue == 0) _newNoteView(context),
+                          if (groupValue == 1) _notesView(context),
+                        ]),
+                  ),
+                )),
+          )),
+    );
+  }
 
-//   final double fixedFontSizePercentage;
-//   final BuildContext context;
-//   final item;
+  Column _notesView(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return ListItem(
+              title: Text(
+                "هذه الأية متشابهة مع التي في سورة البقرة، انتبه",
+                style: TextStyle(fontSize: 12),
+              ),
+              subtitle: SizedBox(
+                width: 400,
+                child: Row(
+                  children: [
+                    Text(
+                      "ahmed",
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "2021-2-21",
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // var hasSeperator = quranProvider.seperators.firstWhereOrNull(
-//     //   (element) =>
-//     //       element.verseNumber.toString() == item["verseNumber"] &&
-//     //       element.pageNumber == item["pageNumber"],
-//     // );
-//     return GestureDetector(
-//       onTap: () => {
-//         showModalBottomSheet(
-//             context: context,
-//             builder: (context) {
-//               return VerseOptionsBottomSheet(item: item);
-//             })
-//       },
-//       child: Text(item["text"],
-//           style: TextStyle(
-//             color: const Color(0xffae8f74),
-//             fontSize: fixedFontSizePercentage,
-//             fontFamily: "p${item['pageNumber']}",
-//           )),
-//     );
-//   }
-// }
+  Column _newNoteView(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        const Text(
+          "إضافة سريعة",
+          style: TextStyle(
+            fontFamily: "montserrat",
+            color: Colors.grey,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        _quickNoteBuilder(),
+        const Text(
+          "أو",
+          style: TextStyle(
+            fontFamily: "montserrat",
+            color: Colors.grey,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        _newNoteInput(),
+        const SizedBox(
+          height: 10,
+        ),
+        _bottomActions(context)
+      ],
+    );
+  }
 
-// class Word extends StatelessWidget {
-//   const Word({
-//     Key? key,
-//     required this.color,
-//     required this.item,
-//     required this.fixedFontSizePercentage,
-//     required this.index,
-//   }) : super(key: key);
+  Row _bottomActions(BuildContext context) {
+    return Row(
+      children: [
+        ElevatedButton(
+            onPressed: () => {},
+            child: Text("إضافة",
+                style: TextStyle(
+                  fontFamily: "montserrat",
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 14,
+                ))),
+        const SizedBox(
+          width: 20,
+        ),
+        TextButton(
+          child: Text("إضافة + تسجيل كإضافة سريعة",
+              style: TextStyle(
+                fontFamily: "montserrat",
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 10,
+              )),
+          onPressed: () => {},
+        )
+      ],
+    );
+  }
 
-//   final double fixedFontSizePercentage;
-//   final item;
-//   final color;
-//   final int index;
+  CustomInput _newNoteInput() {
+    return CustomInput(
+      controller: noteController,
+      prefixIcon: Icons.subject_rounded,
+      keyboardType: TextInputType.multiline,
+      minLines: 3,
+      maxLength: 100,
+      maxLines: 3,
+      label: "ملاحظة مفصلة ",
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'الرجاء ادخال موضوع الرسالة';
+        }
+        return null;
+      },
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // var found = quranProvider.mistakes
-//     //     .firstWhereOrNull((element) => element.wordID == item["wordID"]);
-//     return GestureDetector(
-//       onTap: () => {
-//         // quranProvider.addMistake(
-//         //     id: item["wordID"],
-//         //     pageNumber: item["pageNumber"],
-//         //     verseNumber: item["verseNumber"],
-//         //     chapterCode: item["chapterCode"],
-//         //     color: found?.color),
-//         // HapticFeedback.lightImpact(),
-//       },
-//       child: Text(
-//         "${item["text"]}",
-//         style: TextStyle(
-//           fontSize: fixedFontSizePercentage,
-//           fontFamily: "p${item["pageNumber"]}",
-//           color: color,
-//           letterSpacing: index == 0 ? 4 : 0,
-//           shadows: const [
-//             Shadow(
-//               offset: Offset(0.0, 0.0),
-//               blurRadius: 0.1,
-//               color: Color.fromARGB(255, 0, 0, 0),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  SizedBox _quickNoteBuilder() {
+    return SizedBox(
+        child: ListView.builder(
+      shrinkWrap: true,
+      itemBuilder: (context, index) => ListItem(
+        title: const Text("خطأ تجويد"),
+        leading: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            border: Border.all(
+                width: 2, color: Theme.of(context).scaffoldBackgroundColor),
+            borderRadius: const BorderRadius.all(Radius.circular(7)),
+          ),
+          child: Center(
+              child: Icon(
+            Icons.add,
+            size: 20,
+            color: Theme.of(context).colorScheme.primary,
+          )),
+        ),
+      ),
+      itemCount: 2,
+    ));
+  }
+
+  CupertinoSlidingSegmentedControl<int> _notesSlider(BuildContext context) {
+    return CupertinoSlidingSegmentedControl<int>(
+      children: const {
+        0: Text("إضافة ملاحظة"),
+        1: Text("الملاحظات السابقة"),
+      },
+      groupValue: groupValue,
+      onValueChanged: (val) => {
+        setState(() {
+          groupValue = val!;
+        })
+      },
+      thumbColor: Theme.of(context).colorScheme.primary,
+      padding: const EdgeInsets.all(8),
+    );
+  }
+
+  Row _wordDetails() {
+    return Row(
+      children: [
+        Text("${widget.item['text']}",
+            style: TextStyle(
+              fontFamily: "p${widget.item["pageNumber"]}",
+              color: Color(int.parse(widget.mistake.color)),
+              fontSize: 30,
+            )),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(" - "),
+        ),
+        Text(
+            "آية ${widget.item["verseNumber"]} - ص${widget.item["pageNumber"]}",
+            style: const TextStyle(
+              fontFamily: "montserrat",
+              color: Colors.grey,
+              fontSize: 14,
+            )),
+      ],
+    );
+  }
+}

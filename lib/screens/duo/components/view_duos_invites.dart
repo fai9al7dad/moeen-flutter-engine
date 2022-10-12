@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:confetti/confetti.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -12,6 +13,7 @@ import 'package:moeen/screens/duo/components/invites_shimmer.dart';
 import 'package:moeen/screens/settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'dart:math' as math;
 
 GlobalKey _one = GlobalKey();
 
@@ -24,7 +26,7 @@ class ViewDuoInvites extends StatefulWidget {
 
 class _ViewDuoInvitesState extends State<ViewDuoInvites> {
   final Api api = Api();
-
+  final confettiController = ConfettiController();
   late List<DuoInviteModel> invites;
   bool loading = true;
   @override
@@ -32,6 +34,13 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
     super.initState();
     fetchInvites();
     checkIfFirstTime();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    confettiController.dispose();
   }
 
   void checkIfFirstTime() async {
@@ -80,76 +89,87 @@ class _ViewDuoInvitesState extends State<ViewDuoInvites> {
         child: Text("لا يوجد لديك طلبات إضافة"),
       );
     }
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: GroupedListView<dynamic, String>(
-          elements: invites,
-          // separatorBuilder: (context, index) => const Divider(
-          //       thickness: 0.8,
-          //     ),
-          groupBy: (element) {
-            return element.type;
-          },
-          groupSeparatorBuilder: (value) => SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
-                  child: Text(
-                    value == "recieved" ? "طلبات إضافة" : "دعوات أرسلتها",
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+    return Stack(alignment: Alignment.topCenter, children: [
+      Container(
+        padding: const EdgeInsets.all(20),
+        child: GroupedListView<dynamic, String>(
+            elements: invites,
+            // separatorBuilder: (context, index) => const Divider(
+            //       thickness: 0.8,
+            //     ),
+            groupBy: (element) {
+              return element.type;
+            },
+            groupSeparatorBuilder: (value) => SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
+                    child: Text(
+                      value == "recieved" ? "طلبات إضافة" : "دعوات أرسلتها",
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ),
-          separator: const Divider(
-            height: 0,
-            thickness: 0.8,
-          ),
-          order: GroupedListOrder.DESC,
-          indexedItemBuilder: (context, element, index) {
-            int num = 2 + 1;
+            separator: const Divider(
+              height: 0,
+              thickness: 0.8,
+            ),
+            order: GroupedListOrder.DESC,
+            indexedItemBuilder: (context, element, index) {
+              int num = 2 + 1;
 
-            if (element.type == "recieved") {
-              if (index == 0) {
-                return CustomShowCase(
-                    caseKey: _one,
-                    title: "لديك طلب إضافة",
-                    description: "بعد قبول الطلب، يمكنكم تصحيح مصاحفكم عن بعد ",
-                    child: AcceptOrRejectInvite(
-                        num: num,
-                        index: 1,
-                        id: element.firstUser?.id,
-                        fetchInvites: fetchInvites,
-                        username: element.firstUser?.username));
+              if (element.type == "recieved") {
+                if (index == 0) {
+                  return CustomShowCase(
+                      caseKey: _one,
+                      title: "لديك طلب إضافة",
+                      description:
+                          "بعد قبول الطلب، يمكنكم تصحيح مصاحفكم عن بعد ",
+                      child: AcceptOrRejectInvite(
+                          num: num,
+                          index: 1,
+                          confettiController: confettiController,
+                          id: element.firstUser?.id,
+                          fetchInvites: fetchInvites,
+                          username: element.firstUser?.username));
+                }
+                return AcceptOrRejectInvite(
+                    num: num,
+                    index: 1,
+                    confettiController: confettiController,
+                    id: element.firstUser?.id,
+                    fetchInvites: fetchInvites,
+                    username: element.firstUser?.username);
+              } else {
+                return ListItem(
+                  title: Text("${element.firstUser?.username}"),
+                  subtitle: const Text("بإنتظار القبول"),
+                  trailing: TextButton(
+                    child: Text("إلغاء",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary)),
+                    onPressed: () async {
+                      try {
+                        await api.deletePendingDuoInvite(
+                            toUserID: element.firstUser?.id);
+                        fetchInvites();
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                  ),
+                );
               }
-              return AcceptOrRejectInvite(
-                  num: num,
-                  index: 1,
-                  id: element.firstUser?.id,
-                  fetchInvites: fetchInvites,
-                  username: element.firstUser?.username);
-            } else {
-              return ListItem(
-                title: Text("${element.firstUser?.username}"),
-                subtitle: const Text("بإنتظار القبول"),
-                trailing: TextButton(
-                  child: Text("إلغاء",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary)),
-                  onPressed: () async {
-                    try {
-                      await api.deletePendingDuoInvite(
-                          toUserID: element.firstUser?.id);
-                      fetchInvites();
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                ),
-              );
-            }
-          }),
-    );
+            }),
+      ),
+      ConfettiWidget(
+        confettiController: confettiController,
+        blastDirectionality: BlastDirectionality.explosive,
+        blastDirection: math.pi / 2,
+        shouldLoop: true,
+      )
+    ]);
   }
 }
 
@@ -179,36 +199,45 @@ class AcceptOrRejectInvite extends StatelessWidget {
   final String? username;
   final int? id;
   final Function? fetchInvites;
+  final ConfettiController confettiController;
   const AcceptOrRejectInvite(
       {Key? key,
       required this.username,
       required this.id,
       required this.num,
       required this.fetchInvites,
+      required this.confettiController,
       required this.index})
       : super(key: key);
 
   void acceptOrRejectInvite({inviteID, type, context}) async {
     final Api api = Api();
-    // try {
-    //   await api.acceptOrRejectInvite(fromUserID: inviteID, type: type);
-    //   // ignore: use_build_context_synchronously
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //       backgroundColor: Colors.green[200],
-    //       content: Text(
-    //         type == "accept" ? "تم القبول 👍✅" : "تم الرفض 👍❌",
-    //         style: TextStyle(color: Colors.green[900]),
-    //       )));
-    //   fetchInvites!();
-    // } on Dio.DioError catch (e) {
-    //   print(e.response?.data);
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //       backgroundColor: Colors.red[200],
-    //       content: Text(
-    //         e.response?.data["message"],
-    //         style: TextStyle(color: Colors.red[900]),
-    //       )));
-    // }
+
+    try {
+      await api.acceptOrRejectInvite(fromUserID: inviteID, type: type);
+      if (type == "accept") {
+        confettiController.play();
+        Future.delayed(const Duration(seconds: 2), () {
+          confettiController.stop();
+        });
+      }
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green[200],
+          content: Text(
+            type == "accept" ? "تم القبول 👍✅" : "تم الرفض 👍❌",
+            style: TextStyle(color: Colors.green[900]),
+          )));
+      fetchInvites!();
+    } on Dio.DioError catch (e) {
+      print(e.response?.data);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red[200],
+          content: Text(
+            e.response?.data["message"],
+            style: TextStyle(color: Colors.red[900]),
+          )));
+    }
   }
 
   @override
@@ -221,53 +250,17 @@ class AcceptOrRejectInvite extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Column(
-                // crossAxisAlignment: Cr,\
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle_outline,
-                      size: 25, color: Theme.of(context).colorScheme.primary),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text("قبول",
-                      style: TextStyle(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5),
-                          fontSize: 10))
-                ],
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Column(
-                // crossAxisAlignment: Cr,\
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.highlight_off_outlined,
-                      size: 25,
-                      color: Theme.of(context).primaryColor.withOpacity(0.5)),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text("رفض",
-                      style: TextStyle(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5),
-                          fontSize: 10))
-                ],
-              ),
-              // ElevatedButton(
-              //     onPressed: () => acceptOrRejectInvite(
-              //         inviteID: id, type: "accept", context: context),
-              //     child: const Text("قبول")),
-              // TextButton(
-              //     onPressed: () => acceptOrRejectInvite(
-              //         inviteID: id, type: "reject", context: context),
-              //     child: const Text(
-              //       "رفض",
-              //       style: TextStyle(color: Colors.red),
-              //     )),
+              ElevatedButton(
+                  onPressed: () => acceptOrRejectInvite(
+                      inviteID: id, type: "accept", context: context),
+                  child: const Text("قبول")),
+              TextButton(
+                  onPressed: () => acceptOrRejectInvite(
+                      inviteID: id, type: "reject", context: context),
+                  child: const Text(
+                    "رفض",
+                    style: TextStyle(color: Colors.red),
+                  )),
             ],
           ),
         ));
