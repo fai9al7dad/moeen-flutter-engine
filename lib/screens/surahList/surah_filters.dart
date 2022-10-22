@@ -6,6 +6,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:moeen/components/list_item.dart';
+import 'package:moeen/helpers/database/highlight_notes/highlight_notes.dart';
+import 'package:moeen/helpers/database/highlight_notes/models/highlight_note_model.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
@@ -23,14 +25,14 @@ class SurahFilters extends StatefulWidget {
 
 class _SurahFiltersState extends State<SurahFilters> {
   final wcm = WordColorMap();
-  final DatabaseHelper db = DatabaseHelper();
+  final db = DatabaseHelper();
   final werdsColorsMap = WerdsColorsMap();
+  final highLightNotes = HighLightNotesDB();
 
   List<Word> data = [];
   bool loading = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }
@@ -46,12 +48,17 @@ class _SurahFiltersState extends State<SurahFilters> {
     List<Word> _data = [];
     for (var item in colors) {
       Word word = await db.getWordByID(id: item.wordID);
+      // get highlight note by word.id if exists and append it to the word
+      HighLightNoteModel? highlightNote =
+          await highLightNotes.getFirstHighlightNoteFromWord(word.id);
+
       if (item.color == MistakesColors.revert) continue;
       _data.add(Word(
           id: word.id,
           verseNumber: word.verseNumber,
           text: word.text,
           chapterCode: word.chapterCode,
+          highlightNote: highlightNote?.note,
           pageID: word.pageID,
           color: item.color));
     }
@@ -79,6 +86,7 @@ class _SurahFiltersState extends State<SurahFilters> {
             // separatorBuilder: (context, index) => const Divider(
             //       thickness: 0.8,
             //     ),
+
             groupBy: (element) {
               return element.chapterCode;
             },
@@ -137,21 +145,32 @@ class _SurahFiltersState extends State<SurahFilters> {
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.of(context).size.width * 0.8,
                       ),
-                      child: Row(children: [
-                        Text("${element.chapterCode}surah",
-                            style: const TextStyle(
-                                fontSize: 18, fontFamily: "surahname")),
-                        const SizedBox(width: 8),
-                        Text(
-                          "رقم الصفحة: ${element.pageID}",
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "رقم الآية: ${element.verseNumber}",
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      ])));
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (element.highlightNote != null)
+                            Text("${element.highlightNote}",
+                                style: TextStyle(
+                                    color: Color(int.parse(element.color)))),
+                          if (element.highlightNote != null)
+                            const SizedBox(height: 8),
+                          Row(children: [
+                            Text("${element.chapterCode}surah",
+                                style: const TextStyle(
+                                    fontSize: 18, fontFamily: "surahname")),
+                            const SizedBox(width: 8),
+                            Text(
+                              "رقم الصفحة: ${element.pageID}",
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "رقم الآية: ${element.verseNumber}",
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ]),
+                        ],
+                      )));
             }));
   }
 }

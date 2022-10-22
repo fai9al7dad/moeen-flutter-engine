@@ -126,7 +126,6 @@ class SeperatorsDB {
     final List<Map<String, dynamic>> maps = await dbClient!.rawQuery(
         "select * from $seperatorsDB where wordID = ${seperator.wordID} ");
     if (maps.isNotEmpty) {
-      inspect("exists");
       await dbClient.update(
           seperatorsDB,
           {

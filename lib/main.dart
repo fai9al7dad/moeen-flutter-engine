@@ -42,7 +42,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<QuranProvider>(context, listen: false).getData();
     Provider.of<ThemeProvider>(context, listen: false).fetchTheme();

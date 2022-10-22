@@ -21,6 +21,8 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
     // const Analytics(),
     const SeperatorsScreen(),
     const Settings(),
+    const Settings(),
+    const Settings(),
   ];
   int currentTab = 0;
   @override
@@ -31,15 +33,15 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
         bottomNavigationBar: BottomNavigationBar(
           // type: BottomNavigationBarType.shifting,
           unselectedItemColor: Colors.grey,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          unselectedFontSize: 0,
-          selectedFontSize: 0,
+          // showSelectedLabels: false,
+          // showUnselectedLabels: false,
+          // unselectedFontSize: 0,
+          // selectedFontSize: 0,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.group_outlined),
-              label: '',
-              // label: 'الثنائيات',
+              // label: '',
+              label: 'الثنائيات',
             ),
             // BottomNavigationBarItem(
             //   icon: Icon(Icons.bar_chart_outlined),
@@ -49,14 +51,26 @@ class _ExtraScreensContainerState extends State<ExtraScreensContainer> {
             BottomNavigationBarItem(
               icon: Icon(Icons.bookmarks_outlined),
               // backgroundColor: Color(0xfffff8ed),
-              label: '',
-              // label: 'الفواصل',
+              // label: '',
+              label: 'الفواصل',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart_outlined),
+              // backgroundColor: Color(0xfffff8ed),
+              // label: '',
+              label: 'الإحصائيات',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.table_restaurant_outlined),
+              // backgroundColor: Color(0xfffff8ed),
+              // label: '',
+              label: 'اختبار الحفظ',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined),
               // backgroundColor: Color(0xfffff8ed),
-              label: '',
-              // label: 'الإعدادات',
+              // label: '',
+              label: 'الإعدادات',
             ),
           ],
           currentIndex: currentTab,

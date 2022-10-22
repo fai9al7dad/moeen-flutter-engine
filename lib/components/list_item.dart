@@ -28,7 +28,7 @@ class ListItem extends StatelessWidget {
           border: Border.all(color: Theme.of(context).colorScheme.secondary),
           borderRadius: BorderRadius.circular(7)),
       child: ListTile(
-        tileColor: Theme.of(context).colorScheme.background,
+        // tileColor: Theme.of(context).colorScheme.background,
         onTap: onTap,
         leading: index != null
             ? Container(

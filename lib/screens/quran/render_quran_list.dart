@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:moeen/helpers/database/highlight_notes/highlight_notes.dart';
 
 import 'package:moeen/helpers/database/seperators/seperators_database.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
@@ -50,9 +51,6 @@ class _MainScaffoldState extends State<MainScaffold> {
     Provider.of<QuranProvider>(context, listen: false)
         .refreshData(pageNumber: 1);
     checkTemp();
-    // Provider.of<QuranProvider>(context, listen: false).refreshData();
-
-    // Provider.of<AuthProvider>(context, listen: false).tryToken(token: );
   }
 
   void initSeperators() async {

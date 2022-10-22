@@ -168,6 +168,7 @@ class ShimmerLoading extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: ListView.builder(
+          shrinkWrap: true,
           itemCount: 3,
           itemBuilder: (context, index) {
             return const DuoShimmer();

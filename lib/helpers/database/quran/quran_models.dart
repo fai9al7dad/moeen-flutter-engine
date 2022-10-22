@@ -16,7 +16,9 @@ class Word {
       transliteration,
       verseNumber,
       text,
+      highlightNote,
       color;
+
   int? id, lineID, isNewChapter, wordID, isBismillah;
   int? lineNumber;
   int? pageID;
@@ -29,6 +31,7 @@ class Word {
       this.lineID,
       this.lineNumber,
       this.chapterCode,
+      this.highlightNote,
       this.text,
       this.transliteration,
       this.verseNumber,

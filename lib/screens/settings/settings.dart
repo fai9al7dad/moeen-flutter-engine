@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/list_item.dart';
@@ -78,99 +79,107 @@ class _SettingsState extends State<Settings> {
             textDirection: TextDirection.rtl,
             child: Stack(children: [
               Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    if (authProvider.isAuth)
-                      AuthUserInfo(
-                          username: authProvider.authUser?.username,
-                          userID: authProvider.authUser?.id),
-                    const SizedBox(height: 20),
-                    ListItem(
-                      title: const Text('عن التطبيق'),
-                      leading: const Icon(Icons.info_outline_rounded),
-                      trailing: Icon(Icons.chevron_right,
-                          color: Theme.of(context).colorScheme.primary),
-                      onTap: () {
-                        Navigator.pushNamed(context, "/about-app");
-                      },
-                    ),
-                    ListItem(
-                      title: const Text('تواصل معنا'),
-                      leading: const Icon(Icons.chat_outlined),
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        color: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: AnimationConfiguration.toStaggeredList(
+                      childAnimationBuilder: (widget) => SlideAnimation(
+                        horizontalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: widget,
+                        ),
                       ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ContactScreen(
-                                      authUserName:
-                                          authProvider.authUser?.username,
-                                      authEmail: authProvider.authUser?.email,
-                                    )));
-                      },
-                    ),
-                    ListItem(
-                      title: const Text('شرح التطبيق'),
-                      leading: const Icon(Icons.description_outlined),
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OnBoarding(
-                                      updateOnBoarding: () =>
-                                          {Navigator.pop(context)},
-                                    )));
-                      },
-                    ),
-                    ListItem(
-                      title: const Text('المظهر الليلي'),
-                      leading: const Icon(Icons.mode_night_outlined),
-                      trailing: Switch.adaptive(
-                        value:
-                            Provider.of<ThemeProvider>(context, listen: false)
+                      children: [
+                        if (authProvider.isAuth)
+                          AuthUserInfo(
+                              username: authProvider.authUser?.username,
+                              userID: authProvider.authUser?.id),
+                        const SizedBox(height: 20),
+                        ListItem(
+                          title: const Text('عن التطبيق'),
+                          leading: const Icon(Icons.info_outline_rounded),
+                          trailing: Icon(Icons.chevron_right,
+                              color: Theme.of(context).colorScheme.primary),
+                          onTap: () {
+                            Navigator.pushNamed(context, "/about-app");
+                          },
+                        ),
+                        ListItem(
+                          title: const Text('تواصل معنا'),
+                          leading: const Icon(Icons.chat_outlined),
+                          trailing: Icon(
+                            Icons.chevron_right,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ContactScreen(
+                                          authUserName:
+                                              authProvider.authUser?.username,
+                                          authEmail:
+                                              authProvider.authUser?.email,
+                                        )));
+                          },
+                        ),
+                        ListItem(
+                          title: const Text('شرح التطبيق'),
+                          leading: const Icon(Icons.description_outlined),
+                          trailing: Icon(
+                            Icons.chevron_right,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OnBoarding(
+                                          updateOnBoarding: () =>
+                                              {Navigator.pop(context)},
+                                        )));
+                          },
+                        ),
+                        ListItem(
+                          title: const Text('المظهر الليلي'),
+                          leading: const Icon(Icons.mode_night_outlined),
+                          trailing: Switch.adaptive(
+                            value: Provider.of<ThemeProvider>(context,
+                                    listen: false)
                                 .isDarkMode,
-                        activeColor: Theme.of(context).colorScheme.primary,
-                        onChanged: (bool value) => {
-                          Provider.of<ThemeProvider>(context, listen: false)
-                              .toggleTheme(value)
-                        },
-                      ),
+                            activeColor: Theme.of(context).colorScheme.primary,
+                            onChanged: (bool value) => {
+                              Provider.of<ThemeProvider>(context, listen: false)
+                                  .toggleTheme(value)
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        if (authProvider.isAuth)
+                          ListItem(
+                            title: const Text('مزامنة البيانات على هذا الجهاز'),
+                            leading: const Icon(Icons.sync),
+                            onTap: () {
+                              setState(() {
+                                showSyncDialog = true;
+                              });
+                            },
+                          ),
+                        const SizedBox(height: 20),
+                        if (authProvider.isAuth)
+                          ListItem(
+                              onTap: () => setState(() {
+                                    showAlertDialog = true;
+                                  }),
+                              title: const Center(
+                                child: Text("تسجيل الخروج",
+                                    style: TextStyle(
+                                        fontFamily: "montserrat-bold",
+                                        fontSize: 14,
+                                        color: Colors.red)),
+                              ))
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    if (authProvider.isAuth)
-                      ListItem(
-                        title: const Text('مزامنة البيانات على هذا الجهاز'),
-                        leading: const Icon(Icons.sync),
-                        onTap: () {
-                          setState(() {
-                            showSyncDialog = true;
-                          });
-                        },
-                      ),
-                    const SizedBox(height: 20),
-                    if (authProvider.isAuth)
-                      ListItem(
-                          onTap: () => setState(() {
-                                showAlertDialog = true;
-                              }),
-                          title: const Center(
-                            child: Text("تسجيل الخروج",
-                                style: TextStyle(
-                                    fontFamily: "montserrat-bold",
-                                    fontSize: 14,
-                                    color: Colors.red)),
-                          ))
-                  ],
-                ),
-              ),
+                  )),
               if (showAlertDialog)
                 AlertDialog(
                   actions: [
