@@ -1,13 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moeen/helpers/general/constants.dart';
-import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 void main() {
@@ -25,10 +23,7 @@ void main() {
       ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
       ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
     ],
-    child: DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const MyApp(), // Wrap your app
-    ),
+    child: const MyApp(), // Wrap your app
   ));
 }
 
@@ -55,8 +50,6 @@ class _MyAppState extends State<MyApp> {
           builder: Builder(
         builder: (context) => MaterialApp(
           useInheritedMediaQuery: true,
-          locale: DevicePreview.locale(context),
-          builder: DevicePreview.appBuilder,
           routes: CustomRouter.routes,
           title: 'تطبيق معين',
           debugShowCheckedModeBanner: false,
@@ -68,15 +61,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
-// ThemeData(
-          
-//           fontFamily: "montserrat",
-//           scaffoldBackgroundColor: const Color(0xfffff8ed),
-//           // scaffoldBackgroundColor: const Color(0xff1f2937),
-//           primarySwatch: Colors.green,
-//         ),
 // class Word extends StatefulWidget {
 //   var word;
 //   var pageID;

@@ -127,13 +127,10 @@ class _MainScaffoldState extends State<MainScaffold> {
                     child: PageView.builder(
                       controller: quranProvider.pageController,
                       allowImplicitScrolling: true,
-                      physics: const BouncingScrollPhysics(),
-                      // reverse: true,
-                      // physics: const AlwaysScrollableScrollPhysics(),
+                      physics: const CustomPageViewScrollPhysics(),
                       // scrollDirection: Axis.horizontal,
                       clipBehavior: Clip.none,
-
-                      itemCount: quranProvider.quran.length,
+                      itemCount: 604,
                       onPageChanged: (p) {
                         quranProvider.refreshData(pageNumber: p + 1);
                       },
@@ -141,12 +138,8 @@ class _MainScaffoldState extends State<MainScaffold> {
                         return FractionallySizedBox(
                           widthFactor: 1 / 1.1,
                           child: RenderPage(
-                              page: quranProvider.quran[index],
-                              fixedFontSizePercentageForHeader:
-                                  fixedFontSizePercentageForHeader,
-                              fixedFontSizePercentage: fixedFontSizePercentage,
-                              fixedLineHeightPercentage:
-                                  fixedLineHeightPercentage),
+                            index: index,
+                          ),
                         );
                         // return const Text("sdf");
                         // return const Text("sdf");

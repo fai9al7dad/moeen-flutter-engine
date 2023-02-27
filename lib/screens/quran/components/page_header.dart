@@ -7,75 +7,73 @@ import 'package:moeen/screens/quran/components/page_header_mistakes_and_warnings
 import 'package:provider/provider.dart';
 
 class PageHeader extends StatelessWidget {
-  final page;
-  final double fixedFontSizePercentageForHeader;
-  const PageHeader(
-      {Key? key,
-      required this.page,
-      required this.fixedFontSizePercentageForHeader})
-      : super(key: key);
+  final int index;
+  const PageHeader({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    double headerPadding = fixedFontSizePercentageForHeader >= 18 ? 110 : 10;
+    double headerPadding = 10;
 
     return Padding(
       padding: EdgeInsets.only(left: headerPadding, right: headerPadding),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Expanded(
-          //     child: Row(children: [
-          // ])),
-          Row(
-            children: [
-              Text(
-                "الحزب ${page["hizbNumber"].toString()}",
-                style: TextStyle(
+      child: Consumer<QuranProvider>(builder: (context, quranProvider, child) {
+        var page = quranProvider.quran[index];
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Expanded(
+            //     child: Row(children: [
+            // ])),
+            Row(
+              children: [
+                Text(
+                  "الحزب ${page["hizbNumber"].toString()}",
+                  style: TextStyle(
                     color: const Color(0xffae8f74),
                     fontFamily: "montserrat",
-                    fontSize: fixedFontSizePercentageForHeader),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                "الجزء ${page["juzNumber"].toString()}",
-                style: TextStyle(
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  "الجزء ${page["juzNumber"].toString()}",
+                  style: TextStyle(
                     color: const Color(0xffae8f74),
                     fontFamily: "montserrat",
-                    fontSize: fixedFontSizePercentageForHeader),
-              ),
-            ],
-          ),
+                  ),
+                ),
+              ],
+            ),
 
-          Row(children: [
-            PageNumber(
-              pageNumber: page["pageNumber"],
-              fixedFontSizePercentage: fixedFontSizePercentageForHeader,
-            ),
-            PageHeaderMistakesAndWarnings(
-              pageNumber: page["pageNumber"],
-              fixedFontSizePercentageForHeader:
-                  fixedFontSizePercentageForHeader,
-            ),
-          ]),
-          Row(
-            children: [
-              SurahName(
-                surah: page["chapterCode"],
-                fixedFontSizePercentageForHeader:
-                    fixedFontSizePercentageForHeader,
+            Row(children: [
+              PageNumber(
+                pageNumber: page["pageNumber"],
+                fixedFontSizePercentage: 18,
               ),
-              const SizedBox(
-                width: 5,
+              PageHeaderMistakesAndWarnings(
+                pageNumber: page["pageNumber"],
+                fixedFontSizePercentageForHeader: 18,
               ),
-              DuosOrWerd(
-                fixedFontSizePercentageForHeader:
-                    fixedFontSizePercentageForHeader,
-              )
-            ],
-          )
-        ],
-      ),
+            ]),
+            Row(
+              children: [
+                SurahName(
+                  surah: page["chapterCode"],
+                  fixedFontSizePercentageForHeader: 18,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                DuosOrWerd(
+                  fixedFontSizePercentageForHeader: 18,
+                )
+              ],
+            )
+          ],
+        );
+      }),
     );
   }
 }

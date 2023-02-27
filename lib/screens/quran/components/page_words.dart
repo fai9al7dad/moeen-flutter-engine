@@ -1,113 +1,96 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moeen/screens/quran/components/page_words/word.dart';
+import 'package:moeen/helpers/general/GeneralHelpers.dart';
+import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:moeen/screens/quran/components/verse_options_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
-class PageWords extends StatefulWidget {
-  final List page;
-  final double fixedFontSizePercentage;
-  final double fixedLineHeightPercentage;
+final helpers = GeneralHelpers();
 
-  const PageWords(
-      {Key? key,
-      required this.page,
-      required this.fixedFontSizePercentage,
-      required this.fixedLineHeightPercentage})
-      : super(key: key);
-
-  @override
-  State<PageWords> createState() => _PageWordsState();
-}
-
-class _PageWordsState extends State<PageWords> {
-  List<List<Widget>> rows = [];
-
-  void fillRows(context) {
-    // print quran provider mistakes
-    List<List<Widget>> rows = [];
-    for (int i = 0; i < 15; i++) {
-      rows.add([]);
-    }
-    int curRow = 0;
-    for (int i = 0; i < widget.page.length; i++) {
-      var item = widget.page[i];
-
-      // var found = _mistakes
-      //     .firstWhereOrNull((element) => element.wordID == item["wordID"]);
-      Widget? el;
-      if (item["isNewChapter"] == 1 &&
-          item["isBismillah"] == 1 &&
-          item["pageNumber"] != 187) {
-        el = Bismillah(
-          fixedFontSizePercentage: widget.fixedFontSizePercentage,
-        );
-      }
-      if (item["isNewChapter"] == 1 && item["isBismillah"] != 1) {
-        el = SurahHeader(
-          fixedFontSizePercentage: widget.fixedFontSizePercentage,
-          chapterCode: item["chapterCode"],
-        );
-      }
-      if (item["isNewChapter"] == 1 && item["pageNumber"] == 187) {
-        el = SurahHeader(
-          fixedFontSizePercentage: widget.fixedFontSizePercentage,
-          chapterCode: item["chapterCode"],
-        );
-      }
-      if (item["charType"] == "end") {
-        el = VerseNumber(
-          context: context,
-          item: item,
-          fixedFontSizePercentage: widget.fixedFontSizePercentage,
-        );
-      }
-      if (item["charType"] == "word") {
-        el = Word(
-          // color: Color(int.parse(found?.color ?? "0xFF000000")),
-          item: item,
-          index: i,
-          fixedFontSizePercentage: widget.fixedFontSizePercentage,
-        );
-      }
-      int curLineNum = item["lineNumber"];
-      // if last item this will return undefined
-      int aftLineNum =
-          i != widget.page.length - 1 ? widget.page[i + 1]["lineNumber"] : 15;
-      bool lineChanged = curLineNum != aftLineNum;
-
-      rows[curRow].add(el!);
-      if (lineChanged) {
-        curRow++;
-      }
-    }
-    // rows[0].add(const Text("s"));
-    if (mounted) {
-      setState(() {
-        this.rows = rows;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fillRows(context);
-  }
+class PageWords extends StatelessWidget {
+  final int index;
+  const PageWords({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: List.generate(rows.length, (row) {
-      return SizedBox(
-        height: widget.fixedLineHeightPercentage *
-            MediaQuery.of(context).size.height *
-            0.03,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: rows[row],
-        ),
-      );
-    }));
+    return Consumer<QuranProvider>(
+      builder: (context, quranProvider, child) {
+        String pageNumber = (index + 1).toString();
+        var lastItem = quranProvider.quran[index].last;
+        return Column(
+            // loop by the number of lines -> to render the lines in the page
+            children: List.generate(lastItem["lineNumber"], (line) {
+          int lineNumber = line + 1;
+          return Stack(
+            children: [
+              ...List.generate(quranProvider.quran[index].length, (i) {
+                var e = quranProvider.quran[index][i];
+                if (e["lineNumber"] == lineNumber) {
+                  if (e["isNewChapter"] == 1 && e["isBismillah"] != 1) {
+                    return Center(
+                      child: Image.asset(
+                        "assets/images/markers/ayah_2.png",
+                        width: 350,
+                        // height: 50,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    );
+                  }
+                  if (e["charType"] == "end") {
+                    return Positioned(
+                      top: 15,
+                      left: e["x_start"].toDouble() * 0.38,
+                      child: Stack(alignment: Alignment.center, children: [
+                        Image.asset(
+                          "assets/images/markers/ayah_3.png",
+                          // fit: BoxFit.fitWidth,
+                          width: 25,
+                          height: 25,
+                        ),
+                        Text(
+                          helpers.replaceEnglishNumber(
+                              e["verseNumber"].toString()),
+                          style: const TextStyle(
+                            fontFamily: "naskh",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ]),
+                    );
+                  }
+                  return Positioned(
+                    left: e["x_start"].toDouble() * 0.38,
+                    child: GestureDetector(
+                      child: const SizedBox(
+                        width: 20,
+                        height: 20,
+                      ),
+
+                      // onTap: () {
+
+                      // },
+                    ),
+                  );
+                }
+                return const SizedBox();
+              }),
+              Image.asset(
+                "assets/images/quran_images/$pageNumber/$lineNumber.png",
+                fit: BoxFit.fitWidth,
+                width: 1080,
+                height: 50,
+              )
+            ],
+          );
+        }));
+      },
+    );
   }
 }
 

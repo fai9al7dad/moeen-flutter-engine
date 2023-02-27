@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +89,7 @@ class QuranProvider with ChangeNotifier {
   }
 
   void getData() async {
-    _loadingGetData = false;
+    _loadingGetData = true;
     var databaseHelper = DatabaseHelper();
     List q = await databaseHelper.getJoinedQuran();
     _quran = q;
@@ -96,16 +98,20 @@ class QuranProvider with ChangeNotifier {
   }
 
   Future refreshData({pageNumber}) async {
-    var m;
-    if (_isWerd) {
-      m = await werdColorsMaps.getPageColors(pageNumber: pageNumber);
-    } else {
-      m = await wordsColorsMap.getPageColors(pageNumber: pageNumber);
-    }
+    // var m;
+    // var databaseHelper = DatabaseHelper();
+    // List q = await databaseHelper.getJoinedQuran(pageNumber: 10);
+    // _quran = q;
 
-    _mistakes = m;
+    // if (_isWerd) {
+    //   m = await .getPageColors(pageNumber: pageNumber);
+    // } else {
+    //   m = await wordsColorsMap.getPageColors(pageNumber: pageNumber);
+    // }
+
+    // _mistakes = m;
     // disabling notify listeners here might mean that first two renderd pages will not show colors
-    notifyListeners();
+    // notifyListeners();
   }
 
   void refreshSeperotrs() async {
