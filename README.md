@@ -2,6 +2,8 @@
 
 ## bugs
 
+global listener on page that triggers and calcaulate bbox on press
+
 ## improvments
 
 - [ ] optimize sql init query on android, ios->?

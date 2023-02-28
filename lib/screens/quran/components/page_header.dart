@@ -19,7 +19,7 @@ class PageHeader extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: headerPadding, right: headerPadding),
       child: Consumer<QuranProvider>(builder: (context, quranProvider, child) {
-        var page = quranProvider.quran[index];
+        var page = quranProvider.quran[index][0];
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,18 +31,18 @@ class PageHeader extends StatelessWidget {
               children: [
                 Text(
                   "الحزب ${page["hizbNumber"].toString()}",
-                  style: TextStyle(
-                    color: const Color(0xffae8f74),
-                    fontFamily: "montserrat",
-                  ),
+                  style: const TextStyle(
+                      color: Color(0xffae8f74),
+                      fontFamily: "montserrat",
+                      fontSize: 12),
                 ),
                 const SizedBox(width: 5),
                 Text(
                   "الجزء ${page["juzNumber"].toString()}",
-                  style: TextStyle(
-                    color: const Color(0xffae8f74),
-                    fontFamily: "montserrat",
-                  ),
+                  style: const TextStyle(
+                      color: Color(0xffae8f74),
+                      fontFamily: "montserrat",
+                      fontSize: 12),
                 ),
               ],
             ),
@@ -50,25 +50,25 @@ class PageHeader extends StatelessWidget {
             Row(children: [
               PageNumber(
                 pageNumber: page["pageNumber"],
-                fixedFontSizePercentage: 18,
+                fixedFontSizePercentage: 12,
               ),
               PageHeaderMistakesAndWarnings(
                 pageNumber: page["pageNumber"],
-                fixedFontSizePercentageForHeader: 18,
+                fixedFontSizePercentageForHeader: 12,
               ),
             ]),
             Row(
               children: [
                 SurahName(
                   surah: page["chapterCode"],
-                  fixedFontSizePercentageForHeader: 18,
+                  fixedFontSizePercentageForHeader: 10,
                 ),
                 const SizedBox(
                   width: 5,
                 ),
-                DuosOrWerd(
-                  fixedFontSizePercentageForHeader: 18,
-                )
+                // const DuosOrWerd(
+                //   fixedFontSizePercentageForHeader: 9,
+                // )
               ],
             )
           ],

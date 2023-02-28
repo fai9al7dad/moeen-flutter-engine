@@ -1,3 +1,4 @@
+import 'dart:developer';
 import "dart:io" as io;
 import 'package:flutter/services.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
@@ -76,7 +77,8 @@ class DatabaseHelper {
     }
 
     var dbClient = await db;
-    String query = "select * from data order by lineNumber";
+    String query =
+        "select * from data where  charType = 'end' or isNewChapter = 1 order by lineNumber";
 
     List list = await dbClient!.rawQuery(query);
 
@@ -88,5 +90,13 @@ class DatabaseHelper {
       pages[item["pageNumber"] - 1].add(item);
     }
     return pages;
+  }
+
+  Future<List<Map>> getWordByX({x, pageNumber, lineNumber}) async {
+    var dbClient = await db;
+    List<Map> word = await dbClient!.rawQuery(
+        "select * from data where x_start <= $x and x_end >= $x and pageNumber = $pageNumber and lineNumber = $lineNumber limit 1");
+
+    return word;
   }
 }
