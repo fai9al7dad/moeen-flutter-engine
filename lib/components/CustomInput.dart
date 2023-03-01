@@ -53,7 +53,6 @@ class CustomInput extends StatelessWidget {
           fillColor: Theme.of(context).colorScheme.background,
           label: Text(
             label,
-            style: const TextStyle(fontFamily: "montserrat"),
           ),
           // hintText: 'اسم المستخدم',
           prefixIcon: Icon(prefixIcon),

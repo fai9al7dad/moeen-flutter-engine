@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moeen/helpers/general/constants.dart';
@@ -7,6 +8,7 @@ import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -23,7 +25,10 @@ void main() {
       ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
       ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
     ],
-    child: const MyApp(), // Wrap your app
+    child: DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(), // Wrap your app
+    ), // Wrap your app
   ));
 }
 
@@ -51,6 +56,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context) => MaterialApp(
           useInheritedMediaQuery: true,
           routes: CustomRouter.routes,
+          locale: DevicePreview.locale(context),
+          builder: DevicePreview.appBuilder,
           title: 'تطبيق معين',
           debugShowCheckedModeBanner: false,
           themeMode: themeProvider.themeMode,

@@ -99,17 +99,14 @@ class _Step1State extends State<Step1> {
         Text(
           'نسيت كلمة المرور ؟ 😔',
           textAlign: TextAlign.start,
-          style: TextStyle(
-              fontFamily: "montserrat-bold",
-              fontSize: 30,
-              color: Colors.green[500],
-              shadows: const [
-                Shadow(
-                  offset: Offset(1, 1),
-                  blurRadius: 0.5,
-                  color: Color.fromARGB(80, 0, 0, 0),
-                ),
-              ]),
+          style:
+              TextStyle(fontSize: 30, color: Colors.green[500], shadows: const [
+            Shadow(
+              offset: Offset(1, 1),
+              blurRadius: 0.5,
+              color: Color.fromARGB(80, 0, 0, 0),
+            ),
+          ]),
         ),
         const SizedBox(
           height: 10,
@@ -118,7 +115,6 @@ class _Step1State extends State<Step1> {
           'لا بأس أدخل بريدك الإلكتروني الذي سجلت به وستصلك رسالة منا',
           textAlign: TextAlign.end,
           style: TextStyle(
-            fontFamily: "montserrat",
             fontSize: 12,
             color: Colors.green[800],
           ),
@@ -206,17 +202,14 @@ class _Step2State extends State<Step2> {
         Text(
           'تم ارسال الرمز بنجاح',
           textAlign: TextAlign.start,
-          style: TextStyle(
-              fontFamily: "montserrat-bold",
-              fontSize: 30,
-              color: Colors.green[500],
-              shadows: const [
-                Shadow(
-                  offset: Offset(1, 1),
-                  blurRadius: 0.5,
-                  color: Color.fromARGB(80, 0, 0, 0),
-                ),
-              ]),
+          style:
+              TextStyle(fontSize: 30, color: Colors.green[500], shadows: const [
+            Shadow(
+              offset: Offset(1, 1),
+              blurRadius: 0.5,
+              color: Color.fromARGB(80, 0, 0, 0),
+            ),
+          ]),
         ),
         const SizedBox(
           height: 10,
@@ -225,7 +218,6 @@ class _Step2State extends State<Step2> {
           'الرجاء ادخال الرمز الذي وصلك على الإيميل، ثم غير كلمة المرور',
           textAlign: TextAlign.end,
           style: TextStyle(
-            fontFamily: "montserrat",
             fontSize: 12,
             color: Colors.green[800],
           ),

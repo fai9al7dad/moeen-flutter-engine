@@ -31,8 +31,8 @@ class ThemeProvider extends ChangeNotifier {
 class MyTheme {
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: const Color(0xFF1F2937),
-    fontFamily: "montserrat",
     primaryColor: Colors.white,
+    fontFamily: "nashkh",
     colorScheme: const ColorScheme.dark().copyWith(
         primary: const Color(0xFF10B981),
         background: const Color(0xFF374151),
@@ -41,8 +41,8 @@ class MyTheme {
   );
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: const Color(0xFFF7F0E7),
-    fontFamily: "montserrat",
     primaryColor: Colors.black,
+    fontFamily: "nashkh",
     textTheme: const TextTheme(),
     colorScheme: const ColorScheme.light().copyWith(
         primary: const Color(0xFF10B981),

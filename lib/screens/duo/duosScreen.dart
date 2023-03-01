@@ -88,16 +88,12 @@ class _DuosScreenState extends State<DuosScreen> {
               title: Text(
                 "اختر الثنائي",
                 style: TextStyle(
-                    fontFamily: "montserrat",
-                    fontSize: 14,
-                    color: Theme.of(context).primaryColor),
+                    fontSize: 14, color: Theme.of(context).primaryColor),
               ),
               centerTitle: true,
               bottom: TabBar(
                   labelStyle: TextStyle(
-                      fontFamily: "montserrat",
-                      fontSize: 14,
-                      color: Theme.of(context).primaryColor),
+                      fontSize: 14, color: Theme.of(context).primaryColor),
                   enableFeedback: true,
                   indicatorColor: Theme.of(context).colorScheme.primary,
                   labelColor: Theme.of(context).primaryColor,

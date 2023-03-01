@@ -46,7 +46,6 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
                   Text(
                     "تنبيه",
                     style: TextStyle(
-                        fontFamily: "montserrat-bold",
                         fontSize: 30,
                         shadows: const [
                           Shadow(
@@ -77,14 +76,14 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
               ),
               const Text(
                 "انت الآن المصحح",
-                style: TextStyle(fontFamily: "montserrat-bold", fontSize: 32),
+                style: TextStyle(fontSize: 32),
               ),
               const SizedBox(
                 height: 40,
               ),
               const Text(
                 "أمامك الآن سيظهر مصحف زميلك، بالتحديدات والأخطاء المسجلة في مصحفه. ",
-                style: TextStyle(fontFamily: "montserrat"),
+                style: TextStyle(),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -112,7 +111,7 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
                   ),
                   const Text(
                     "لإنهاء الورد قم بالضغط على",
-                    style: TextStyle(fontFamily: "montserrat"),
+                    style: TextStyle(),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -122,7 +121,7 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
               ),
               const Text(
                 "ملاحظة: عند تحديد خطأ او تنبيه، سيتم تسجيلها في الورد ولن تسجل في مصحفه حتى يقبل الورد",
-                style: TextStyle(fontFamily: "montserrat"),
+                style: TextStyle(),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -134,7 +133,7 @@ class _WerdIntroductionScreenState extends State<WerdIntroductionScreen> {
                 children: [
                   const Text(
                     "عدم عرض هذا التنبيه مرة أخرى",
-                    style: TextStyle(fontFamily: "montserrat", fontSize: 12),
+                    style: TextStyle(fontSize: 12),
                     textAlign: TextAlign.center,
                   ),
                   Checkbox(

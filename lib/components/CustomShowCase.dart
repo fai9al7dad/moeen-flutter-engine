@@ -35,12 +35,8 @@ class CustomShowCase extends StatelessWidget {
         showcaseBackgroundColor: Tertiary().s400,
         // overlayPadding: const EdgeInsets.all(8),
         contentPadding: const EdgeInsets.all(10),
-        titleTextStyle: TextStyle(
-            color: Tertiary().s900,
-            fontFamily: "montserrat-bold",
-            fontSize: 16),
-        descTextStyle: TextStyle(
-            color: Tertiary().s900, fontFamily: "montserrat", fontSize: 14),
+        titleTextStyle: TextStyle(color: Tertiary().s900, fontSize: 16),
+        descTextStyle: TextStyle(color: Tertiary().s900, fontSize: 14),
         child: child);
   }
 }

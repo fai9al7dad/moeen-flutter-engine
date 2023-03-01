@@ -30,6 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
   english_words: ^4.0.0
+  device_preview: ^1.1.0
+
   sqflite: ^2.0.3
   path: ^1.8.1
   file: ^6.1.4
@@ -58,7 +60,6 @@ dependencies:
   rive: ^0.9.0
   table_calendar: ^3.0.7
   intl: ^0.17.0
-  device_preview: ^1.1.0
 flutter_icons:
   ios: true
   android: true

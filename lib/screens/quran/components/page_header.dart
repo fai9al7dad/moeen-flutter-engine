@@ -31,18 +31,14 @@ class PageHeader extends StatelessWidget {
               children: [
                 Text(
                   "الحزب ${page["hizbNumber"].toString()}",
-                  style: const TextStyle(
-                      color: Color(0xffae8f74),
-                      fontFamily: "montserrat",
-                      fontSize: 12),
+                  style:
+                      const TextStyle(color: Color(0xffae8f74), fontSize: 12),
                 ),
                 const SizedBox(width: 5),
                 Text(
                   "الجزء ${page["juzNumber"].toString()}",
-                  style: const TextStyle(
-                      color: Color(0xffae8f74),
-                      fontFamily: "montserrat",
-                      fontSize: 12),
+                  style:
+                      const TextStyle(color: Color(0xffae8f74), fontSize: 12),
                 ),
               ],
             ),
@@ -243,7 +239,7 @@ class PageNumber extends StatelessWidget {
                 style: TextStyle(
                     color: const Color(0xffae8f74),
                     fontSize: fixedFontSizePercentage,
-                    fontFamily: "montserrat")),
+                    fontFamily: "nashkh")),
             const SizedBox(width: 5),
             Transform.scale(
                 scaleX: pageNumber % 2 == 0 ? 1 : -1,

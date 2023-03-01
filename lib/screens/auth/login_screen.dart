@@ -64,16 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Text(
                         'حياكم الله 👋',
                         textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontFamily: "montserrat-bold",
-                            fontSize: 30,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(1, 1),
-                                blurRadius: 0.5,
-                                color: Color.fromARGB(80, 0, 0, 0),
-                              ),
-                            ]),
+                        style: TextStyle(fontSize: 30, shadows: [
+                          Shadow(
+                            offset: Offset(1, 1),
+                            blurRadius: 0.5,
+                            color: Color.fromARGB(80, 0, 0, 0),
+                          ),
+                        ]),
                       ),
                       const SizedBox(
                         height: 10,
@@ -82,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         'الرجاء تسجيل الدخول للإستمرار',
                         textAlign: TextAlign.end,
                         style: TextStyle(
-                          fontFamily: "montserrat",
                           fontSize: 12,
                         ),
                       ),
@@ -124,8 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 const Text(
                                   'نسيت كلمة المرور ؟',
-                                  style: TextStyle(
-                                      fontFamily: "montserrat", fontSize: 10),
+                                  style: TextStyle(fontSize: 10),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -135,9 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextButton.styleFrom(
                                       padding: const EdgeInsets.all(3)),
                                   child: const Text('اضغط هنا للإستعادة',
-                                      style: TextStyle(
-                                          fontFamily: "montserrat",
-                                          fontSize: 10)),
+                                      style: TextStyle(fontSize: 10)),
                                 ),
                               ],
                             ),
@@ -202,8 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 const Text(
                                   'ليس لديك حساب ؟',
-                                  style: TextStyle(
-                                      fontFamily: "montserrat", fontSize: 10),
+                                  style: TextStyle(fontSize: 10),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -212,9 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextButton.styleFrom(
                                       padding: const EdgeInsets.all(3)),
                                   child: const Text('تسجيل حساب جديد',
-                                      style: TextStyle(
-                                          fontFamily: "montserrat",
-                                          fontSize: 10)),
+                                      style: TextStyle(fontSize: 10)),
                                 ),
                               ],
                             ),
@@ -261,7 +251,6 @@ class SyncDialog extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   color: Tertiary().s500,
-                  fontFamily: "montserrat-bold",
                 ),
                 textAlign: TextAlign.right,
               ),
@@ -302,8 +291,7 @@ class SyncDialog extends StatelessWidget {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(TextStyle(
-                              color: Colors.grey[900],
-                              fontFamily: "montserrat")),
+                              color: Colors.grey[900], fontFamily: "nashkh")),
                           backgroundColor:
                               MaterialStateProperty.all(Tertiary().s500)),
                       onPressed: () {

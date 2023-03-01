@@ -99,7 +99,6 @@ class _ContactScreenState extends State<ContactScreen> {
                         'يا مرحبا 👋',
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontFamily: "montserrat-bold",
                             fontSize: 30,
                             color: Colors.green[500],
                             shadows: const [
@@ -117,7 +116,6 @@ class _ContactScreenState extends State<ContactScreen> {
                         'نسعد جدا لسماع اقتراحاتكم والتعليقات والاقتراحات الخاصة بالتطبيق',
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          fontFamily: "montserrat",
                           fontSize: 12,
                           color: Colors.green[800],
                         ),
@@ -164,7 +162,6 @@ class _ContactScreenState extends State<ContactScreen> {
                                     'نحتاج الإيميل، لكي نتمكن من الرد عليك',
                                     // textAlign: TextAlign.end,
                                     style: TextStyle(
-                                      fontFamily: "montserrat",
                                       fontSize: 10,
                                       color: Colors.grey,
                                     )),

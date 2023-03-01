@@ -92,7 +92,6 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
             children: [
               const Text("وضع فاصل",
                   style: TextStyle(
-                    fontFamily: "montserrat-bold",
                     fontSize: 20,
                   )),
               const SizedBox(
@@ -100,7 +99,6 @@ class _VerseOptionsBottomSheetState extends State<VerseOptionsBottomSheet> {
               ),
               const Text("اضفط مطولا للإنتقال إلى الموضع",
                   style: TextStyle(
-                    fontFamily: "montserrat",
                     color: Colors.grey,
                     fontSize: 14,
                   )),

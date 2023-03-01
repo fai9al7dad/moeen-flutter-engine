@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -7,7 +5,6 @@ import 'package:moeen/components/CustomAppBar.dart';
 import 'package:moeen/components/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
-import 'package:moeen/helpers/database/temp_word_colors/TempWordsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
@@ -18,7 +15,6 @@ import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/screens/contact/contactScreen.dart';
 import 'package:moeen/screens/on_boarding/on_boarding.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -173,9 +169,7 @@ class _SettingsState extends State<Settings> {
                               title: const Center(
                                 child: Text("تسجيل الخروج",
                                     style: TextStyle(
-                                        fontFamily: "montserrat-bold",
-                                        fontSize: 14,
-                                        color: Colors.red)),
+                                        fontSize: 14, color: Colors.red)),
                               ))
                       ],
                     ),
@@ -267,13 +261,13 @@ class AuthUserInfo extends StatelessWidget {
         ListItem(
           title: Text(
             "اسم المستخدم: $username",
-            style: const TextStyle(fontFamily: "montserrat"),
+            style: const TextStyle(),
           ),
         ),
         ListItem(
           title: Text(
             "رقم المستخدم: $userID ",
-            style: const TextStyle(fontFamily: "montserrat"),
+            style: const TextStyle(),
           ),
         ),
         ListItem(

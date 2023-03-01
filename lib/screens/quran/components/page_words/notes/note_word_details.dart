@@ -25,7 +25,6 @@ class NoteWordDetails extends StatelessWidget {
         ),
         Text("آية ${item["verseNumber"]} - ص${item["pageNumber"]}",
             style: const TextStyle(
-              fontFamily: "montserrat",
               color: Colors.grey,
               fontSize: 14,
             )),

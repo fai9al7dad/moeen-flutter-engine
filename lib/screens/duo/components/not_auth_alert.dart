@@ -34,7 +34,7 @@ class NotAuthAlert extends StatelessWidget {
               const SizedBox(height: 20),
               const Text(
                 "تحتاج لأن تكون مسجل الدخول للإستمرار",
-                style: TextStyle(fontFamily: "montserrat-bold", fontSize: 22),
+                style: TextStyle(fontSize: 22),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),

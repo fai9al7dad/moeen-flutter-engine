@@ -125,7 +125,6 @@ class _RenderListState extends State<RenderList> {
                           "${element["pages"][0]} - ${element["pages"][1]}",
                           style: TextStyle(
                               fontSize: 8,
-                              fontFamily: "montserrat",
                               color: Theme.of(context)
                                   .primaryColor
                                   .withOpacity(0.5)),
@@ -136,8 +135,9 @@ class _RenderListState extends State<RenderList> {
                 ),
                 subtitle: Text(
                   "عدد صفحاتها ${element["pages"][1] - element["pages"][0] + 1}، عدد أياتها ${element['verses_count']}",
-                  style:
-                      const TextStyle(fontSize: 10, fontFamily: "montserrat"),
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
                 ),
                 trailing: ConstrainedBox(
                   constraints: const BoxConstraints(
@@ -261,9 +261,9 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
                       Text(
                         _mistakes.toString(),
                         style: TextStyle(
-                            fontSize: 8,
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: "montserrat"),
+                          fontSize: 8,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ])
               : const SizedBox(width: 0),
@@ -284,9 +284,9 @@ class _SurahMistakesAndWarningsState extends State<SurahMistakesAndWarnings> {
                       Text(
                         _warnings.toString(),
                         style: TextStyle(
-                            fontSize: 8,
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: "montserrat"),
+                          fontSize: 8,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ])
               : const SizedBox(width: 0),

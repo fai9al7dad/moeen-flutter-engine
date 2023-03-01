@@ -100,7 +100,6 @@ class _SeperatorsScreenState extends State<SeperatorsScreen> {
                 children: [
                   const Text("اضفط على رقم الأية لإضافة فاصل",
                       style: TextStyle(
-                        fontFamily: "montserrat",
                         color: Colors.grey,
                         fontSize: 14,
                       )),

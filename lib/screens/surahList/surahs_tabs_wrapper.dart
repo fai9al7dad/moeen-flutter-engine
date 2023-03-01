@@ -21,9 +21,7 @@ class SurahTabsWrapper extends StatelessWidget {
             title: Text(
               "السور",
               style: TextStyle(
-                  fontFamily: "montserrat",
-                  fontSize: 14,
-                  color: Theme.of(context).primaryColor),
+                  fontSize: 14, color: Theme.of(context).primaryColor),
             ),
             centerTitle: true,
             bottom: TabBar(
@@ -33,9 +31,7 @@ class SurahTabsWrapper extends StatelessWidget {
                 unselectedLabelColor:
                     Theme.of(context).primaryColor.withOpacity(0.5),
                 labelStyle: TextStyle(
-                    fontFamily: "montserrat",
-                    fontSize: 14,
-                    color: Theme.of(context).primaryColor),
+                    fontSize: 14, color: Theme.of(context).primaryColor),
                 tabs: const [
                   Tab(
                     text: "فهرس السور",

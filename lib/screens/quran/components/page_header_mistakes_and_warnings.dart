@@ -43,7 +43,7 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
                       style: TextStyle(
                           fontSize: fixedFontSizePercentageForHeader,
                           color: Color(textColor),
-                          fontFamily: "montserrat"),
+                          fontFamily: "nashkh"),
                     ),
                     const SizedBox(width: 1),
                     Container(
@@ -65,7 +65,7 @@ class PageHeaderMistakesAndWarnings extends StatelessWidget {
                       style: TextStyle(
                           fontSize: fixedFontSizePercentageForHeader,
                           color: Color(textColor),
-                          fontFamily: "montserrat"),
+                          fontFamily: "nashkh"),
                     ),
                     const SizedBox(width: 1),
                     Container(

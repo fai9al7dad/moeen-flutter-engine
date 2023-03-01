@@ -52,7 +52,6 @@ class _NewNoteViewState extends State<NewNoteView> {
         const Text(
           "إضافة سريعة",
           style: TextStyle(
-            fontFamily: "montserrat",
             color: Colors.grey,
             fontSize: 14,
           ),
@@ -64,7 +63,6 @@ class _NewNoteViewState extends State<NewNoteView> {
         const Text(
           "أو",
           style: TextStyle(
-            fontFamily: "montserrat",
             color: Colors.grey,
             fontSize: 14,
           ),
@@ -107,7 +105,6 @@ Row _bottomActions(BuildContext context, Function addNote) {
           onPressed: () => addNote(),
           child: Text("إضافة",
               style: TextStyle(
-                fontFamily: "montserrat",
                 color: Theme.of(context).primaryColor,
                 fontSize: 14,
               ))),
@@ -117,7 +114,6 @@ Row _bottomActions(BuildContext context, Function addNote) {
       TextButton(
         child: Text("إضافة + تسجيل كإضافة سريعة",
             style: TextStyle(
-              fontFamily: "montserrat",
               color: Theme.of(context).colorScheme.primary,
               fontSize: 10,
             )),

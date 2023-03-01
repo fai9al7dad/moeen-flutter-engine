@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
           title: Text(
             title,
-            style: const TextStyle(fontFamily: "montserrat", fontSize: 14),
+            style: const TextStyle(fontSize: 14),
           ),
           centerTitle: true,
           automaticallyImplyLeading: showBackButton ?? true,

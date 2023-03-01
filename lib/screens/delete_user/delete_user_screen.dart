@@ -88,10 +88,8 @@ class _DeleteUserScreenState extends State<DeleteUserScreen> {
                         padding: EdgeInsets.all(20.0),
                         child: Center(
                           child: Text("حذف الحساب",
-                              style: TextStyle(
-                                  fontFamily: "montserrat-bold",
-                                  fontSize: 14,
-                                  color: Colors.red)),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.red)),
                         )),
                   )
                 ],

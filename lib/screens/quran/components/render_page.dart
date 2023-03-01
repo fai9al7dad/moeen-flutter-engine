@@ -24,8 +24,10 @@ class RenderPage extends StatelessWidget {
           index: index,
         ),
         const SizedBox(height: 5),
-        PageWords(
-          index: index,
+        Expanded(
+          child: PageWords(
+            index: index,
+          ),
         ),
 
         // PageWords(page: page),

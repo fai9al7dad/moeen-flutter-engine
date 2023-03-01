@@ -40,16 +40,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Text(
                   'مستخدم جديد 🥳',
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontFamily: "montserrat-bold",
-                      fontSize: 30,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(1, 1),
-                          blurRadius: 0.5,
-                          color: Color.fromARGB(80, 0, 0, 0),
-                        ),
-                      ]),
+                  style: TextStyle(fontSize: 30, shadows: [
+                    Shadow(
+                      offset: Offset(1, 1),
+                      blurRadius: 0.5,
+                      color: Color.fromARGB(80, 0, 0, 0),
+                    ),
+                  ]),
                 ),
                 const SizedBox(
                   height: 10,
@@ -58,7 +55,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   'الرجاء تسجيل حساب للإستمرار',
                   textAlign: TextAlign.end,
                   style: TextStyle(
-                    fontFamily: "montserrat",
                     fontSize: 12,
                   ),
                 ),
@@ -92,7 +88,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const Text('تحتاج الإيميل في حال نسيت كلمة المرور',
                               // textAlign: TextAlign.end,
                               style: TextStyle(
-                                fontFamily: "montserrat",
                                 fontSize: 10,
                                 color: Colors.grey,
                               )),
@@ -207,8 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           const Text(
                             'لديك حساب ؟',
-                            style: TextStyle(
-                                fontFamily: "montserrat", fontSize: 10),
+                            style: TextStyle(fontSize: 10),
                           ),
                           TextButton(
                             onPressed: () {
@@ -217,8 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: TextButton.styleFrom(
                                 padding: const EdgeInsets.all(3)),
                             child: const Text('تسجيل الدخول',
-                                style: TextStyle(
-                                    fontFamily: "montserrat", fontSize: 10)),
+                                style: TextStyle(fontSize: 10)),
                           ),
                         ],
                       ),
