@@ -31,6 +31,9 @@ class _PageWordsState extends State<PageWords> {
         double xOffset = constraints.maxWidth / 1080;
         double lineHeight = (constraints.maxHeight - 50) / 15;
         return Column(
+          mainAxisAlignment: widget.index < 2
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           // loop by the number of lines -> to render the lines in the page
           children: List.generate(lastItem["lineNumber"], (line) {
             int lineNumber = line + 1;

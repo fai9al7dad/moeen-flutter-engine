@@ -27,7 +27,7 @@ class DatabaseHelper {
 
       await io.File(path).writeAsBytes(bytes, flush: true);
     }
-    var openedDatabase = await openDatabase(path, version: 1);
+    var openedDatabase = await openDatabase(path, version: 2);
 
     return openedDatabase;
   }

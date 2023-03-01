@@ -18,12 +18,14 @@ class RenderPage extends StatelessWidget {
         // Text(mistakes[0]['id'].toString()),
         Column(
       children: [
-        const SizedBox(height: 50),
+        SizedBox(height: MediaQuery.of(context).padding.top),
 
         PageHeader(
           index: index,
         ),
         const SizedBox(height: 5),
+        // if index == 0 return center else return expanded
+
         Expanded(
           child: PageWords(
             index: index,
