@@ -10,18 +10,8 @@ class NotAuthAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: "الثنائيات",
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.settings,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, "/settings");
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),

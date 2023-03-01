@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 final helpers = GeneralHelpers();
 
-class PageWords extends StatefulWidget {
+class PageWords extends StatelessWidget {
   final int index;
   const PageWords({
     Key? key,
@@ -17,29 +17,22 @@ class PageWords extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PageWords> createState() => _PageWordsState();
-}
-
-class _PageWordsState extends State<PageWords> {
-  List data = [];
-  @override
   Widget build(BuildContext context) {
     return Consumer<QuranProvider>(builder: (context, quranProvider, child) {
-      String pageNumber = (widget.index + 1).toString();
-      var lastItem = quranProvider.quran[widget.index].last;
+      String pageNumber = (index + 1).toString();
+      var lastItem = quranProvider.quran[index].last;
       return LayoutBuilder(builder: (context, constraints) {
         double xOffset = constraints.maxWidth / 1080;
         double lineHeight = (constraints.maxHeight - 50) / 15;
         return Column(
-          mainAxisAlignment: widget.index < 2
-              ? MainAxisAlignment.center
-              : MainAxisAlignment.start,
+          mainAxisAlignment:
+              index < 2 ? MainAxisAlignment.center : MainAxisAlignment.start,
           // loop by the number of lines -> to render the lines in the page
           children: List.generate(lastItem["lineNumber"], (line) {
             int lineNumber = line + 1;
             return Stack(children: [
-              ...List.generate(quranProvider.quran[widget.index].length, (i) {
-                var e = quranProvider.quran[widget.index][i];
+              ...List.generate(quranProvider.quran[index].length, (i) {
+                var e = quranProvider.quran[index][i];
 
                 if (lineNumber == e["lineNumber"]) {
                   if (e["isNewChapter"] == 1 && e["isBismillah"] != 1) {
@@ -96,23 +89,23 @@ class _PageWordsState extends State<PageWords> {
                   height: lineHeight,
                 ),
               ),
-              ...List.generate(data.length, (i) {
-                if (data[i]["lineNumber"] == lineNumber) {
-                  return Positioned(
-                    left: data[i]["x_start"].toDouble() * xOffset,
-                    child: Container(
-                      width: data[i]["x_end"].toDouble() * xOffset -
-                          data[i]["x_start"].toDouble() * xOffset,
-                      height: lineHeight,
-                      decoration: const BoxDecoration(
-                          color: Colors.red,
-                          backgroundBlendMode: BlendMode.lighten),
-                      // make the color of thi
-                    ),
-                  );
-                }
-                return const SizedBox();
-              }),
+              // ...List.generate(data.length, (i) {
+              //   if (data[i]["lineNumber"] == lineNumber) {
+              //     return Positioned(
+              //       left: data[i]["x_start"].toDouble() * xOffset,
+              //       child: Container(
+              //         width: data[i]["x_end"].toDouble() * xOffset -
+              //             data[i]["x_start"].toDouble() * xOffset,
+              //         height: lineHeight,
+              //         decoration: const BoxDecoration(
+              //             color: Colors.red,
+              //             backgroundBlendMode: BlendMode.lighten),
+              //         // make the color of thi
+              //       ),
+              //     );
+              //   }
+              //   return const SizedBox();
+              // }),
             ]);
           }),
         );
