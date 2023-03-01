@@ -18,7 +18,7 @@ class RenderPage extends StatelessWidget {
         // Text(mistakes[0]['id'].toString()),
         Column(
       children: [
-        const SizedBox(height: 10),
+        const SizedBox(height: 50),
 
         PageHeader(
           index: index,

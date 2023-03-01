@@ -66,6 +66,7 @@ class _PageWordsState extends State<PageWords> {
                           fontFamily: "naskh",
                           fontWeight: FontWeight.bold,
                           fontSize: 11,
+                          color: Colors.black,
                         ),
                       ),
                     ]),
@@ -90,7 +91,7 @@ class _PageWordsState extends State<PageWords> {
                 "assets/images/quran_images/$pageNumber/$lineNumber.png",
                 fit: BoxFit.fitWidth,
                 width: 1080,
-                height: 44,
+                height: 45,
               ),
             ),
             ...List.generate(data.length, (i) {

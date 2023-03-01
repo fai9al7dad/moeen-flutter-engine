@@ -12,7 +12,7 @@
 .history
 .svn/
 migrate_working_dir/
-assets/images/quran_images/
+# assets/images/quran_images/
 # IntelliJ related
 *.iml
 *.ipr

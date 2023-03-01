@@ -66,9 +66,9 @@ class PageHeader extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                // const DuosOrWerd(
-                //   fixedFontSizePercentageForHeader: 9,
-                // )
+                const DuosOrWerd(
+                  fixedFontSizePercentageForHeader: 9,
+                )
               ],
             )
           ],
