@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/helpers/models/werds_model.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';

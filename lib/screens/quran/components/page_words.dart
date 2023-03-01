@@ -79,6 +79,16 @@ class PageWords extends StatelessWidget {
                   final db = DatabaseHelper();
                   var word = await db.getWordByX(
                       x: x, pageNumber: pageNumber, lineNumber: lineNumber);
+
+                  quranProvider.addMistake(
+                      id: word["id"],
+                      pageNumber: int.parse(pageNumber),
+                      verseNumber: word["verseNumber"],
+                      lineNumber: lineNumber,
+                      x_start: word["x_start"],
+                      x_end: word["x_end"],
+                      chapterCode: word["chapterCode"],
+                      context: context);
                   // data.add(word[0]);
                   // setState(() {});
                 },
@@ -89,13 +99,13 @@ class PageWords extends StatelessWidget {
                   height: lineHeight,
                 ),
               ),
-              // ...List.generate(data.length, (i) {
-              //   if (data[i]["lineNumber"] == lineNumber) {
+              // ...List.generate(quranProvider.mistakes.length, (i) {
+              //   if (quranProvider.mistakes[i]["lineNumber"] == lineNumber) {
               //     return Positioned(
-              //       left: data[i]["x_start"].toDouble() * xOffset,
+              //       left: quranProvider.mistakes[i]["x_start"].toDouble() * xOffset,
               //       child: Container(
-              //         width: data[i]["x_end"].toDouble() * xOffset -
-              //             data[i]["x_start"].toDouble() * xOffset,
+              //         width: quranProvider.mistakes[i]["x_end"].toDouble() * xOffset -
+              //             quranProvider.mistakes[i]["x_start"].toDouble() * xOffset,
               //         height: lineHeight,
               //         decoration: const BoxDecoration(
               //             color: Colors.red,

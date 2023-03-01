@@ -1,15 +1,11 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moeen/components/CustomAppBar.dart';
-import 'package:moeen/components/CustomShowCase.dart';
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/CustomAppBar.dart';
+import 'package:moeen/common/presentation/atoms/CustomShowCase.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
-import 'package:moeen/helpers/models/highlights_model.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

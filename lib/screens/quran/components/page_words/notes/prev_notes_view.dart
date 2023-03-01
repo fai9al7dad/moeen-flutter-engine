@@ -1,9 +1,6 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/database/highlight_notes/highlight_notes.dart';
 import 'package:moeen/helpers/database/highlight_notes/models/highlight_note_model.dart';
 import 'package:moeen/screens/duo/components/select_duo.dart';

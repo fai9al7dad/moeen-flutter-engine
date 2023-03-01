@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:moeen/components/skeleton.dart';
+import 'package:moeen/common/presentation/atoms/skeleton.dart';
 
 class InvitesShimmer extends StatelessWidget {
   const InvitesShimmer({

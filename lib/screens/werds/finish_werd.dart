@@ -1,7 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:moeen/components/CustomAppBar.dart';
+import 'package:moeen/common/presentation/atoms/CustomAppBar.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/helpers/general/constants.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';

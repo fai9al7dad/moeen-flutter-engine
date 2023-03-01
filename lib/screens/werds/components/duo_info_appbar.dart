@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:moeen/components/streak_progress_widget.dart';
+import 'package:moeen/common/presentation/atoms/streak_progress_widget.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
-import 'package:moeen/screens/werds/components/circle_streak_progress.dart';
-import 'package:moeen/screens/werds/werds_screen.dart';
-import 'package:square_percent_indicater/square_percent_indicater.dart';
 
 class DuoInfoAppBar extends StatefulWidget {
   final String? username;

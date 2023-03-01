@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moeen/components/CustomAppBar.dart';
-import 'package:moeen/components/CustomShowCase.dart';
-import 'package:moeen/components/streak_progress_widget.dart';
+import 'package:moeen/common/presentation/atoms/CustomAppBar.dart';
+import 'package:moeen/common/presentation/atoms/CustomShowCase.dart';
+import 'package:moeen/common/presentation/atoms/streak_progress_widget.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/werd_colors_map/WerdsColorsMap.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';

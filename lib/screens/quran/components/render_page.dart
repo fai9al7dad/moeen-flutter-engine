@@ -14,12 +14,9 @@ class RenderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
-    return
-        // Text(mistakes[0]['id'].toString()),
-        Column(
+    return Column(
       children: [
         SizedBox(height: MediaQuery.of(context).padding.top),
-
         PageHeader(
           index: index,
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moeen/common/presentation/atoms/CustomAppBar.dart';
 
-import 'package:moeen/components/CustomAppBar.dart';
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/screens/settings/settings.dart';
 
 class AboutApp extends StatelessWidget {

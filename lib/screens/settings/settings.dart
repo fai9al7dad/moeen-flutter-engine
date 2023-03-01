@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-import 'package:moeen/components/CustomAppBar.dart';
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/CustomAppBar.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/database/quran/quran_database_helper.dart';
 import 'package:moeen/helpers/database/quran/quran_models.dart';
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';

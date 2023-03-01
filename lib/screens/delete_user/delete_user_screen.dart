@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:moeen/components/CustomAppBar.dart';
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/CustomAppBar.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/dio/api.dart';
 import 'package:moeen/providers/auth/auth_provider.dart';
-import 'package:moeen/screens/settings/settings.dart';
 import 'package:provider/provider.dart';
 
 class DeleteUserScreen extends StatefulWidget {

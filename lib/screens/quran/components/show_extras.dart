@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:grouped_list/grouped_list.dart';
-import 'package:moeen/components/CustomInput.dart';
-import 'package:moeen/components/list_item.dart';
+import 'package:moeen/common/presentation/atoms/CustomInput.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/database/quran_simple/quran_simple_database.dart';
 import 'package:moeen/helpers/general/GeneralHelpers.dart';
 import 'package:moeen/providers/quran/quran_provider.dart';

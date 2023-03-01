@@ -1,16 +1,12 @@
-import 'dart:developer';
-
 import 'package:confetti/confetti.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:moeen/components/CustomShowCase.dart';
-import 'package:moeen/components/list_item.dart';
-import 'package:moeen/components/skeleton.dart';
+import 'package:moeen/common/presentation/atoms/CustomShowCase.dart';
+import 'package:moeen/common/presentation/atoms/list_item.dart';
 import 'package:moeen/helpers/dio/API.dart';
 import 'package:moeen/helpers/models/duos_model.dart';
 import 'package:moeen/screens/duo/components/invites_shimmer.dart';
-import 'package:moeen/screens/settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'dart:math' as math;

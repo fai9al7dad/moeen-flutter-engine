@@ -98,20 +98,16 @@ class QuranProvider with ChangeNotifier {
   }
 
   Future refreshData({pageNumber}) async {
-    // var m;
-    // var databaseHelper = DatabaseHelper();
-    // List q = await databaseHelper.getJoinedQuran(pageNumber: 10);
-    // _quran = q;
+    var m;
+    if (_isWerd) {
+      m = await werdColorsMaps.getPageColors(pageNumber: pageNumber);
+    } else {
+      m = await wordsColorsMap.getPageColors(pageNumber: pageNumber);
+    }
 
-    // if (_isWerd) {
-    //   m = await .getPageColors(pageNumber: pageNumber);
-    // } else {
-    //   m = await wordsColorsMap.getPageColors(pageNumber: pageNumber);
-    // }
-
-    // _mistakes = m;
+    _mistakes = m;
     // disabling notify listeners here might mean that first two renderd pages will not show colors
-    // notifyListeners();
+    notifyListeners();
   }
 
   void refreshSeperotrs() async {
@@ -205,7 +201,7 @@ class QuranProvider with ChangeNotifier {
     }
     var word = WordColorMapModel(
         pageNumber: pageNumber,
-        verseNumber: int.parse(verseNumber),
+        verseNumber: verseNumber,
         chapterCode: chapterCode,
         color: newColor,
         wordID: id);
@@ -220,7 +216,7 @@ class QuranProvider with ChangeNotifier {
         final tempWordsColorsMap = TempWordColorMap();
         var word = TempWordColorMapModel(
             pageNumber: pageNumber,
-            verseNumber: int.parse(verseNumber),
+            verseNumber: verseNumber,
             chapterCode: chapterCode,
             color: newColor,
             wordID: id);

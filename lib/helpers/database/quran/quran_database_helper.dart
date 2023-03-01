@@ -92,11 +92,11 @@ class DatabaseHelper {
     return pages;
   }
 
-  Future<List<Map>> getWordByX({x, pageNumber, lineNumber}) async {
+  Future<Map> getWordByX({x, pageNumber, lineNumber}) async {
     var dbClient = await db;
     List<Map> word = await dbClient!.rawQuery(
         "select * from data where x_start <= $x and x_end >= $x and pageNumber = $pageNumber and lineNumber = $lineNumber limit 1");
 
-    return word;
+    return word[0];
   }
 }
