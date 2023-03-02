@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:moeen/helpers/general/constants.dart';
-import 'package:moeen/providers/auth/auth_provider.dart';
-import 'package:moeen/providers/quran/quran_provider.dart';
+import 'package:moeen/common/data/data_sources/router.dart';
+import 'package:moeen/features/quran/domain/usecases/quran_provider.dart';
+import 'package:moeen/features/quran_search/domain/usecases/quran_search_provider.dart';
 import 'package:moeen/providers/theme/my_theme.dart';
 import 'package:moeen/providers/werd/werd_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:device_preview/device_preview.dart';
+// import 'package:device_preview/device_preview.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -21,43 +21,31 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
-      ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
       ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
       ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
+      ChangeNotifierProvider<QuranSearchProvider>(
+          create: (_) => QuranSearchProvider()),
     ],
-    child: DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const MyApp(), // Wrap your app
-    ), // Wrap your app
+    child: const MyApp(), // Wrap your app
   ));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<QuranProvider>(context, listen: false).getData();
-    Provider.of<ThemeProvider>(context, listen: false).fetchTheme();
-  }
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) => ShowCaseWidget(
           builder: Builder(
         builder: (context) => MaterialApp(
+          builder: (context, Widget? child) => Directionality(
+            textDirection: TextDirection.rtl,
+            child: child!,
+          ),
           useInheritedMediaQuery: true,
           routes: CustomRouter.routes,
-          locale: DevicePreview.locale(context),
-          builder: DevicePreview.appBuilder,
+          // locale: DevicePreview.locale(context),
+          // builder: DevicePreview.appBuilder,
           title: 'تطبيق معين',
           debugShowCheckedModeBanner: false,
           themeMode: themeProvider.themeMode,

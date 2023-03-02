@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/common/data/data_sources/constants.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

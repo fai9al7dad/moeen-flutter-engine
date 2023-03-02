@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/common/data/data_sources/constants.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class CustomShowCase extends StatelessWidget {

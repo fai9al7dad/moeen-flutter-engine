@@ -1,8 +1,5 @@
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moeen/helpers/general/GeneralHelpers.dart';
+import 'package:moeen/common/data/data_sources/GeneralHelpers.dart';
 import 'package:square_percent_indicater/square_percent_indicater.dart';
 
 class StreakProgressWidget extends StatefulWidget {

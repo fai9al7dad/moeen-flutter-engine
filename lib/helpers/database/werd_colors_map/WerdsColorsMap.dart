@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:moeen/helpers/database/words_colors/WordsColorsMap.dart';
-import 'package:moeen/helpers/general/constants.dart';
+import 'package:moeen/common/data/data_sources/constants.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
