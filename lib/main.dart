@@ -4,8 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:moeen/common/data/data_sources/router.dart';
 import 'package:moeen/features/quran/domain/usecases/quran_provider.dart';
 import 'package:moeen/features/quran_search/domain/usecases/quran_search_provider.dart';
-import 'package:moeen/providers/theme/my_theme.dart';
-import 'package:moeen/providers/werd/werd_provider.dart';
+import 'package:moeen/common/domain/use_cases/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 // import 'package:device_preview/device_preview.dart';
@@ -21,7 +20,6 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
-      ChangeNotifierProvider<WerdProvider>(create: (_) => WerdProvider()),
       ChangeNotifierProvider<QuranProvider>(create: (_) => QuranProvider()),
       ChangeNotifierProvider<QuranSearchProvider>(
           create: (_) => QuranSearchProvider()),

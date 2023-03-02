@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moeen/features/quran/domain/usecases/quran_provider.dart';
-import 'package:moeen/providers/theme/my_theme.dart';
+import 'package:moeen/common/domain/use_cases/theme_provider.dart';
 import 'package:moeen/screens/on_boarding_screen.dart';
 import 'package:moeen/screens/quran/quran_screen.dart';
 import 'package:provider/provider.dart';

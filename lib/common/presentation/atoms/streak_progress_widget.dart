@@ -36,10 +36,10 @@ class _StreakProgressWidgetState extends State<StreakProgressWidget> {
 
   void calculateStreak() {
     final GeneralHelpers gh = GeneralHelpers();
-    int streakPercentage = gh.calculateStreak(widget.latestWerd);
-    setState(() {
-      value = streakPercentage;
-    });
+    // int streakPercentage = gh.calculateStreak(widget.latestWerd);
+    // setState(() {
+    //   value = streakPercentage;
+    // });
   }
 
   @override
