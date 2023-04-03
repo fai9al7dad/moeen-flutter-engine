@@ -102,6 +102,7 @@ class PageWords extends StatelessWidget {
                         text: item.text!,
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => {
+                            // here we show seperators , but you can do anything
                                 showModalBottomSheet(
                                     context: context,
                                     builder: (context) {
@@ -110,9 +111,6 @@ class PageWords extends StatelessWidget {
                                     })
                               },
                         style: TextStyle(
-                          // backgroundColor: hasSeperator != null
-                          //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                          //     : null,
                           color: hasSeperator != null
                               ? Color(
                                   int.parse(hasSeperator.color ?? "0xffae8f74"))
@@ -128,18 +126,9 @@ class PageWords extends StatelessWidget {
                             : "${item.text} ",
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return VerseOptionsBottomSheet(
-                                          item: item);
-                                    })
+                                // on word tap
                               },
                         style: TextStyle(
-                          // backgroundColor: hasSeperator != null
-                          //     ? Color(int.parse(hasSeperator.color ?? "0xffae8f74"))
-                          //     : null,
-
                           color: hasSeperator != null
                               ? Color(
                                   int.parse(hasSeperator.color ?? "0xffae8f74"))
@@ -162,14 +151,7 @@ class PageWords extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => {
-                              quranProvider.addMistake(
-                                  context: context,
-                                  id: item.id!,
-                                  pageNumber: item.pageNumber!,
-                                  verseNumber: item.verseNumber!,
-                                  chapterCode: item.chapterCode!,
-                                  color: found?.color),
-                              HapticFeedback.lightImpact(),
+                             // on word tap
                             },
                     );
                   }
@@ -189,15 +171,7 @@ class PageWords extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => {
-                              // setMW(),
-                              quranProvider.addMistake(
-                                  context: context,
-                                  id: item.id,
-                                  pageNumber: item.pageNumber,
-                                  verseNumber: item.verseNumber,
-                                  chapterCode: item.chapterCode,
-                                  color: found?.color),
-                              HapticFeedback.lightImpact(),
+                              // on word tap
                             },
                     );
                   }
@@ -216,14 +190,7 @@ class PageWords extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () => {
-                              quranProvider.addMistake(
-                                  context: context,
-                                  id: item.id!,
-                                  pageNumber: item.pageNumber!,
-                                  verseNumber: item.verseNumber!,
-                                  chapterCode: item.chapterCode!,
-                                  color: found?.color),
-                              HapticFeedback.lightImpact(),
+                          // on word tap
                             });
                 })),
             textAlign: TextAlign.center,
