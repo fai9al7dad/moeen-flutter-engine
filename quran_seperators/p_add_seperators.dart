@@ -5,8 +5,15 @@ import 'package:moeen/features/quran_view/quran_models.dart';
 import 'package:moeen/features/quran_view/quran_view_provider.dart';
 import 'package:provider/provider.dart';
 
-final gh = Utils();
-
+String replaceEnglishNumber(String input) {
+  const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+// ٠١٢٣٤٥٦٧٨٩
+  for (int i = 0; i < english.length; i++) {
+    input = input.replaceAll(english[i], arabic[i]);
+  }
+  return input;
+}
 class AddSeperator extends StatelessWidget {
   final QuranEntity word;
   const AddSeperator({super.key, required this.word});
@@ -91,7 +98,7 @@ class AddSeperator extends StatelessWidget {
                                             letterSpacing: -3,
                                             fontFamily: "surahname")),
                                     Text(
-                                        "أية ${gh.replaceEnglishNumber(seperatorsProvider.seperators[index].verseNumber.toString())} صفحة ${gh.replaceEnglishNumber(seperatorsProvider.seperators[index].pageNumber.toString())}",
+                                        "أية ${replaceEnglishNumber(seperatorsProvider.seperators[index].verseNumber.toString())} صفحة ${replaceEnglishNumber(seperatorsProvider.seperators[index].pageNumber.toString())}",
                                         style: const TextStyle(fontSize: 14)),
                                   ],
                                 )
