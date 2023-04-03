@@ -1,11 +1,5 @@
 # moeen flutter
 
-in this repo you will find main libraries from moeen.
-examples:
-1. mushaf rendering
-2. word highlighting
-3. seperators
-
-..etc
+in this repo you will find main libraries from moeen. one goal is to make the library general purpose, so it will be easier to use in your code
 
 > will be updated regulary
