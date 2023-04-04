@@ -18,13 +18,9 @@ class HighlightsProvider with ChangeNotifier implements IHighlightsProvider {
   List<HighlightModel> get mistakes => _mistakes;
 
   Future refreshPage(BuildContext context, {pageNumber}) async {
-    // bool isWerd = Provider.of<WerdsProvider>(context, listen: false).isWerd;
-    // if (isWerd) {
-    //   _mistakes = await werdDatabaseApi.getPageColors(pageNumber: pageNumber);
-    // } else {
+
     _mistakes =
         await highlightsDatabaseApi.getPageColors(pageNumber: pageNumber);
-    // }
 
     notifyListeners();
   }
@@ -41,15 +37,7 @@ class HighlightsProvider with ChangeNotifier implements IHighlightsProvider {
       required verseNumber,
       required chapterCode,
       color}) async {
-    bool isWerd = Provider.of<WerdsProvider>(context, listen: false).isWerd;
-    if (isWerd) {
-      Provider.of<WerdsProvider>(context, listen: false).addMistake(context,
-          id: id,
-          pageNumber: pageNumber,
-          verseNumber: verseNumber,
-          color: color,
-          chapterCode: chapterCode);
-    } else {
+
       Provider.of<SelfHighLightsProvider>(context, listen: false).addMistake(
           context,
           id: id,
@@ -57,6 +45,6 @@ class HighlightsProvider with ChangeNotifier implements IHighlightsProvider {
           verseNumber: verseNumber,
           color: color,
           chapterCode: chapterCode);
-    }
+
   }
 }
