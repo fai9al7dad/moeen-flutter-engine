@@ -50,10 +50,6 @@ class SelfHighLightsProvider
     await highlightsDatabaseApi.insertWord(word);
     Provider.of<HighlightsProvider>(context, listen: false)
         .refreshPage(context, pageNumber: pageNumber);
-    try {
-      await api.addHighlightBySelfUserID(wordID: id, type: type);
-    } on DioError {
-      await tempHighlightsDatabaseApi.insertWord(word);
-    }
+   
   }
 }
